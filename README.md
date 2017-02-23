@@ -1,2 +1,2 @@
 awesome v4.0
-![AltText](http://i.imgur.com/ZqIaK0R.png)
+![AltText](http://i.imgur.com/jm2fjLG.jpg)

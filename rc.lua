@@ -725,7 +725,7 @@ awful.rules.rules = {
                      keys = clientkeys,
                      buttons = clientbuttons,
                      screen = awful.screen.preferred,
-                     --size_hints_honor = false,
+                     size_hints_honor = false,
                      placement = awful.placement.no_overlap+awful.placement.no_offscreen                    
      }
     },
@@ -793,7 +793,11 @@ awful.rules.rules = {
        end},
     { rule = { class = "Tor Browser" },
       properties = { floating = true, border_width = 0 } },
-    { rule = { class = "Vlc" },
+    
+     --{ rule = { class = "Xfce4-terminal" },
+      --properties = { border_width = 0 } },
+    
+     { rule = { class = "Vlc" },
      properties = { floating = true }
  },
    { rule = { class = "Deadbeef" },
