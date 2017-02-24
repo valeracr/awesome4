@@ -25,7 +25,7 @@ local APW = require("apw/widget")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
 --require("yawn")
 --yawn.register(2077746, "#d71111")
-awful.util.spawn_with_shell("sleep 10 && xcompmgr -cCfF -r7 -o.65 -l-10 -t-8 -D7 &")
+awful.util.spawn_with_shell("sleep 12 && xcompmgr -cCfF -r7 -o.65 -l-10 -t-8 -D7 &")
 --awful.util.spawn_with_shell("xcompmgr -cCfF &")
 --awful.util.spawn_with_shell("sleep 7 && killall xcompmgr &")
 
@@ -59,7 +59,7 @@ end
 --beautiful.init(awful.util.get_themes_dir() .. "default/theme.lua")
 beautiful.init("/home/valera/.config/awesome/themes/colored/theme.lua")
 -- This is used later as the default terminal and editor to run.
-terminal = "xfce4-terminal"
+terminal = "urxvt"
 editor = os.getenv("EDITOR") or "leafpad"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -273,7 +273,7 @@ volicon:buttons(awful.util.table.join(
 pacman = wibox.widget.textbox("<span color=\"#e65117\"><b>☠</b></span>")
 pacman:set_font("Comic Sans MS 16")
 pacman:buttons(awful.util.table.join(
-    awful.button({ }, 1, function () awful.util.spawn("".. terminal.. " -e 'yaourt -Syyu --aur'", false) end)
+    awful.button({ }, 1, function () awful.util.spawn("xfce4-terminal -e 'yaourt -Syyu --aur'", false) end)
 ))
 -- Pacman Widget
 pacwidget = wibox.widget.textbox()
@@ -325,7 +325,7 @@ myapp2start = awful.widget.launcher({ name = "thunar",
 -- Create a laucher widget
 myapp3start = awful.widget.launcher({ name = "xfce4-terminal",
                                      image = "/home/valera/.config/awesome/appicons/xfce4-terminal.png",
-                                     command = "xfce4-terminal"})
+                                     command = "urxvt"})
 
 -- Create a laucher widget
 myapp4start = awful.widget.launcher({ name = "fbreader",
@@ -794,8 +794,8 @@ awful.rules.rules = {
     { rule = { class = "Tor Browser" },
       properties = { floating = true, border_width = 0 } },
     
-     --{ rule = { class = "Xfce4-terminal" },
-      --properties = { border_width = 0 } },
+     { rule = { class = "Xfce4-terminal" },
+      properties = { size_hints_honor = true } },
     
      { rule = { class = "Vlc" },
      properties = { floating = true }

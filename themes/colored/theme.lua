@@ -56,7 +56,7 @@ theme.fg_blu        = "#8ebdde"
 
 -- {{{ Borders
 
-theme.border_width  = 2
+theme.border_width  = 1
 theme.border_normal = "#000000"
 --theme.border_focus  = "#535d6c"
 theme.border_focus  = "#f70101"
@@ -100,7 +100,7 @@ theme.arrl                          = theme.confdir .. "/icons/arrl.png"
 theme.arrl_dl                       = theme.confdir .. "/icons/arrl_dl.png"
 theme.arrl_ld                       = theme.confdir .. "/icons/arrl_ld.png"
 -- }}}
-theme.hotkeys_group_margin = "#oooooooo"
+theme.hotkeys_group_margin = "#oooooo"
 -- {{{ Taglist
 
 theme.taglist_squares_sel   = theme.confdir .. "/taglist/squaref_b.png"
@@ -116,7 +116,7 @@ theme.tasklist_floating_icon = theme.confdir .. "/floating.png"
 
 -- }}}
 -- {{{ Gaps
-theme.useless_gap       = 1
+theme.useless_gap       = 0
 theme.gap_single_client = true
 
 
