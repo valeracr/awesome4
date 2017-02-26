@@ -57,10 +57,11 @@ theme.fg_blu        = "#8ebdde"
 -- {{{ Borders
 
 theme.border_width  = 1
-theme.border_normal = "#000000"
---theme.border_focus  = "#535d6c"
-theme.border_focus  = "#f70101"
-theme.border_marked = "#91231c"
+theme.border_normal = "#910101"
+--theme.border_normal = "#f70101"
+--theme.border_focus  = "#e65117"
+theme.border_focus  = "#e65117"
+theme.border_marked = "#d46912"
 
 -- }}}
 

@@ -59,7 +59,7 @@ end
 --beautiful.init(awful.util.get_themes_dir() .. "default/theme.lua")
 beautiful.init("/home/valera/.config/awesome/themes/colored/theme.lua")
 -- This is used later as the default terminal and editor to run.
-terminal = "urxvt"
+terminal = "xfce4-terminal"
 editor = os.getenv("EDITOR") or "leafpad"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -158,6 +158,7 @@ mymainmenu = freedesktop.menu.build({
 
 mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
                                      menu = mymainmenu })
+
 
 -- Keyboard map indicator and switcher
 mykeyboardlayout = awful.widget.keyboardlayout()
@@ -325,7 +326,7 @@ myapp2start = awful.widget.launcher({ name = "thunar",
 -- Create a laucher widget
 myapp3start = awful.widget.launcher({ name = "xfce4-terminal",
                                      image = "/home/valera/.config/awesome/appicons/xfce4-terminal.png",
-                                     command = "urxvt"})
+                                     command = "xfce4-terminal"})
 
 -- Create a laucher widget
 myapp4start = awful.widget.launcher({ name = "fbreader",
@@ -794,8 +795,8 @@ awful.rules.rules = {
     { rule = { class = "Tor Browser" },
       properties = { floating = true, border_width = 0 } },
     
-     { rule = { class = "Xfce4-terminal" },
-      properties = { size_hints_honor = true } },
+    -- { rule = { class = "Xfce4-terminal" },
+     -- properties = { size_hints_honor = true } },
     
      { rule = { class = "Vlc" },
      properties = { floating = true }
@@ -829,8 +830,10 @@ awful.rules.rules = {
       properties = { floating = true } }, 
     { rule = { class = "xine" },
       properties = { floating = true } },
---     {rule = {class = "Xfce4-terminal"}, awesome отключить фокус наведением мыши
---      properties = {opacity = 0.4} },
+
+     {rule = {class = "Skype"},
+      properties = {floating = true} },
+
      { rule = { class = "Pavucontrol" },
       properties = { floating = true } },
      { rule = { class = "Galculator" },

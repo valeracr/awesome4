@@ -45,6 +45,7 @@ local desktop = {
             label = "Trash",
             icon  = "trash",
             onclick = "trash://"
+            --onclick1 = onclick1
         }
     },
     -- Default parameters
@@ -76,6 +77,7 @@ end
 -- @param icon icon string file path
 -- @param onclick function to execute on click
 function desktop.add_single_icon(args, label, icon, onclick)
+--function desktop.add_single_icon(args, label, icon, onclick1)
     local s = args.screen
 
     -- define icon dimensions and position
@@ -108,6 +110,7 @@ function desktop.add_single_icon(args, label, icon, onclick)
         }
 
         icon:buttons(awful.button({ }, 1, nil, onclick))
+        --icon:buttons(awful.button({ }, 1, nil,  onclick1))
 
         icon_container = wibox(common)
         icon_container:set_widget(icon)
@@ -146,6 +149,7 @@ function desktop.add_base_icons(args)
         desktop.add_single_icon(args, base.label, utils.lookup_icon(base.icon), function()
             --awful.spawn(string.format("%s '%s'", args.open_width, base.onclick))
             awful.util.spawn(string.format("thunar %s", base.onclick))
+            --awful.util.spawn_with_shell("/usr/bin/opera", base.onclick1)
         end)
     end
 end
@@ -228,6 +232,7 @@ function desktop.add_dirs_and_files_icons(args)
         if file.show then
             local label = args.showlabels and file.filename or nil
             local onclick = function () awful.spawn(string.format("%s", args.open_with, file.path)) end
+            --local onclick1 = function () awful.util.spawn_with_shell("/usr/bin/opera") end
             desktop.add_single_icon(args, label, file.icon, onclick)
         end
     end
