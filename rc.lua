@@ -160,6 +160,7 @@ mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
                                      menu = mymainmenu })
 
 
+
 -- Keyboard map indicator and switcher
 mykeyboardlayout = awful.widget.keyboardlayout()
 mytextclock1 = wibox.widget.textclock(" <span color=\"#e65117\"><span font=\"odstemplik Bold 18\"><b>%H:%M</b></span></span>")
@@ -424,10 +425,19 @@ local l = awful.layout.suit  -- Just to save some typing: use an alias.
 local layouts = { l.tile.bottom, l.tile.bottom, l.tile.bottom, l.spiral.dwindle, l.floating }
 awful.tag(names, s, layouts )
 awful.screen.connect_for_each_screen(function(s)
-local t = awful.tag.find_by_name(awful.tag.setncol( 4 ),"ƀ" ) 
-local t1 = awful.tag.find_by_name(awful.tag.setncol( 4 ), "Ɵ" ) 
-awful.tag.setncol( 4, t )
-awful.tag.setncol( 4, t1)
+--local t = awful.tag.find_by_name(awful.tag.setncol( 4 ),"ƀ" ) 
+--local _tag = awful.tag.find_by_name(awful.tag.setmwfact(0.15, t3), "ƈ" ) 
+--awful.tag.setncol( 4, t )
+--awful.tag.setncol( 2, t1)
+--awful.tag.setmwfact (0.15, screen[1].tags[3])
+awful.tag.setnmaster(1, screen[1].tags[3])
+awful.tag.setncol( 2, screen[1].tags[1])
+awful.tag.setncol( 2, screen[1].tags[2])
+awful.tag.setncol( 2, screen[s].tags[3])
+--awful.tag.setmwfact(0.15, _tag)
+--awful.tag.setmfpol(0.70, screen[s].tags[3])
+--awful.tag.seticon("/home/valera/Sharingan Icons by Kshegzyaj/PNG/128x128/Sharingan 2 Virgules.png", screen[s].tags[1]) 
+awful.tag.setproperty(screen[s].tags[3], "master_width_factor", 0.70)
 end)
 
 
@@ -799,7 +809,7 @@ awful.rules.rules = {
      -- properties = { size_hints_honor = true } },
     
      { rule = { class = "Vlc" },
-     properties = { floating = true }
+     properties = { screen = 1,  tag = "ƈ" }
  },
    { rule = { class = "Deadbeef" },
       properties = { floating = true, border_width = 0 } },

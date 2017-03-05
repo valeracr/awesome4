@@ -122,6 +122,8 @@ theme.gap_single_client = true
 
 
 -- }}}
+
+
 -- {{{ Layout
 
 theme.layout_tile       = theme.confdir .. "/layouts/tile.png"
