@@ -354,6 +354,31 @@ space1.text = "  "
 -- Create a textclock widget
 mytextclock = wibox.widget.textclock()
 
+local tag_menu = {
+    {"⸻⸻⸻"},
+    { "Add Tag",      function() lain.util.add_tag()     end, "/usr/share/icons/Black Diamond-V2/scalable/actions/add1.png" },    
+    { "Rename Tag",  function() lain.util.rename_tag()  end, "/home/valera/.icons/Black Diamond-V2/scalable/places/emptytrash.png" },
+    { "Tag right",          function() lain.util.move_tag(1)   end, "/home/valera/.config/awesome/themes/colored/icons/right.png" },
+    { "Tag left",          function() lain.util.move_tag(-1)  end , "/home/valera/.config/awesome/themes/colored/icons/left.png" },
+    { "Delete Tag",        function() lain.util.delete_tag()  end, "/usr/share/icons/Black Diamond-V2/scalable/categories/internet.png" },
+    { "Clients", function() lain.util.menu_clients_current_tags(tag_menu) end, "/usr/share/icons/Black Diamond-V2/scalable/apps/console.png" },
+    {"            "}
+}
+---------
+--Tag_menu
+local function tag_menu_toggle()
+    local instance = nil
+    return function ()
+        if instance and instance.wibox.visible then
+            instance:hide()
+            instance = nil
+        else
+            --instance = lain.util.menu_clients_current_tags(tag_menu)
+              instance =  awful.menu(tag_menu):show() 
+        end
+    end
+end
+------------
 -- Create a wibox for each screen and add it
 local taglist_buttons = awful.util.table.join(
                     awful.button({ }, 1, function(t) t:view_only() end),
@@ -362,10 +387,11 @@ local taglist_buttons = awful.util.table.join(
                                                   client.focus:move_to_tag(t)
                                               end
                                           end),
-                    awful.button({ }, 3, awful.tag.viewtoggle),
+                    awful.button({ }, 2, awful.tag.viewtoggle), 
+                    awful.button({ }, 3, tag_menu_toggle () ),                                                                  
                     awful.button({ modkey }, 3, function(t)
                                               if client.focus then
-                                                  client.focus:toggle_tag(t)
+                                                  client.focus:toggle_tag_fn(t)
                                               end
                                           end),
                     awful.button({ }, 4, function(t) awful.tag.viewnext(t.screen) end),
