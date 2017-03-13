@@ -43,13 +43,13 @@ local desktop = {
         },
         [3] = {
             label = "Trash",
-            icon  = "trash",
+            icon  = "user-trash",
             onclick = "trash://"
             --onclick1 = onclick1
         }
     },
     -- Default parameters
-    iconsize   = { width = 48,  height = 48 },
+    iconsize   = { width = 36,  height = 36 },
     labelsize  = { width = 100, height = 15 },
    -- margin     = { x = 20, y = 20 },
     margin     = { x = 20, y = 40 },

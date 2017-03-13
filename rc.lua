@@ -25,9 +25,10 @@ local APW = require("apw/widget")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
 --require("yawn")
 --yawn.register(2077746, "#d71111")
-awful.util.spawn_with_shell("sleep 12 && xcompmgr -cCfF -r7 -o.65 -l-10 -t-8 -D7 &")
+--awful.util.spawn_with_shell("sleep 12 && xcompmgr -cCfF -r7 -o.65 -l-10 -t-8 -D7 &")
 --awful.util.spawn_with_shell("xcompmgr -cCfF &")
 --awful.util.spawn_with_shell("sleep 7 && killall xcompmgr &")
+awful.spawn.with_shell("sleep 12 && compton -cCfF -r7 -o.65 -l-10 -t-8 -D7 &")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -159,6 +160,28 @@ mymainmenu = freedesktop.menu.build({
 mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
                                      menu = mymainmenu })
 
+    -- Each screen has its own tag table.
+--awful.tag({ 1, 2, 3, 4, 5 }, s, awful.layout.layouts[1])
+
+local names = { "Ƅ", "ƀ", "Ɵ", "ƈ", "Ɗ" }
+local l = awful.layout.suit  -- Just to save some typing: use an alias.
+local layouts = { l.tile.bottom, l.tile.bottom, l.tile.bottom, l.spiral.dwindle, l.floating }
+awful.tag(names, s, layouts )
+awful.screen.connect_for_each_screen(function(s)
+--local t = awful.tag.find_by_name(awful.tag.setncol( 4 ),"ƀ" ) 
+--local _tag = awful.tag.find_by_name(awful.tag.setmwfact(0.15, t3), "ƈ" ) 
+--awful.tag.setncol( 4, t )
+--awful.tag.setncol( 2, t1)
+--awful.tag.setmwfact (0.15, screen[1].tags[3])
+awful.tag.setnmaster(1, screen[1].tags[3])
+awful.tag.setncol( 2, screen[1].tags[1])
+awful.tag.setncol( 2, screen[1].tags[2])
+awful.tag.setncol( 2, screen[s].tags[3])
+--awful.tag.setmwfact(0.15, _tag)
+--awful.tag.setmfpol(0.70, screen[s].tags[3])
+--awful.tag.seticon("/home/valera/Sharingan Icons by Kshegzyaj/PNG/128x128/Sharingan 2 Virgules.png", screen[s].tags[1]) 
+awful.tag.setproperty(screen[s].tags[3], "master_width_factor", 0.70)
+end)
 
 
 -- Keyboard map indicator and switcher
@@ -318,7 +341,7 @@ fixedwidget5 = wibox.layout.constraint(netwidget, "exact", 23)
 -- Create a laucher widget
 myapp1start = awful.widget.launcher({ name = "firefox",
                                      image = "/home/valera/.config/awesome/appicons/firefox.png",
-                                     command = "firefox"})
+                                     command = "/home/valera/firefox/firefox-bin"})
 -- Create a laucher widget
 myapp2start = awful.widget.launcher({ name = "thunar",
                                      image = "/home/valera/.config/awesome/appicons/thunar.png",
@@ -361,7 +384,7 @@ local tag_menu = {
     { "Tag right",          function() lain.util.move_tag(1)   end, "/home/valera/.config/awesome/themes/colored/icons/right.png" },
     { "Tag left",          function() lain.util.move_tag(-1)  end , "/home/valera/.config/awesome/themes/colored/icons/left.png" },
     { "Delete Tag",        function() lain.util.delete_tag()  end, "/usr/share/icons/Black Diamond-V2/scalable/categories/internet.png" },
-    { "Clients", function() lain.util.menu_clients_current_tags(tag_menu) end, "/usr/share/icons/Black Diamond-V2/scalable/apps/console.png" },
+    { "Clients", function() awful.menu.clients() end, "/usr/share/icons/Black Diamond-V2/scalable/apps/console.png" },
     {"            "}
 }
 ---------
@@ -397,6 +420,31 @@ local taglist_buttons = awful.util.table.join(
                     awful.button({ }, 4, function(t) awful.tag.viewnext(t.screen) end),
                     awful.button({ }, 5, function(t) awful.tag.viewprev(t.screen) end)
                 )
+-------------
+---Client_menu
+
+local t1 = awful.tag.find_by_name(awful.client.movetotag( "Ƅ" ),"Ƅ" )  
+local t2 = awful.tag.find_by_name(awful.client.movetotag( "ƀ" ),"ƀ" )
+local t3 = awful.tag.find_by_name(awful.client.movetotag( "Ɵ" ),"Ɵ" )
+local t4 = awful.tag.find_by_name(awful.client.movetotag( "ƈ" ),"ƈ" )
+local t5 = awful.tag.find_by_name(awful.client.movetotag( "Ɗ" ),"Ɗ" )
+
+
+local t_menu ={ 
+           {"____FIRST", function() awful.client.movetotag(t1) end },
+           {"____SECOND", function() awful.client.movetotag(t2) end},
+           {"____THIRD", function() awful.client.movetotag(t3) end},
+           {"____FOURTH", function() awful.client.movetotag(t4) end},
+           {"____FIFTH", function() awful.client.movetotag(t5) end},           
+}
+
+local move_menu = ({ items = { { "Move to tag", t_menu, "/usr/share/icons/Black Diamond-V2/scalable/11.png" },
+                             {"Floating",  function() awful.client.floating.toggle(c) end, "/usr/share/icons/Black Diamond-V2/scalable/12.png" },
+                             { "Clients", function(c) awful.menu.clients() end, "/usr/share/icons/Black Diamond-V2/scalable/apps/console.png" },
+                             --{"kill" ,  function(c) awful.urgent.delete (c)  end}                           
+                                  }
+                        })        
+
 
 local tasklist_buttons = awful.util.table.join(
                      awful.button({ }, 1, function (c)
@@ -415,11 +463,24 @@ local tasklist_buttons = awful.util.table.join(
                                                   c:raise()
                                               end
                                           end),
-                     awful.button({ }, 3, client_menu_toggle_fn()),
+                 
+                    awful.button({ }, 8, client_menu_toggle_fn()),                   
+                    awful.button({ }, 2, function (c)  c:kill()                         end),                    
+                  awful.button({ }, 3, function (c)
+                                        if instance then
+                                        instance:hide()
+                                        instance = nil
+                                    else
+                                     instance = awful.menu(move_menu):toggle()
+                                       end
+                                       end,
+                                          function (c)
+                                          client.focus = c
+                                                  c:raise()
+                                              end),
                      awful.button({ }, 4, function ()
                                               awful.client.focus.byidx(1)
                                           end),
-                      awful.button({ }, 2, function (c)  c:kill()                         end),
                      awful.button({ }, 5, function ()
                                               awful.client.focus.byidx(-1)
                                           end))
@@ -443,28 +504,7 @@ awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
     set_wallpaper(s)
 
-    -- Each screen has its own tag table.
---awful.tag({ 1, 2, 3, 4, 5 }, s, awful.layout.layouts[1])
 
-local names = { "Ƅ", "ƀ", "Ɵ", "ƈ", "Ɗ" }
-local l = awful.layout.suit  -- Just to save some typing: use an alias.
-local layouts = { l.tile.bottom, l.tile.bottom, l.tile.bottom, l.spiral.dwindle, l.floating }
-awful.tag(names, s, layouts )
-awful.screen.connect_for_each_screen(function(s)
---local t = awful.tag.find_by_name(awful.tag.setncol( 4 ),"ƀ" ) 
---local _tag = awful.tag.find_by_name(awful.tag.setmwfact(0.15, t3), "ƈ" ) 
---awful.tag.setncol( 4, t )
---awful.tag.setncol( 2, t1)
---awful.tag.setmwfact (0.15, screen[1].tags[3])
-awful.tag.setnmaster(1, screen[1].tags[3])
-awful.tag.setncol( 2, screen[1].tags[1])
-awful.tag.setncol( 2, screen[1].tags[2])
-awful.tag.setncol( 2, screen[s].tags[3])
---awful.tag.setmwfact(0.15, _tag)
---awful.tag.setmfpol(0.70, screen[s].tags[3])
---awful.tag.seticon("/home/valera/Sharingan Icons by Kshegzyaj/PNG/128x128/Sharingan 2 Virgules.png", screen[s].tags[1]) 
-awful.tag.setproperty(screen[s].tags[3], "master_width_factor", 0.70)
-end)
 
 
     -- Create a promptbox for each screen
@@ -482,6 +522,7 @@ end)
 
     -- Create a tasklist widget
     s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, tasklist_buttons)
+
 
     -- Create the wibox
     s.mywibox = awful.wibar({ position = "top", screen = s, height = 18 })
@@ -658,6 +699,7 @@ globalkeys = awful.util.table.join(
               {description = "show the menubar", group = "launcher"})
 )
 
+
 clientkeys = awful.util.table.join(
     awful.key({ }, "F5", function (c) scratch.pad.set(c, 0.80, 0.60, true) end),
     awful.key({ modkey,           }, "f",
@@ -744,6 +786,7 @@ end
 clientbuttons = awful.util.table.join(
     awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
     awful.button({  }, 8, awful.mouse.client.move),
+    awful.button({ }, 9, function () awful.menu(move_menu):toggle() end),
     awful.button({ modkey }, 3, awful.mouse.client.resize))
 
 -- Set keys
