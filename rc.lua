@@ -23,12 +23,13 @@ local calendar = lain.widget.calendar()
 scratch = require("scratch")
 local APW = require("apw/widget")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
---require("yawn")
---yawn.register(2077746, "#d71111")
---awful.util.spawn_with_shell("sleep 12 && xcompmgr -cCfF -r7 -o.65 -l-10 -t-8 -D7 &")
+--local radical = require("radical")
+--require("collision")()
+
+--awful.util.spawn_with_shell("sleep 14 && xcompmgr -cCfF -r7 -o.65 -l-10 -t-8 -D7 &")
 --awful.util.spawn_with_shell("xcompmgr -cCfF &")
 --awful.util.spawn_with_shell("sleep 7 && killall xcompmgr &")
-awful.spawn.with_shell("sleep 12 && compton -cCfF -r7 -o.65 -l-10 -t-8 -D7 &")
+awful.spawn.with_shell("sleep 12 && compton -icCfF -r7 -o.65 -l-10 -t-8 -D7 &")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -341,7 +342,7 @@ fixedwidget5 = wibox.layout.constraint(netwidget, "exact", 23)
 -- Create a laucher widget
 myapp1start = awful.widget.launcher({ name = "firefox",
                                      image = "/home/valera/.config/awesome/appicons/firefox.png",
-                                     command = "/home/valera/firefox/firefox-bin"})
+                                     command = "firefox"})
 -- Create a laucher widget
 myapp2start = awful.widget.launcher({ name = "thunar",
                                      image = "/home/valera/.config/awesome/appicons/thunar.png",
@@ -440,8 +441,7 @@ local t_menu ={
 
 local move_menu = ({ items = { { "Move to tag", t_menu, "/usr/share/icons/Black Diamond-V2/scalable/11.png" },
                              {"Floating",  function() awful.client.floating.toggle(c) end, "/usr/share/icons/Black Diamond-V2/scalable/12.png" },
-                             { "Clients", function(c) awful.menu.clients() end, "/usr/share/icons/Black Diamond-V2/scalable/apps/console.png" },
-                             --{"kill" ,  function(c) awful.urgent.delete (c)  end}                           
+                             { "Clients", function(c) awful.menu.clients() end, "/usr/share/icons/Black Diamond-V2/scalable/apps/console.png" },     
                                   }
                         })        
 
@@ -465,7 +465,7 @@ local tasklist_buttons = awful.util.table.join(
                                           end),
                  
                     awful.button({ }, 8, client_menu_toggle_fn()),                   
-                    awful.button({ }, 2, function (c)  c:kill()                         end),                    
+                  awful.button({ }, 2, function (c)  c:kill()                         end),                                  
                   awful.button({ }, 3, function (c)
                                         if instance then
                                         instance:hide()
@@ -679,6 +679,7 @@ globalkeys = awful.util.table.join(
                   end
               end,
               {description = "restore minimized", group = "client"}),
+
 
     -- Prompt
     awful.key({  },            "Menu",     function () awful.screen.focused().mypromptbox:run() end,
@@ -1007,4 +1008,4 @@ awful.util.spawn_with_shell("setxkbmap -layout 'us, ru' -option 'grp:caps_toggle
 --awful.util.spawn_with_shell("run_once /usr/bin/synclient TouchpadOff=1")
 --awful.util.spawn_with_shell (awful.tag.incncol( 4, nil, true))
 --awful.util.spawn_with_shell("run_once thunderbird")
-awful.util.spawn_with_shell("run_once nm-applet")
+--awful.util.spawn_with_shell("run_once nm-applet")
