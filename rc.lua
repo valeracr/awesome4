@@ -117,7 +117,7 @@ end
 -- Create a laucher widget and a main menu
 myawesomemenu = {
    { "hotkeys", function() return false, hotkeys_popup.show_help end, "/home/valera/sharingan-icons-1.5/acestream16.png"},
-   { "manual", terminal .. " -e man awesome", "/home/valera/.icons/Black Diamond-V2/scalable/places/folder-documents.png"},   
+   { "manual", "xterm -e man awesome", "/home/valera/.icons/Black Diamond-V2/scalable/places/folder-documents.png"},   
   -- { "edit config", editor_cmd .. " " .. awesome.conffile, "/home/valera/.icons/Black Diamond-V2/scalable/emblems/emblem-xxs.png"},
    { "edit config", "leafpad /home/valera/.config/awesome/rc.lua", "/home/valera/.icons/Black Diamond-V2/scalable/emblems/emblem-xxs.png"},
    { "restart", awesome.restart, "/home/valera/sharingan-icons-1.5/clamtk.png"},
@@ -440,11 +440,15 @@ local t_menu ={
 }
 
 local move_menu = ({ items = { { "Move to tag", t_menu, "/usr/share/icons/Black Diamond-V2/scalable/11.png" },
-                             {"Floating",  function() awful.client.floating.toggle(c) end, "/usr/share/icons/Black Diamond-V2/scalable/12.png" },
-                             { "Clients", function(c) awful.menu.clients() end, "/usr/share/icons/Black Diamond-V2/scalable/apps/console.png" },     
+             {"Floating",  function() awful.client.floating.toggle(c) end, "/usr/share/icons/Black Diamond-V2/scalable/12.png" },
+             {"Ontop", function() awful.util.spawn_with_shell("xdotool key Super_L+t") end, "/usr/share/icons/Black Diamond-V2/scalable/actions/25.png"},
+             {"Minimized", function() awful.util.spawn_with_shell("xdotool key Super_L+n") end, "/usr/share/icons/Black Diamond-V2/scalable/actions/26.png"},
+             {"Maximized", function() awful.util.spawn_with_shell("xdotool key Super_L+m") end, "/usr/share/icons/Black Diamond-V2/scalable/actions/27.png"},
+             {"Fullscreen", function() awful.util.spawn_with_shell("xdotool key Super_L+f") end, "/usr/share/icons/Black Diamond-V2/scalable/places/16/folder-drag-accept.png"},
+             {"Close", function() awful.util.spawn_with_shell("xdotool key Super_L+c") end, "/usr/share/icons/Black Diamond-V2/scalable/actions/add.png"},
+             { "Clients", function(c) awful.menu.clients() end, "/usr/share/icons/Black Diamond-V2/scalable/apps/console.png" }, 
                                   }
-                        })        
-
+                        })   
 
 local tasklist_buttons = awful.util.table.join(
                      awful.button({ }, 1, function (c)
