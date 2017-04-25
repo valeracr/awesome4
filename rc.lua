@@ -348,7 +348,7 @@ fixedwidget5 = wibox.layout.constraint(netwidget, "exact", 23)
 -- Create a laucher widget
 myapp1start = awful.widget.launcher({ name = "firefox",
                                      image = "/home/valera/.config/awesome/appicons/firefox.png",
-                                     command = "firefox"})
+                                     command = "env GTK_THEME=Boje-Red firefox"})
 -- Create a laucher widget
 myapp2start = awful.widget.launcher({ name = "thunar",
                                      image = "/home/valera/.config/awesome/appicons/thunar.png",
