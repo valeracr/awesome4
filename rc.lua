@@ -133,7 +133,7 @@ standart_menu = {
     { "FiReFox", "firefox", "/home/valera/.icons/Black Diamond-V2/scalable/apps/firefox.png" },
     { "TOR", "/home/valera/tor/Browser/start-tor-browser --detach", "/home/valera/.icons/Black Diamond-V2/scalable/apps/epiphany-bookmarks.png" },
     { "Google-Earth", "google-earth", "/home/valera/.icons/Black Diamond-V2/scalable/apps/googleearth-icon.png" },
-    { "Thuderbird", "env GTK_THEME=Boje-Red thunderbird", "/home/valera/.icons/Black Diamond-V2/scalable/emblems/emblem-web.png" },
+    { "Thuderbird", "env GTK_THEME=Boje-Orange thunderbird", "/home/valera/.icons/Black Diamond-V2/scalable/emblems/emblem-web.png" },
     { "XTERM", "xterm", "/home/valera/.icons/Black Diamond-V2/scalable/apps/xterm.png"  },
     { "KDEnLive", "kdenlive", "/home/valera/.icons/Black Diamond-V2/scalable/apps/kdenlive.png" }             
 }
@@ -451,6 +451,9 @@ local move_menu = ({ items = { { "Move to tag", t_menu, "/usr/share/icons/Black 
              {"Minimized", function() awful.util.spawn_with_shell("xdotool key Super_L+n") end, "/usr/share/icons/Black Diamond-V2/scalable/actions/26.png"},
              {"Maximized", function() awful.util.spawn_with_shell("xdotool key Super_L+m") end, "/usr/share/icons/Black Diamond-V2/scalable/actions/27.png"},
              {"Fullscreen", function() awful.util.spawn_with_shell("xdotool key Super_L+f") end, "/usr/share/icons/Black Diamond-V2/scalable/places/16/folder-drag-accept.png"},
+             {"VertMax", function() awful.util.spawn_with_shell("xdotool key Control+Super_L+m") end, "/usr/share/icons/Black Diamond-V2/scalable/vert.png"},
+             {"HorMax",  function() awful.util.spawn_with_shell("xdotool key Shift+Super_L+m") end, "/usr/share/icons/Black Diamond-V2/scalable/horis.png"},
+             {"Restore",  function() awful.util.spawn_with_shell("xdotool key Shift+Super_L+m Control+Super_L+m") end, "/usr/share/icons/Black Diamond-V2/scalable/restore.png"},
              {"Close", function() awful.util.spawn_with_shell("xdotool key Super_L+c") end, "/usr/share/icons/Black Diamond-V2/scalable/actions/add.png"},
              { "Clients", function(c) awful.menu.clients() end, "/usr/share/icons/Black Diamond-V2/scalable/apps/console.png" }, 
                                   }
@@ -620,7 +623,7 @@ globalkeys = awful.util.table.join(
     awful.key({ }, "F7", function () scratch.drop("xfce4-terminal", "bottom", nil, nil, 0.30) end),
     --awful.key({ }, "F2", function () scratch.drop("opera", c, nil, nil, 1.00, 0.90) end),
     awful.key({ }, "F2", function () awful.spawn("opera") end),
-    awful.key({ }, "F3", function () awful.spawn("thunar") end),
+    --awful.key({ }, "F3", function () awful.spawn("thunar") end),
     awful.key({ modkey,           }, "j",
         function ()
             awful.client.focus.byidx( 1)
@@ -1025,7 +1028,7 @@ awful.util.spawn_with_shell("run_once kbdd")
 --awful.util.spawn_with_shell("xset s off && xset -dpms &")
 --awful.util.spawn_with_shell("run_once google-chrome-stable")
 --awful.util.spawn_with_shell("run_once /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
---awful.util.spawn_with_shell("run_once sleep 3 && /usr/bin/nm-applet --sm-disable")
+awful.util.spawn_with_shell("run_once sleep 3 && /usr/bin/nm-applet --sm-disable")
 --awful.util.spawn_with_shell("run_once /usr/bin/touchpad11")
 awful.util.spawn_with_shell("setxkbmap -layout 'us, ru' -option 'grp:caps_toggle'")
 --awful.util.spawn_with_shell("run_once start-pulseaudio-x11")
