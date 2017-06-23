@@ -596,13 +596,6 @@ awful.screen.connect_for_each_screen(function(s)
             mytextclock1,
             space1,
             s.mylayoutbox,
-            { -- close button
-          image  = "/usr/share/awesome/themes/default/titlebar/close_normal.png",
-          buttons = awful.util.table.join(awful.button({}, 1, function()
-              if client.focus then client.focus:kill() end
-          end)),
-          widget = wibox.widget.imagebox
-        },
         },
     }
 end)
