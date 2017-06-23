@@ -447,14 +447,14 @@ local t_menu ={
 
 local move_menu = ({ items = { { "Move to tag", t_menu, "/usr/share/icons/Black Diamond-V2/scalable/11.png" },
              {"Floating",  function() awful.client.floating.toggle(c) end, "/usr/share/icons/Black Diamond-V2/scalable/12.png" },
-             {"Ontop", function() awful.util.spawn_with_shell("xdotool key Super_L+t") end, "/usr/share/icons/Black Diamond-V2/scalable/actions/25.png"},
-             {"Minimized", function() awful.util.spawn_with_shell("xdotool key Super_L+n") end, "/usr/share/icons/Black Diamond-V2/scalable/actions/26.png"},
-             {"Maximized", function() awful.util.spawn_with_shell("xdotool key Super_L+m") end, "/usr/share/icons/Black Diamond-V2/scalable/actions/27.png"},
-             {"Fullscreen", function() awful.util.spawn_with_shell("xdotool key Super_L+f") end, "/usr/share/icons/Black Diamond-V2/scalable/places/16/folder-drag-accept.png"},
-             {"V_Max", function() awful.util.spawn_with_shell("xdotool key Control+Super_L+m") end, "/usr/share/icons/Black Diamond-V2/scalable/vert.png"},
-             {"H_Max",  function() awful.util.spawn_with_shell("xdotool key Shift+Super_L+m") end, "/usr/share/icons/Black Diamond-V2/scalable/horis.png"},
-             {"Restore",  function() awful.util.spawn_with_shell("xdotool key Shift+Super_L+m Control+Super_L+m") end, "/usr/share/icons/Black Diamond-V2/scalable/restore.png"},
-             {"Close", function() awful.util.spawn_with_shell("xdotool key Super_L+c") end, "/usr/share/icons/Black Diamond-V2/scalable/actions/add.png"},
+             {"Ontop",  function() client.focus.ontop = not client.focus.ontop client.focus:raise() end , "/usr/share/icons/Black Diamond-V2/scalable/actions/25.png"},
+             {"Minimized", function() client.focus.minimized = true client.focus:raise() end, "/usr/share/icons/Black Diamond-V2/scalable/actions/26.png"},
+             {"Maximized", function() client.focus.maximized = not client.focus.maximized client.focus:raise() end, "/usr/share/icons/Black Diamond-V2/scalable/actions/27.png"},
+             {"Fullscreen", function() client.focus.fullscreen = not client.focus.fullscreen end, "/usr/share/icons/Black Diamond-V2/scalable/places/16/folder-drag-accept.png"},
+             {"V_Max", function() client.focus.maximized_vertical = not client.focus.maximized_vertical client.focus:raise() end, "/usr/share/icons/Black Diamond-V2/scalable/vert.png"},
+             {"H_Max",  function() client.focus.maximized_horizontal = not client.focus.maximized_horizontal client.focus:raise() end, "/usr/share/icons/Black Diamond-V2/scalable/horis.png"},
+             {"Restore",  function() client.focus.maximized_vertical = not client.focus.maximized_vertical client.focus.maximized_horizontal = not client.focus.maximized_horizontal client.focus:raise() end, "/usr/share/icons/Black Diamond-V2/scalable/restore.png"},
+             {"Close", function() client.focus:kill() end,  "/usr/share/icons/Black Diamond-V2/scalable/actions/add.png"},
              { "Clients", function(c) awful.menu.clients() end, "/usr/share/icons/Black Diamond-V2/scalable/apps/console.png" }, 
                                   }
                         })   
@@ -596,6 +596,13 @@ awful.screen.connect_for_each_screen(function(s)
             mytextclock1,
             space1,
             s.mylayoutbox,
+            { -- close button
+          image  = "/usr/share/awesome/themes/default/titlebar/close_normal.png",
+          buttons = awful.util.table.join(awful.button({}, 1, function()
+              if client.focus then client.focus:kill() end
+          end)),
+          widget = wibox.widget.imagebox
+        },
         },
     }
 end)
