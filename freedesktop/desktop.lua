@@ -52,7 +52,7 @@ local desktop = {
     iconsize   = { width = 36,  height = 36 },
     labelsize  = { width = 100, height = 15 },
    -- margin     = { x = 20, y = 20 },
-    margin     = { x = 20, y = 40 },
+    margin     = { x = 20, y = 70 },
 }
 
 -- MIME types list
