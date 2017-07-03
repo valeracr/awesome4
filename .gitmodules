@@ -1,6 +1,0 @@
-[submodule "radical"]
-	path = radical
-	url = ../../Elv13/radical.git
-[submodule "collision"]
-	path = collision
-	url = ../../Elv13/collision
