@@ -241,7 +241,7 @@ vicious.register(cpuwidget2, vicious.widgets.cpu, "$1%" ,2)
 fixedwidget = wibox.layout.constraint(cpuwidget2, "exact", 35)
 
 sensors = wibox.widget.textbox()
-vicious.register(sensors, vicious.widgets.thermal, "$1°C", 3, { "coretemp.0/hwmon/hwmon0", "core"})
+vicious.register(sensors, vicious.widgets.thermal, "$1°C", 3, { "coretemp.0/hwmon/hwmon1", "core"})
 fixedwidget1 = wibox.layout.constraint(sensors, "exact", 50)
 
 memicon = wibox.widget.imagebox()
@@ -253,18 +253,18 @@ local function disptemp()
 		screen = screen
 	}
 
-	f = io.popen("sensors")
+	f = io.popen("sensors  nouveau-pci-0100")
 	infos = f:read("*all")
 	f:close()
 
 	showtempinfo = naughty.notify( {
-                font = "odstemplik Bold 18",
+                font = "odstemplik Bold 14",
 		text	= infos,
 		timeout	= 0,
         position = "top_right",
         margin = 10,
         height = 200,
-        width = 200,
+        width = 420,
         border_color = '#404040',
         border_width = 2,
         -- opacity = 0.95,
@@ -332,7 +332,7 @@ pacwidget:set_font("odstemplik Bold 17")
 
 --
 -- Network Widget
-netwidget = blingbling.net({ interface = "enp2s0", show_text = false })
+netwidget = blingbling.net({ interface = "enp3s0", show_text = false })
 netwidget:set_ippopup()
 netwidget:set_graph_line_color("#e65117ff")
 ----netwidget:set_background_color("#f7010150")
