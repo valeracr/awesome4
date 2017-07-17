@@ -122,7 +122,7 @@ theme.gap_single_client = true
 
 
 -- }}}
-
+theme.notification_bg = "#00000080"
 
 -- {{{ Layout
 
