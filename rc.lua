@@ -131,7 +131,7 @@ standart_menu = {
     { "CHROME", "google-chrome-stable", "/home/valera/.icons/Black Diamond-V2/scalable/apps/22/chromium-browser.png" },
     { "KlaVa", "onboard", "/home/valera/.icons/Black Diamond-V2/scalable/apps/gnutella.png" },
     { "FiReFox", "firefox", "/home/valera/.icons/Black Diamond-V2/scalable/apps/firefox.png" },
-    { "TOR", "/home/valera/tor/Browser/start-tor-browser --detach", "/home/valera/.icons/Black Diamond-V2/scalable/apps/epiphany-bookmarks.png" },
+    { "TOR", "env GTK_THEME=Boje-Red /home/valera/tor/Browser/start-tor-browser --detach", "/home/valera/.icons/Black Diamond-V2/scalable/apps/epiphany-bookmarks.png" },
     { "Google-Earth", "google-earth", "/home/valera/.icons/Black Diamond-V2/scalable/apps/googleearth-icon.png" },
     { "Thuderbird", "env GTK_THEME=Boje-Orange thunderbird", "/home/valera/.icons/Black Diamond-V2/scalable/emblems/emblem-web.png" },
     { "XTERM", "xterm", "/home/valera/.icons/Black Diamond-V2/scalable/apps/xterm.png"  },
@@ -348,7 +348,7 @@ fixedwidget5 = wibox.layout.constraint(netwidget, "exact", 23)
 -- Create a laucher widget
 myapp1start = awful.widget.launcher({ name = "firefox",
                                      image = "/home/valera/.config/awesome/appicons/firefox.png",
-                                     command = "env GTK_THEME=Boje-Red firefox"})
+                                     command = "firefox"})
 -- Create a laucher widget
 myapp2start = awful.widget.launcher({ name = "thunar",
                                      image = "/home/valera/.config/awesome/appicons/thunar.png",
@@ -906,8 +906,11 @@ awful.rules.rules = {
      -- properties = { size_hints_honor = true } },
     
      { rule = { class = "Vlc" },
-     properties = { screen = 1,  tag = "ƈ" }
- },
+     --properties = { screen = 1,  tag = "ƈ" }
+     properties = { floating = true },
+			callback = function (c)
+         awful.placement.centered(c,nil)
+       end},
    { rule = { class = "Deadbeef" },
       properties = { floating = true, border_width = 0 } },
       { rule = { class = "Dialog" },
@@ -1030,7 +1033,7 @@ awful.util.spawn_with_shell("run_once kbdd")
 --awful.util.spawn_with_shell("run_once /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
 awful.util.spawn_with_shell("run_once sleep 3 && /usr/bin/nm-applet --sm-disable")
 --awful.util.spawn_with_shell("run_once /usr/bin/touchpad11")
-awful.util.spawn_with_shell("setxkbmap -layout 'us, ru' -option 'grp:caps_toggle'")
+--awful.util.spawn_with_shell("setxkbmap -layout 'us, ru' -option 'grp:caps_toggle'")
 --awful.util.spawn_with_shell("run_once start-pulseaudio-x11")
 --awful.util.spawn_with_shell("run_once /usr/bin/synclient TouchpadOff=1")
 --awful.util.spawn_with_shell (awful.tag.incncol( 4, nil, true))
