@@ -191,7 +191,7 @@ mykeyboardlayout = awful.widget.keyboardlayout()
 mytextclock1 = wibox.widget.textclock(" <span color=\"#e65117\"><span font=\"odstemplik Bold 18\"><b>%H:%M</b></span></span>")
 mytextclock1:buttons(awful.util.table.join(
     --awful.button({ }, 1, function () awful.util.spawn("xterm -e 'curl wttr.in; exec bash'", false) end) 
-      awful.button({ }, 1, function () awful.util.spawn("/home/valera/.config/awesome/ww", false) end) 
+      awful.button({ }, 1, function () awful.util.spawn("/home/valera/Документы/ww", false) end) 
 ))
 
 mytextclockicon = wibox.widget.imagebox()
@@ -302,11 +302,14 @@ volicon:buttons(awful.util.table.join(
 --pacicon = wibox.widget.imagebox()
 --pacicon:set_image(beautiful.widget_pac)
 --
-pacman = wibox.widget.textbox("<span color=\"#e65117\"><b>☠</b></span>")
-pacman:set_font("Comic Sans MS 16")
-pacman:buttons(awful.util.table.join(
-    awful.button({ }, 1, function () awful.util.spawn("xfce4-terminal -e 'yaourt -Syyu --aur'", false) end)
-))
+---pacman = wibox.widget.textbox("<span color=\"#e65117\"><b>☠</b></span>")
+---pacman:set_font("Comic Sans MS 16")
+---pacman:buttons(awful.util.table.join(
+---    awful.button({ }, 1, function () awful.util.spawn("xfce4-terminal -e 'yaourt -Syyu --aur'", false) end)
+---))
+pacman=awful.widget.launcher({ name = "pacman",
+                                     image = "/home/valera/.config/awesome/appicons/skull32.png",
+                                     command = "xfce4-terminal -e 'yaourt -Syyu --aur'"})
 -- Pacman Widget
 pacwidget = wibox.widget.textbox()
 
