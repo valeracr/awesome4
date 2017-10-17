@@ -369,8 +369,8 @@ myapp4start = awful.widget.launcher({ name = "fbreader",
 
 -- Create a laucher widget
 myapp5start = awful.widget.launcher({ name = "palemoon",
-                                     image = "//home/valera/.config/awesome/appicons/palemoon.png",
-                                     command = "pcmanfm"})
+                                     image = "//home/valera/.config/awesome/appicons/a10.png",
+                                     command = "google-chrome-stable"})
 
 -- Create a laucher widget
 myapp7start = awful.widget.launcher({ name = "opera",
