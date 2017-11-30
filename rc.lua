@@ -133,7 +133,7 @@ standart_menu = {
     { "FiReFox", "firefox", "/home/valera/.icons/Black Diamond-V2/scalable/apps/firefox.png" },
     { "TOR", "env GTK_THEME=Boje-Red /home/valera/tor/Browser/start-tor-browser --detach", "/home/valera/.icons/Black Diamond-V2/scalable/apps/epiphany-bookmarks.png" },
     { "Google-Earth", "google-earth", "/home/valera/.icons/Black Diamond-V2/scalable/apps/googleearth-icon.png" },
-    { "Thuderbird", "env GTK_THEME=Boje-Orange thunderbird", "/home/valera/.icons/Black Diamond-V2/scalable/emblems/emblem-web.png" },
+    { "Aisleriot", "env GTK_THEME='Fire Red Theme' sol", "/usr/share/icons/Black Diamond-V2/scalable/apps/gnome-aisleriot.png" },
     { "XTERM", "xterm", "/home/valera/.icons/Black Diamond-V2/scalable/apps/xterm.png"  },
     { "KDEnLive", "kdenlive", "/home/valera/.icons/Black Diamond-V2/scalable/apps/kdenlive.png" }             
 }
@@ -221,7 +221,7 @@ dbus.connect_signal("ru.gentoo.kbdd", function(...)
         end
         )
 kbdwidget:buttons(awful.util.table.join(awful.button({ }, 1, change)))
-fixedwidget4 = wibox.layout.constraint(kbdwidget, "exact", 54)
+fixedwidget4 = wibox.layout.constraint(kbdwidget, "exact", 47)
 
 --CPU---------------
 -- Инициализация виджета
@@ -242,7 +242,7 @@ fixedwidget = wibox.layout.constraint(cpuwidget2, "exact", 35)
 
 sensors = wibox.widget.textbox()
 vicious.register(sensors, vicious.widgets.thermal, "$1°C", 3, { "coretemp.0/hwmon/hwmon1", "core"})
-fixedwidget1 = wibox.layout.constraint(sensors, "exact", 50)
+fixedwidget1 = wibox.layout.constraint(sensors, "exact", 38)
 
 memicon = wibox.widget.imagebox()
 memicon.image = "/home/valera/.icons/Black Diamond-V2/scalable/apps/gnome-system-monitor.png"
@@ -377,8 +377,21 @@ myapp7start = awful.widget.launcher({ name = "opera",
                                      image = "/home/valera/.config/awesome/appicons/opera.png",
                                      command = "opera"})
 
+-- Create a laucher widget
+myapp8start = awful.widget.launcher({ name = "thunderbird",
+                                     image = "/usr/share/icons/gnome/32x32/apps/thunderbird.png",
+                                     command = "thunderbird"})
+
+
 space = wibox.widget.textbox()
-space.text = " ⥣ "
+--space.text = " ⍿ "
+space.text = " ╠ "
+
+space2 = wibox.widget.textbox()
+space2.text = " ╣ "
+
+space3 = wibox.widget.textbox()
+space3.text = " ∥ "
 
 space1 = wibox.widget.textbox()
 space1.text = "  "
@@ -551,20 +564,22 @@ awful.screen.connect_for_each_screen(function(s)
             mylauncher,
             space1,
             s.mytaglist,
-            space1,
+            --space1,
             space,
             myapp1start,
-            space,
+            space2,
             myapp2start,
             space,
             myapp3start,
-            space,
+            space2,
             myapp4start,
             space,
             myapp5start,
-            space,
+            space2,
             myapp7start,
             space,
+            myapp8start,
+            space2,
             space1,
             s.mypromptbox,
         },
@@ -574,26 +589,28 @@ awful.screen.connect_for_each_screen(function(s)
            -- mykeyboardlayout,
             wibox.widget.systray(),
             space1,
+            space,
             fixedwidget5,
+            space2,
             fixedwidget4,
             space,
             pacman,
             pacwidget,
            -- space1,
-            space,
+            space2,
             cpuwidget,
             space1,
             fixedwidget,
             space,
             memicon3,
             fixedwidget1,
-            space,
+            space2,
             memicon,
             fixedwidget3,
             space,
             volicon,
             APW,
-            space,
+            space2,
             --mytextclock,
             mytextclockicon,
             mytextclock1,
