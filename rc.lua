@@ -391,7 +391,7 @@ space2 = wibox.widget.textbox()
 space2.text = " ╣ "
 
 space3 = wibox.widget.textbox()
-space3.text = " ∥ "
+space3.text = " "
 
 space1 = wibox.widget.textbox()
 space1.text = "  "
@@ -614,8 +614,10 @@ awful.screen.connect_for_each_screen(function(s)
             --mytextclock,
             mytextclockicon,
             mytextclock1,
-            space1,
+            space3,
+            space,
             s.mylayoutbox,
+            space2,
         },
     }
 end)
@@ -960,7 +962,8 @@ awful.rules.rules = {
       properties = { floating = true } }, 
     { rule = { class = "xine" },
       properties = { floating = true } },
-
+    { rule = { class = "Onboard" },
+      properties = { floating = true } },
      {rule = {class = "Skype"},
       properties = {floating = true} },
 
@@ -1059,3 +1062,4 @@ awful.util.spawn_with_shell("run_once sleep 3 && /usr/bin/nm-applet --sm-disable
 --awful.util.spawn_with_shell (awful.tag.incncol( 4, nil, true))
 --awful.util.spawn_with_shell("run_once thunderbird")
 --awful.util.spawn_with_shell("run_once nm-applet")
+awful.util.spawn_with_shell("setxkbmap")
