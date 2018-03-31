@@ -221,7 +221,7 @@ dbus.connect_signal("ru.gentoo.kbdd", function(...)
         end
         )
 kbdwidget:buttons(awful.util.table.join(awful.button({ }, 1, change)))
-fixedwidget4 = wibox.layout.constraint(kbdwidget, "exact", 47)
+fixedwidget4 = wibox.layout.constraint(kbdwidget, "exact", 51)
 
 --CPU---------------
 -- Инициализация виджета
@@ -347,6 +347,87 @@ netwidget:set_font_size(14)
 netwidget.height = 0.50
 fixedwidget5 = wibox.layout.constraint(netwidget, "exact", 23)
 -----------
+-- MPD
+mpd_icon = wibox.widget.imagebox()
+mpd_icon.image = "/home/valera/sharingan-icons-1.5/10.png"
+mpd_icon:buttons(awful.util.table.join(
+    awful.button({ }, 1, function () awful.util.spawn("".. terminal.. " -e mpd", false) end),
+    awful.button({ }, 3, function () awful.util.spawn("".. terminal.. " -e 'killall mpd'", false) end)
+))
+prev_icon = wibox.widget.imagebox()
+prev_icon.image = "/home/valera/.config/awesome/icons/mpd/mpd_prev.png"
+next_icon = wibox.widget.imagebox()
+next_icon.image = "/home/valera/.config/awesome/icons/mpd/mpd_next.png"
+stop_icon = wibox.widget.imagebox()
+stop_icon.image = "/home/valera/.config/awesome/icons/mpd/mpd_stop.png"
+pause_icon = wibox.widget.imagebox()
+pause_icon.image = "/home/valera/.config/awesome/icons/mpd/mpd_pause.png"
+play_pause_icon = wibox.widget.imagebox()
+play_pause_icon.image = "/home/valera/.config/awesome/icons/mpd/mpd_play.png"
+mpd_sepl = wibox.widget.imagebox()
+mpd_sepl.image = "/home/valera/.config/awesome/icons/mpd/mpd_sepl.png"
+mpd_sepr = wibox.widget.imagebox()
+mpd_sepr.image = "/home/valera/.config/awesome/icons/mpd/mpd_sepr.png"
+
+mpdwidget = lain.widget.mpd({
+    settings = function ()
+        if mpd_now.state == "play" then
+            mpd_now.artist = mpd_now.artist:upper():gsub("&.-;", string.lower)
+            mpd_now.title = mpd_now.title:upper():gsub("&.-;", string.lower)
+            --widget:set_markup(markup.font("Tamsyn 3", " ")
+              --                .. markup.font("Tamsyn 7",
+               --               mpd_now.artist
+                --              .. " - " ..
+                --              mpd_now.title
+                --              .. markup.font("Tamsyn 2", " ")))
+            play_pause_icon = wibox.widget.imagebox(beautiful.mpd_pause)
+            mpd_sepl = wibox.widget.imagebox(beautiful.mpd_sepl)
+            mpd_sepr = wibox.widget.imagebox(beautiful.mpd_sepr)
+        elseif mpd_now.state == "pause" then
+            --widget:set_markup(markup.font("Tamsyn 4", "") ..
+             --                 markup.font("Tamsyn 7", "MPD PAUSED") ..
+             --                 markup.font("Tamsyn 10", ""))
+            play_pause_icon = wibox.widget.imagebox(beautiful.mpd_play)
+            mpd_sepl = wibox.widget.imagebox(beautiful.mpd_sepl)
+            mpd_sepr = wibox.widget.imagebox(beautiful.mpd_sepr)
+        else
+            widget:set_markup("")
+            play_pause_icon = wibox.widget.imagebox(beautiful.mpd_play)
+            mpd_sepl = wibox.widget.imagebox(nil)
+            mpd_sepr = wibox.widget.imagebox(nil)
+        end
+    end
+})
+
+music_widget = wibox.container.background(mpdwidget.widget)
+music_widget.bgimage=beautiful.widget_display
+music_widget:buttons(awful.util.table.join(awful.button({ }, 1,
+function () awful.util.spawn_with_shell(ncmpcpp) end)))
+prev_icon:buttons(awful.util.table.join(awful.button({}, 1,
+function ()
+    awful.util.spawn_with_shell("mpc prev || ncmpcpp prev")
+    mpdwidget.update()
+end)))
+next_icon:buttons(awful.util.table.join(awful.button({}, 1,
+function ()
+    awful.util.spawn_with_shell("mpc next || ncmpcpp next")
+    mpdwidget.update()
+end)))
+stop_icon:buttons(awful.util.table.join(awful.button({}, 1,
+function ()
+    play_pause_icon:set_image("/home/valera/.config/awesome/icons/mpd/mpd_pause.png")
+    awful.util.spawn_with_shell("mpc stop || ncmpcpp stop")
+    mpdwidget.update()
+end)))
+play_pause_icon:buttons(awful.util.table.join(awful.button({}, 1,
+function ()
+    awful.util.spawn_with_shell("mpc toggle || ncmpcpp toggle")
+    mpdwidget.update()
+end)))
+spr = wibox.widget.imagebox()
+spr.image = "/home/valera/.config/awesome/icons/mpd/separators/spr.png"
+spr5px = wibox.widget.imagebox()
+spr5px.image = "/home/valera/.config/awesome/icons/mpd/separators/spr5px.png"
 
 -- Create a laucher widget
 myapp1start = awful.widget.launcher({ name = "firefox",
@@ -587,8 +668,25 @@ awful.screen.connect_for_each_screen(function(s)
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
            -- mykeyboardlayout,
-            wibox.widget.systray(),
-            space1,
+          space,
+          wibox.widget.systray(),
+          space2,
+         -- space1,
+          mpd_icon,
+            -- MPD widget
+          spr,
+          prev_icon,
+          spr,
+          stop_icon,
+          spr,
+          play_pause_icon,
+          spr,
+          next_icon,
+          --mpd_sepl,
+          --music_widget,
+         -- mpd_sepr,
+          --spr5px,
+           -- space1,
             space,
             fixedwidget5,
             space2,
@@ -928,6 +1026,12 @@ awful.rules.rules = {
      -- properties = { size_hints_honor = true } },
     
      { rule = { class = "Vlc" },
+     --properties = { screen = 1,  tag = "ƈ" }
+     properties = { floating = true },
+			callback = function (c)
+         awful.placement.centered(c,nil)
+       end},
+     { rule = { class = "vlc" },
      --properties = { screen = 1,  tag = "ƈ" }
      properties = { floating = true },
 			callback = function (c)
