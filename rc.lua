@@ -348,12 +348,7 @@ netwidget.height = 0.50
 fixedwidget5 = wibox.layout.constraint(netwidget, "exact", 23)
 -----------
 -- MPD
-mpd_icon = wibox.widget.imagebox()
-mpd_icon.image = "/home/valera/sharingan-icons-1.5/10.png"
-mpd_icon:buttons(awful.util.table.join(
-    awful.button({ }, 1, function () awful.util.spawn("".. terminal.. " -e mpd", false) end),
-    awful.button({ }, 3, function () awful.util.spawn("".. terminal.. " -e 'killall mpd'", false) end)
-))
+
 prev_icon = wibox.widget.imagebox()
 prev_icon.image = "/home/valera/.config/awesome/icons/mpd/mpd_prev.png"
 next_icon = wibox.widget.imagebox()
@@ -410,20 +405,27 @@ function ()
 end)))
 next_icon:buttons(awful.util.table.join(awful.button({}, 1,
 function ()
-    awful.util.spawn_with_shell("mpc next || ncmpcpp next")
+    awful.util.spawn_with_shell("mpc next || ncmpcpp next")    
     mpdwidget.update()
 end)))
-stop_icon:buttons(awful.util.table.join(awful.button({}, 1,
-function ()
-    play_pause_icon:set_image("/home/valera/.config/awesome/icons/mpd/mpd_pause.png")
-    awful.util.spawn_with_shell("mpc stop || ncmpcpp stop")
-    mpdwidget.update()
-end)))
-play_pause_icon:buttons(awful.util.table.join(awful.button({}, 1,
+--stop_icon:buttons(awful.util.table.join(awful.button({}, 1,
+--function ()
+--    play_pause_icon:set_image("/home/valera/.config/awesome/icons/mpd/mpd_pause.png")
+    ----awful.util.spawn_with_shell("mpc stop || ncmpcpp stop")
+--    awful.util.spawn_with_shell("mpd")
+--    mpdwidget.update()
+--end)))
+stop_icon:buttons(awful.util.table.join(
+    awful.button({ }, 1, function () stop_icon:set_image("/home/valera/.config/awesome/icons/mpd/mpd_pause.png") awful.util.spawn_with_shell("mpd") mpdwidget.update()  end),
+    awful.button({ }, 2, function () stop_icon:set_image("/home/valera/.config/awesome/icons/mpd/mpd_stop.png") awful.util.spawn_with_shell("killall mpd") mpdwidget.update() end)
+))
+play_pause_icon:buttons(awful.util.table.join(
+awful.button({}, 1,
 function ()
     awful.util.spawn_with_shell("mpc toggle || ncmpcpp toggle")
     mpdwidget.update()
-end)))
+end)
+))
 spr = wibox.widget.imagebox()
 spr.image = "/home/valera/.config/awesome/icons/mpd/separators/spr.png"
 spr5px = wibox.widget.imagebox()
@@ -672,7 +674,6 @@ awful.screen.connect_for_each_screen(function(s)
           wibox.widget.systray(),
           space2,
          -- space1,
-          mpd_icon,
             -- MPD widget
           spr,
           prev_icon,
