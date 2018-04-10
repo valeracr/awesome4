@@ -244,8 +244,11 @@ sensors = wibox.widget.textbox()
 vicious.register(sensors, vicious.widgets.thermal, "$1°C", 3, { "coretemp.0/hwmon/hwmon1", "core"})
 fixedwidget1 = wibox.layout.constraint(sensors, "exact", 38)
 
-memicon = wibox.widget.imagebox()
-memicon.image = "/home/valera/.icons/Black Diamond-V2/scalable/apps/gnome-system-monitor.png"
+--memicon = wibox.widget.imagebox()
+--memicon.image = "/home/valera/.icons/Black Diamond-V2/scalable/apps/gnome-system-monitor.png"
+memicon = awful.widget.launcher({ name = "prev",
+                                     image = "/home/valera/.config/awesome/appicons/xfce4-terminal.png",
+                                     command = "xfce4-terminal -e htop"})
 local function disptemp()
 	local f, infos
 	local capi = {
@@ -274,9 +277,6 @@ end
 memicon:connect_signal('mouse::enter', function () disptemp(path) end)
 memicon:connect_signal('mouse::leave', function () naughty.destroy(showtempinfo) end)
 
-memicon:buttons(awful.util.table.join(
-    awful.button({ }, 1, function () awful.util.spawn("".. terminal.. " -e htop", false) end)
-))
 -- Memory
 memwidget = wibox.widget.textbox()
 --vicious.register(memwidget, vicious.widgets.mem, "<span font=\"odstemplik Bold 14\"><b>$2/$3</b></span>", 1)
