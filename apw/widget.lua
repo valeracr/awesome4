@@ -126,7 +126,7 @@ function pulseWidget.Update()
 end
 
 function pulseWidget.LaunchMixer()
-	awful.util.spawn_with_shell( mixer )
+	awful.util.spawn_with_shell("xfce4-mixer")
 end
 
 

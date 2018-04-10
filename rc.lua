@@ -289,24 +289,15 @@ memicon3.image = "/home/valera/sharingan-icons-1.5/speedownload.png"
 fixedwidget3 = wibox.layout.constraint(memwidget, "exact", 50)
 --fixedwidget3:set_width(50)
 
-volicon = wibox.widget.imagebox()
-volicon.image = "/usr/share/icons/Black Diamond-V2/scalable/apps/armagetronad.png"
+volicon = awful.widget.launchers({ name = "pavucontrol",
+                                     image = "/home/valera/.config/awesome/appicons/armagetronad.png",
+                                     command = "pavucontrol"})
 --volumewidget = wibox.widget.textbox()
 --vicious.register( volumewidget, vicious.widgets.volume, "<span color=\"#ffde00\">$1%</span>", 1, "Master" )
-volicon:buttons(awful.util.table.join(
-    awful.button({ }, 2, function () awful.util.spawn("xfce4-mixer") end)
-))
 
 -- {{{ PACMAN
 -- Icon
---pacicon = wibox.widget.imagebox()
---pacicon:set_image(beautiful.widget_pac)
---
----pacman = wibox.widget.textbox("<span color=\"#e65117\"><b>☠</b></span>")
----pacman:set_font("Comic Sans MS 16")
----pacman:buttons(awful.util.table.join(
----    awful.button({ }, 1, function () awful.util.spawn("xfce4-terminal -e 'yaourt -Syyu --aur'", false) end)
----))
+
 pacman=awful.widget.launcher({ name = "pacman",
                                      image = "/home/valera/.config/awesome/appicons/skull32.png",
                                      command = "xfce4-terminal -e 'yaourt -Syyu --aur'"})
