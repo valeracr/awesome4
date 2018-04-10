@@ -123,6 +123,16 @@ theme.gap_single_client = true
 
 -- }}}
 theme.notification_bg = "#00000080"
+-- MPD
+
+theme.mpd_prev  = "/home/valera/.config/awesome/icons/mpd/mpd_prev.png"
+theme.mpd_nex   = "/home/valera/.config/awesome/icons/mpd/mpd_next.png"
+theme.mpd_stop  = "/home/valera/.config/awesome/icons/mpd/mpd_stop.png"
+theme.mpd_pause = "/home/valera/.config/awesome/icons/mpd/mpd_pause.png"
+theme.mpd_play  = "/home/valera/.config/awesome/icons/mpd/mpd_play.png"
+theme.mpd_sepr  = "/home/valera/.config/awesome/icons/mpd/mpd_sepr.png"
+theme.mpd_sepl  = "/home/valera/.config/awesome/icons/mpd/mpd_sepl.png"
+
 
 -- {{{ Layout
 
