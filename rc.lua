@@ -164,9 +164,11 @@ mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
     -- Each screen has its own tag table.
 --awful.tag({ 1, 2, 3, 4, 5 }, s, awful.layout.layouts[1])
 
-local names = { "Ƅ", "ƀ", "Ɵ", "ƈ", "Ɗ" }
+--local names = { "Ƅ", "ƀ", "Ɵ", "ƈ", "Ɗ" }
+local names = { "Ƅ", "Ɵ", "ƈ", "Ɗ" }
 local l = awful.layout.suit  -- Just to save some typing: use an alias.
-local layouts = { l.tile.bottom, l.tile.bottom, l.tile.bottom, l.spiral.dwindle, l.floating }
+--local layouts = { l.tile.bottom, l.tile.bottom, l.tile.bottom, l.spiral.dwindle, l.floating }
+local layouts = { l.tile.bottom, l.tile.bottom, l.spiral.dwindle, l.floating }
 awful.tag(names, s, layouts )
 awful.screen.connect_for_each_screen(function(s)
 --local t = awful.tag.find_by_name(awful.tag.setncol( 4 ),"ƀ" ) 
@@ -176,32 +178,25 @@ awful.screen.connect_for_each_screen(function(s)
 --awful.tag.setmwfact (0.15, screen[1].tags[3])
 awful.tag.setnmaster(1, screen[1].tags[3])
 awful.tag.setncol( 3, screen[1].tags[1])
-awful.tag.setncol( 2, screen[1].tags[2])
+----awful.tag.setncol( 2, screen[1].tags[2])
 awful.tag.setncol( 2, screen[s].tags[3])
 --awful.tag.setmwfact(0.15, _tag)
 --awful.tag.setmfpol(0.70, screen[s].tags[3])
 --awful.tag.seticon("/home/valera/Sharingan Icons by Kshegzyaj/PNG/128x128/Sharingan 2 Virgules.png", screen[s].tags[1]) 
-awful.tag.setproperty(screen[s].tags[3], "master_width_factor", 0.70)
+awful.tag.setproperty(screen[s].tags[2], "master_width_factor", 0.70)
 end)
 
 
 -- Keyboard map indicator and switcher
 mykeyboardlayout = awful.widget.keyboardlayout()
+-------------
 
 mytextclock1 = wibox.widget.textclock(" <span color=\"#e65117\"><span font=\"odstemplik Bold 18\"><b>%H:%M</b></span></span>")
-mytextclock1:buttons(awful.util.table.join(
-    --awful.button({ }, 1, function () awful.util.spawn("xterm -e 'curl wttr.in; exec bash'", false) end) 
-      awful.button({ }, 1, function () awful.util.spawn("/home/valera/Документы/ww", false) end) 
-))
-
-mytextclockicon = wibox.widget.imagebox()
-mytextclockicon.image = "/home/valera/.icons/Black Diamond-V2/scalable/actions/editdelete.png"
---mytextclockicon:set_image("/home/valera/sharingan-icons-1.5/emblem-urgent.png")
--- calendar
 lain.widget.calendar({
-    attach_to = { mytextclockicon }
+    attach_to = { mytextclock1 }
 })
 --widgets.calendar:attach(mytextclockicon)
+
 --{{{--Kbdd----------------------------------------------------------------
 
 function change()
@@ -239,10 +234,16 @@ cpuwidget2 = wibox.widget.textbox()
 -- Регистрация виджета
 vicious.register(cpuwidget2, vicious.widgets.cpu, "$1%" ,2)
 fixedwidget = wibox.layout.constraint(cpuwidget2, "exact", 35)
+----------
 
+--Sensors
+tempwidget = awful.widget.launcher({ name = "weather",
+                                     image = "/home/valera/sharingan-icons-1.5/speedownload.png",
+                                     command = "/home/valera/Документы/ww"})
 sensors = wibox.widget.textbox()
 vicious.register(sensors, vicious.widgets.thermal, "$1°C", 3, { "coretemp.0/hwmon/hwmon1", "core"})
 fixedwidget1 = wibox.layout.constraint(sensors, "exact", 38)
+-----------
 
 --memicon = wibox.widget.imagebox()
 --memicon.image = "/home/valera/.icons/Black Diamond-V2/scalable/apps/gnome-system-monitor.png"
@@ -284,16 +285,16 @@ memwidget = wibox.widget.textbox()
 vicious.register(memwidget, vicious.widgets.mem, "<span >$2 m</span>", 5)
 fixedmemwidget = wibox.layout.constraint(memwidget, "exact", 147)
 memwidget.align = "center"
-memicon3 = wibox.widget.imagebox()
-memicon3.image = "/home/valera/sharingan-icons-1.5/speedownload.png"
 fixedwidget3 = wibox.layout.constraint(memwidget, "exact", 50)
 --fixedwidget3:set_width(50)
+-----------------
 
 volicon = awful.widget.launchers({ name = "pavucontrol",
                                      image = "/home/valera/.config/awesome/appicons/armagetronad.png",
                                      command = "pavucontrol"})
 --volumewidget = wibox.widget.textbox()
 --vicious.register( volumewidget, vicious.widgets.volume, "<span color=\"#ffde00\">$1%</span>", 1, "Master" )
+-------------------
 
 -- {{{ PACMAN
 -- Icon
@@ -505,10 +506,10 @@ local taglist_buttons = awful.util.table.join(
 ---Client_menu
 
 local t1 = awful.tag.find_by_name(awful.client.movetotag( "Ƅ" ),"Ƅ" )  
-local t2 = awful.tag.find_by_name(awful.client.movetotag( "ƀ" ),"ƀ" )
-local t3 = awful.tag.find_by_name(awful.client.movetotag( "Ɵ" ),"Ɵ" )
-local t4 = awful.tag.find_by_name(awful.client.movetotag( "ƈ" ),"ƈ" )
-local t5 = awful.tag.find_by_name(awful.client.movetotag( "Ɗ" ),"Ɗ" )
+--local t2 = awful.tag.find_by_name(awful.client.movetotag( "ƀ" ),"ƀ" )
+local t2 = awful.tag.find_by_name(awful.client.movetotag( "Ɵ" ),"Ɵ" )
+local t3 = awful.tag.find_by_name(awful.client.movetotag( "ƈ" ),"ƈ" )
+local t4 = awful.tag.find_by_name(awful.client.movetotag( "Ɗ" ),"Ɗ" )
 
 
 local t_menu ={ 
@@ -516,7 +517,7 @@ local t_menu ={
            {"____SECOND", function() awful.client.movetotag(t2) end},
            {"____THIRD", function() awful.client.movetotag(t3) end},
            {"____FOURTH", function() awful.client.movetotag(t4) end},
-           {"____FIFTH", function() awful.client.movetotag(t5) end},           
+           --{"____FIFTH", function() awful.client.movetotag(t5) end},           
 }
 
 local move_menu = ({ items = { { "Move to tag", t_menu, "/usr/share/icons/Black Diamond-V2/scalable/11.png" },
@@ -619,10 +620,19 @@ awful.screen.connect_for_each_screen(function(s)
         layout = wibox.layout.align.horizontal,
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
-            mylauncher,
             space1,
+            mylauncher,
+            space,
             s.mytaglist,
-            --space1,
+            space2,
+            -- MPD widget
+          spr,
+          prev_icon,
+          spr,
+          stop_icon,
+          spr,
+          next_icon,
+          spr,
             space,
             myapp1start,
             space2,
@@ -649,14 +659,6 @@ awful.screen.connect_for_each_screen(function(s)
           wibox.widget.systray(),
           space2,
          -- space1,
-            -- MPD widget
-          spr,
-          prev_icon,
-          spr,
-          stop_icon,
-          spr,
-          next_icon,
-          spr,
             space,
             fixedwidget5,
             space2,
@@ -670,7 +672,7 @@ awful.screen.connect_for_each_screen(function(s)
             space1,
             fixedwidget,
             space,
-            memicon3,
+            tempwidget,
             fixedwidget1,
             space2,
             memicon,
@@ -680,7 +682,7 @@ awful.screen.connect_for_each_screen(function(s)
             APW,
             space2,
             --mytextclock,
-            mytextclockicon,
+            --mytextclockicon,
             mytextclock1,
             space3,
             space,
