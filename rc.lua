@@ -25,6 +25,7 @@ local APW = require("apw/widget")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
 --local radical = require("radical")
 --require("collision")()
+local desktop_icons = require("desktop_icons")
 
 awful.util.spawn_with_shell("sleep 14 && xcompmgr -cCfF -r7 -o.65 -l-10 -t-8 -D7 &")
 --awful.util.spawn_with_shell("xcompmgr -cCfF &")
@@ -93,9 +94,9 @@ awful.layout.layouts = {
 }
 -- }}}
 
-for s in screen do
-    freedesktop.desktop.add_icons({screen = s})
-end
+--for s in screen do
+--    freedesktop.desktop.add_icons({screen = s})
+--end
 
 -- {{{ Helper functions
 local function client_menu_toggle_fn()
@@ -185,6 +186,7 @@ awful.tag.setncol( 2, screen[s].tags[3])
 --awful.tag.seticon("/home/valera/Sharingan Icons by Kshegzyaj/PNG/128x128/Sharingan 2 Virgules.png", screen[s].tags[1]) 
 awful.tag.setproperty(screen[s].tags[2], "master_width_factor", 0.70)
 end)
+------------------------
 
 
 -- Keyboard map indicator and switcher
