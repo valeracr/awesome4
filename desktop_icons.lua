@@ -113,6 +113,7 @@ desktop_wibox8:set_widget(my_widget8)
 -------------
 -------------
 my_widget9 = awful.widget.launcher({ name = "acestream",
+                                     --image = "/home/valera/.config/awesome/appicons/12.png",
                                      image = "/usr/share/icons/Black Diamond-V2/scalable/12.png",
                                      command = "acestreamplayer"
                                      })
