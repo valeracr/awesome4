@@ -1011,6 +1011,12 @@ awful.rules.rules = {
 			callback = function (c)
          awful.placement.centered(c,nil)
        end},
+   { rule = { class = "cantata" },
+     --properties = { screen = 1,  tag = "ƈ" }
+     properties = { floating = true },
+			callback = function (c)
+         awful.placement.centered(c,nil)
+       end},
    { rule = { class = "SimpleScreenRecorder" },
      --properties = { screen = 1,  tag = "ƈ" }
      properties = { floating = true },
@@ -1137,7 +1143,7 @@ awful.util.spawn_with_shell("run_once kbdd")
 --awful.util.spawn_with_shell("run_once kbdd && killall -9 kbdd && kbdd")
 --awful.util.spawn_with_shell("xset s off && xset -dpms &")
 --awful.util.spawn_with_shell("run_once google-chrome-stable")
-awful.util.spawn_with_shell("run_once /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
+--awful.util.spawn_with_shell("run_once /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
 awful.util.spawn_with_shell("run_once sleep 3 && /usr/bin/nm-applet --sm-disable")
 --awful.util.spawn_with_shell("run_once /usr/bin/touchpad11")
 --awful.util.spawn_with_shell("setxkbmap -layout 'us, ru' -option 'grp:caps_toggle'")
