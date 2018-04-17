@@ -33,6 +33,7 @@ local hotkeys_popup = require("awful.hotkeys_popup").widget
 --require("collision")()
 blingbling.superproperties.init('the_theme_path')
 mygraph = blingbling.line_graph()
+--local mpd = require("mpd")
 --------
 -------
 
@@ -152,8 +153,10 @@ cpu_graph:set_graph_line_color("#e65117ff")
 cpu_graph:set_graph_color("#f70101ff")
 cpu_graph:set_text_color("#e74f12")
 cpu_graph:set_font("odstemplik bold")
-cpu_graph:set_font_size("22")
+cpu_graph:set_font_size("18")
+blingbling.popups.htop(cpu_graph, { terminal =  "xfce4-terminal" })
 vicious.register(cpu_graph, vicious.widgets.cpu,'$1',2)
+--vicious.register(cpu_graph, vicious.widgets.fs, "${/ used_a}", 120 )
 function cpu_graph:fit(context, width, height) return width, height end
 local desktop_wibox11 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
 desktop_wibox11:geometry({ x = 1040, y = 850, width = 400, height = 50 })
@@ -179,16 +182,16 @@ mem:set_graph_line_color("#e65117ff")
 mem:set_graph_color("#f70101ff")
 mem:set_text_color("#e74f12")
 mem:set_font("odstemplik bold")
-mem:set_font_size("22")
+mem:set_font_size("18")
 vicious.register(mem, vicious.widgets.mem,'$1',2)
 function mem:fit(context, width, height) return width, height end
 local desktop_wibox12 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox12:geometry({ x = 1040, y = 799, width = 400, height = 50 })
+desktop_wibox12:geometry({ x = 1040, y = 799, width = 260, height = 50 })
 desktop_wibox12:set_widget(mem)
 
 ---------------
 --------------
-netwidget = blingbling.net1({ interface = "enp3s0", show_text = true })
+netwidget = blingbling.net1({ interface = "enp3s0", show_text = true, text_background_color = "#00000000" })
 netwidget:set_ippopup()
 netwidget:set_graph_line_color("#e65117ff")
 ----netwidget:set_background_color("#f7010150")
@@ -196,58 +199,76 @@ netwidget:set_graph_color("#f70101ff")
 ----netwidget:set_background_graph_color("#00ea00ff")
 netwidget:set_text_color("#e65117")
 netwidget:set_font("odstemplik Bold")
-netwidget:set_font_size(22)
+netwidget:set_font_size(18)
 netwidget.height = 0.70
 
 function netwidget:fit(context, width, height) return width, height end
 local desktop_wibox12 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox12:geometry({ x = 1040, y = 749, width = 200, height = 50 })
+desktop_wibox12:geometry({ x = 1040, y = 749, width = 170, height = 50 })
 desktop_wibox12:set_widget(netwidget)
 
 -----------
 -----------
-my_widget14 = awful.widget.launchers({ name = "desktop",
-                                     image = "/home/valera/.config/awesome/mpd/mpd_next.png",
-                                     command = "mpc next"
-                                     })
-function my_widget14:fit(context, width, height) return width, height end
-local desktop_wibox14 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox14:geometry({ x = 1385, y = 755, width = 32, height = 32 })
-desktop_wibox14:set_widget(my_widget14)
+--next_icon = awful.widget.launchers({ name = "desktop",
+--                                     image = "/home/valera/.config/awesome/mpd/mpd_next.png",
+--                                     command = "mpc next || ncmpcpp next"
+--                                     })
+--function next_icon:fit(context, width, height) return width, height end
+--local desktop_wibox14 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
+--desktop_wibox14:geometry({ x = 1335, y = 755, width = 32, height = 32 })
+--desktop_wibox14:set_widget(next_icon)
 
 -----------
-stop_icon1 = wibox.widget.imagebox()
-stop_icon1.image = "/home/valera/.config/awesome/mpd/mpd_play.png"
-stop_icon1:buttons(awful.util.table.join(
-    awful.button({ }, 1, function () stop_icon1:set_image("/home/valera/.config/awesome/mpd/mpd_pause.png") awful.util.spawn_with_shell("mpd")  end),
-    awful.button({ }, 2, function () stop_icon1:set_image("/home/valera/.config/awesome/mpd/mpd_play.png") awful.util.spawn_with_shell("killall mpd") end)
-))
-function stop_icon1:fit(context, width, height) return width, height end
-local desktop_wibox15 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox15:geometry({ x = 1343, y = 755, width = 32, height = 32 })
-desktop_wibox15:set_widget(stop_icon1)
+--stop_icon = wibox.widget.imagebox()
+--stop_icon.image = "/home/valera/.config/awesome/icons/mpd/mpd_play.png"
+--stop_icon:buttons(awful.util.table.join(
+--    awful.button({ }, 1, function () stop_icon:set_image("/home/valera/.config/awesome/icons/mpd/mpd_pause.png") awful.util.spawn_with_shell("mpd")  end),
+--    awful.button({ }, 2, function () stop_icon:set_image("/home/valera/.config/awesome/icons/mpd/mpd_play.png") awful.util.spawn_with_shell("killall mpd") end)
+--))
+--function stop_icon:fit(context, width, height) return width, height end
+--local desktop_wibox15 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
+--desktop_wibox15:geometry({ x = 1293, y = 755, width = 32, height = 32 })
+--desktop_wibox15:set_widget(stop_icon)
 ---------
 ---------
 
 -----------
-my_widget18 = awful.widget.launchers({ name = "desktop",
-                                     image = "/home/valera/.config/awesome/mpd/mpd_prev.png",
-                                     command = "mpc next"
-                                     })
-function my_widget18:fit(context, width, height) return width, height end
-local desktop_wibox18 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox18:geometry({ x = 1301, y = 755, width = 32, height = 32 })
-desktop_wibox18:set_widget(my_widget18)
+--prev_icon = awful.widget.launchers({ name = "desktop",
+--                                     image = "/home/valera/.config/awesome/mpd/mpd_prev.png",
+--                                     command = "mpc prev || ncmpcpp prev"
+--                                     })
+--function prev_icon:fit(context, width, height) return width, height end
+--local desktop_wibox18 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
+--desktop_wibox18:geometry({ x = 1241, y = 755, width = 32, height = 32 })
+--desktop_wibox18:set_widget(prev_icon)
 
+------------------
 
+--------
 
+home_fs_usage=blingbling.value_text_box({height = 50, width = 140, v_margin = 4 })
+--home_fs_usage:set_height(16)
+--home_fs_usage:set_width(40)
+--home_fs_usage:set_v_margin(2)
 
+--home_fs_usage:set_font_size("18")
+home_fs_usage:set_text_background_color("#2a000090")
+home_fs_usage:set_values_text_color({{"#f43b0aff",0}, --all value > 0 will be displayed using this color
+                          {"#e65117ff", 0.75},
+                          {"#e65117ff", 0.77}})
+--There is no maximum number of color that users can set, just put the lower values at first. 
+home_fs_usage:set_text_color("#e65117ff")
+home_fs_usage:set_rounded_size(0.4)
+home_fs_usage:set_background_color("#2a000000")
+home_fs_usage:set_label(" /sda1: $percent %")
+home_fs_usage:set_font("odstemplik")
+home_fs_usage:set_font_size(26)
 
+vicious.register(home_fs_usage, vicious.widgets.fs, "${/ used_p}", 120 )
 
-
-
-
-
-
+function home_fs_usage:fit(context, width, height) return width, height end
+local desktop_wibox20 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
+desktop_wibox20:geometry({ x = 1300, y = 799, width = 140, height = 50 })
+desktop_wibox20:set_widget(home_fs_usage)
 
 
