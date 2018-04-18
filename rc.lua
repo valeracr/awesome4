@@ -28,10 +28,10 @@ local hotkeys_popup = require("awful.hotkeys_popup").widget
 local desktop_icons = require("desktop_icons")
 local mpd = require("mpd")
 
---awful.util.spawn_with_shell("sleep 14 && xcompmgr -cCfF -r7 -o.65 -l-10 -t-8 -D7 &")
+awful.util.spawn_with_shell("sleep 14 && xcompmgr -cCfF -r7 -o.65 -l-10 -t-8 -D7 &")
 --awful.util.spawn_with_shell("xcompmgr -cCfF &")
 --awful.util.spawn_with_shell("sleep 7 && killall xcompmgr &")
-awful.spawn.with_shell("sleep 17 && compton -icCfF -r7 -o.65 -l-10 -t-8 -D7 &")
+--awful.spawn.with_shell("sleep 17 && compton -icCfF -r7 -o.65 -l-10 -t-8 -D7 &")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -341,7 +341,7 @@ netwidget:set_text_color("#e65117")
 netwidget:set_font("odstemplik Bold")
 netwidget:set_font_size(14)
 netwidget.height = 0.50
-fixedwidget5 = wibox.layout.constraint(netwidget, "exact", 23)
+fixedwidget5 = wibox.layout.constraint(netwidget, "exact", 19)
 -----------
 
 
@@ -604,35 +604,34 @@ awful.screen.connect_for_each_screen(function(s)
           wibox.widget.systray(),
           space2,
          -- space1,
-            space,
             fixedwidget5,
-            space2,
-            fixedwidget4,
             space,
+            fixedwidget4,
+            space2,
             pacman,
             pacwidget,
            -- space1,
-            space2,
+            space,
             cpuwidget,
             space1,
             fixedwidget,
-            space,
+            space2,
             tempwidget,
             fixedwidget1,
-            space2,
+            space,
             memicon,
             fixedwidget3,
-            space,
+            space2,
             volicon,
             APW,
-            space2,
+            space,
             --mytextclock,
             --mytextclockicon,
             mytextclock1,
-            space3,
-            space,
-            s.mylayoutbox,
+            --space3,
             space2,
+            s.mylayoutbox,
+           -- space2,
         },
     }
 end)

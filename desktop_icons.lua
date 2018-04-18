@@ -141,6 +141,7 @@ cpu_graph = blingbling.line_graph({ height = 50,
                                         label = "cpu:$percent %",
                                         rounded_size = 0.3,
                                         graph_background_color = "#f4080815",
+                                        text_background_color = "#2a000080",
                                         --graph_text_color = "#f29466"                                        
                                       })
 --cpu_graph:set_height(18)
@@ -170,6 +171,7 @@ mem = blingbling.line_graph({ height = 50,
                                         label = "mem:$percent %",
                                         rounded_size = 0.3,
                                         graph_background_color = "#f4080815",
+                                        text_background_color = "#2a000080",
                                         --graph_text_color = "#f29466"                                        
                                       })
 --cpu_graph:set_height(18)
@@ -191,10 +193,10 @@ desktop_wibox12:set_widget(mem)
 
 ---------------
 --------------
-netwidget = blingbling.net1({ interface = "enp3s0", show_text = true, text_background_color = "#00000000" })
+netwidget = blingbling.net1({ interface = "enp3s0", show_text = true, text_background_color = "#2a000080" })
 netwidget:set_ippopup()
 netwidget:set_graph_line_color("#e65117ff")
-----netwidget:set_background_color("#f7010150")
+netwidget:set_background_color("#2a000000")
 netwidget:set_graph_color("#f70101ff")
 ----netwidget:set_background_graph_color("#00ea00ff")
 netwidget:set_text_color("#e65117")
@@ -259,7 +261,7 @@ home_fs_usage:set_values_text_color({{"#f43b0aff",0}, --all value > 0 will be di
 --There is no maximum number of color that users can set, just put the lower values at first. 
 home_fs_usage:set_text_color("#e65117ff")
 home_fs_usage:set_rounded_size(0.4)
-home_fs_usage:set_background_color("#2a000000")
+home_fs_usage:set_background_color("#2a000080")
 home_fs_usage:set_label(" /sda1: $percent %")
 home_fs_usage:set_font("odstemplik")
 home_fs_usage:set_font_size(26)
