@@ -132,7 +132,9 @@ theme.mpd_pause = "/home/valera/.config/awesome/icons/mpd/mpd_pause.png"
 theme.mpd_play  = "/home/valera/.config/awesome/icons/mpd/mpd_play.png"
 theme.mpd_sepr  = "/home/valera/.config/awesome/icons/mpd/mpd_sepr.png"
 theme.mpd_sepl  = "/home/valera/.config/awesome/icons/mpd/mpd_sepl.png"
-
+-- CPU / TMP
+theme.widget_display   = "/home/valera/.config/awesome/icons/mpd/widget_display.png"
+theme.widget_cpu    = "/home/valera/.config/awesome/icons/mpd/widget_cpu.png"
 
 -- {{{ Layout
 

@@ -135,6 +135,7 @@ desktop_wibox10:set_widget(my_widget10)
 
 ------------
 ------------
+-----------
 cpu_graph = blingbling.line_graph({ height = 50,
                                         width = 400,
                                         show_text = true,
@@ -156,7 +157,7 @@ cpu_graph:set_text_color("#e74f12")
 cpu_graph:set_font("odstemplik bold")
 cpu_graph:set_font_size("18")
 blingbling.popups.htop(cpu_graph, { terminal =  "xfce4-terminal" })
-vicious.register(cpu_graph, vicious.widgets.cpu,'$1',2)
+vicious.register(cpu_graph, vicious.widgets.cpu,'$1', 2)
 --vicious.register(cpu_graph, vicious.widgets.fs, "${/ used_a}", 120 )
 function cpu_graph:fit(context, width, height) return width, height end
 local desktop_wibox11 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
@@ -185,7 +186,7 @@ mem:set_graph_color("#f70101ff")
 mem:set_text_color("#e74f12")
 mem:set_font("odstemplik bold")
 mem:set_font_size("18")
-vicious.register(mem, vicious.widgets.mem,'$1',2)
+vicious.register(mem, vicious.widgets.mem,'$1', 3)
 function mem:fit(context, width, height) return width, height end
 local desktop_wibox12 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
 desktop_wibox12:geometry({ x = 1040, y = 799, width = 260, height = 50 })
@@ -262,7 +263,7 @@ home_fs_usage:set_values_text_color({{"#f43b0aff",0}, --all value > 0 will be di
 home_fs_usage:set_text_color("#e65117ff")
 home_fs_usage:set_rounded_size(0.4)
 home_fs_usage:set_background_color("#2a000080")
-home_fs_usage:set_label(" /sda1: $percent %")
+home_fs_usage:set_label("/sda1: $percent %")
 home_fs_usage:set_font("odstemplik")
 home_fs_usage:set_font_size(26)
 
@@ -270,7 +271,22 @@ vicious.register(home_fs_usage, vicious.widgets.fs, "${/ used_p}", 120 )
 
 function home_fs_usage:fit(context, width, height) return width, height end
 local desktop_wibox20 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox20:geometry({ x = 1300, y = 799, width = 140, height = 50 })
+desktop_wibox20:geometry({ x = 1300, y = 799, width = 126, height = 50 })
 desktop_wibox20:set_widget(home_fs_usage)
-
-
+----------
+---------
+cores_graph_conf ={height = 14, width = 50, graph_line_color = "#f43b0a", graph_color = "#ea1010ff", graph_background_color = "#6d0606ff", rounded_size = 0.8}
+cores_graphs = {}
+for i=1,4 do
+  cores_graphs[i] = blingbling.progress_graph( cores_graph_conf)
+  --vicious.register(cores_graphs[i], vicious.widgets.cpu, "$"..(i+1).."",1)
+  vicious.register(cores_graphs[i], vicious.widgets.fs, "${/ used_p}", 120 )
+end
+for i=1,4 do
+--function cores_graphs[i]:fit(context, width, height) return width, height end
+local desktop_wibox41 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
+desktop_wibox41:geometry({ x = 1426, y = 799, width = 14, height = 50 })
+desktop_wibox41:set_widget(cores_graphs[i])
+end
+----------
+----------
