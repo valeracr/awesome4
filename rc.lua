@@ -246,7 +246,7 @@ cpu_icon.image = "/home/valera/.config/awesome/appicons/cp1.png"
 local markup = lain.util.markup
 local cpu = lain.widget.cpu({
     settings = function()
-        widget:set_markup(markup.fontfg("odstemplik Bold 15", "#e65117", "".. cpu_now.usage .. "%"))
+        widget:set_markup(markup.fontfg("odstemplik Bold 15", "#e65117", ":".. cpu_now.usage .. "%"))
     end
 })
 cpu = wibox.layout.constraint(widget, "exact", 35)
@@ -465,7 +465,7 @@ local taglist_buttons = awful.util.table.join(
 ---Client_menu
 
 local t1 = awful.tag.find_by_name(awful.client.movetotag( "Ƅ" ),"Ƅ" )  
---local t2 = awful.tag.find_by_name(awful.client.movetotag( "ƀ" ),"ƀ" )
+local t2 = awful.tag.find_by_name(awful.client.movetotag( "ƀ" ),"ƀ" )
 local t2 = awful.tag.find_by_name(awful.client.movetotag( "Ɵ" ),"Ɵ" )
 local t3 = awful.tag.find_by_name(awful.client.movetotag( "ƈ" ),"ƈ" )
 local t4 = awful.tag.find_by_name(awful.client.movetotag( "Ɗ" ),"Ɗ" )
@@ -476,7 +476,7 @@ local t_menu ={
            {"____SECOND", function() awful.client.movetotag(t2) end},
            {"____THIRD", function() awful.client.movetotag(t3) end},
            {"____FOURTH", function() awful.client.movetotag(t4) end},
-           --{"____FIFTH", function() awful.client.movetotag(t5) end},           
+           {"____FIFTH", function() awful.client.movetotag(t5) end},           
 }
 
 local move_menu = ({ items = { { "Move to tag", t_menu, "/usr/share/icons/Black Diamond-V2/scalable/11.png" },
@@ -595,7 +595,7 @@ awful.screen.connect_for_each_screen(function(s)
            -- space,
            -- myapp1start,
             space2,
-            myapp2start,
+            myapp7start,
             space,
             myapp3start,
             space2,
@@ -603,7 +603,7 @@ awful.screen.connect_for_each_screen(function(s)
             space,
             myapp5start,
             space2,
-            myapp7start,
+            myapp2start,
             space,
             myapp8start,
             space2,
