@@ -2,6 +2,7 @@
 --local color = require("gears.color")
 --local awful = require("awful")
 --local lain       = require("lain")
+require("mic")
 -------
 ----------
 -- Standard awesome library
@@ -268,6 +269,8 @@ home_fs_usage:set_font("odstemplik")
 home_fs_usage:set_font_size(26)
 
 vicious.register(home_fs_usage, vicious.widgets.fs, "${/ used_p}", 120 )
+home_fs_usage:buttons(awful.util.table.join(
+    awful.button({ }, 1, function ()  awful.util.spawn_with_shell("pcmanfm")  end) ))
 
 function home_fs_usage:fit(context, width, height) return width, height end
 local desktop_wibox20 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
@@ -290,3 +293,12 @@ desktop_wibox41:set_widget(cores_graphs[i])
 end
 ----------
 ----------
+--local desktop_wibox42 = wibox({ type = "desktop", visible = true, bg = "#2a000080" })
+--desktop_wibox42:geometry({ x = 20, y = 60, width = 40, height = 50 })
+--desktop_wibox42:set_widget(email_icon)
+
+--local desktop_wibox43 = wibox({ type = "desktop", visible = true, bg = "#2a000080" })
+--desktop_wibox43:geometry({ x = 59, y = 60, width = 50, height = 50 })
+--desktop_wibox43:set_widget(email_widget)
+
+

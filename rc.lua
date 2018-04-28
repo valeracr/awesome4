@@ -27,6 +27,7 @@ local hotkeys_popup = require("awful.hotkeys_popup").widget
 --require("collision")()
 local desktop_icons = require("desktop_icons")
 local mpd = require("mpd")
+require("mic")
 
 awful.util.spawn_with_shell("sleep 14 && xcompmgr -cCfF -r7 -o.65 -l-10 -t-8 -D7 &")
 --awful.util.spawn_with_shell("xcompmgr -cCfF &")
@@ -358,22 +359,25 @@ netwidget.height = 0.50
 fixedwidget5 = wibox.layout.constraint(netwidget, "exact", 19)
 -----------
 
+--------
 
+----------
 spr = wibox.widget.imagebox()
 spr.image = "/home/valera/.config/awesome/icons/mpd/separators/spr.png"
 spr5px = wibox.widget.imagebox()
 spr5px.image = "/home/valera/.config/awesome/icons/mpd/separators/spr5px.png"
 
 -- Create a laucher widget
-myapp1start = awful.widget.launcher({ name = "firefox",
-                                     image = "/home/valera/.config/awesome/appicons/firefox.png",
-                                     command = "firefox"
-                                     })
+--myapp1start = awful.widget.launcher({ name = "firefox",
+--                                     image = "/home/valera/.config/awesome/appicons/firefox.png",
+--                                     command = "firefox"
+--                                     })
 
 -- Create a laucher widget
 myapp2start = awful.widget.launcher({ name = "thunar",
                                      image = "/home/valera/.config/awesome/appicons/thunar.png",
-                                     command = "dbus-launch thunar"})
+                                     --command = "dbus-launch thunar"})
+                                     command = "pcmanfm"})
 
 -- Create a laucher widget
 myapp3start = awful.widget.launcher({ name = "xfce4-terminal",
@@ -579,11 +583,11 @@ awful.screen.connect_for_each_screen(function(s)
         layout = wibox.layout.align.horizontal,
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
-            space,
+            space1,
             mylauncher,
-            space2,
-            s.mytaglist,
             space,
+            s.mytaglist,
+            space2,
               -- MPD widget
           spr,
           prev_icon,
@@ -594,19 +598,19 @@ awful.screen.connect_for_each_screen(function(s)
           spr,
            -- space,
            -- myapp1start,
-            space2,
+            space,
             myapp7start,
-            space,
+            space2,
             myapp3start,
-            space2,
+            space,
             myapp4start,
-            space,
+            space2,
             myapp5start,
-            space2,
-            myapp2start,
             space,
-            myapp8start,
+            myapp2start,
             space2,
+            --myapp8start,
+            --space2,
             space1,
             s.mypromptbox,
         },
@@ -642,7 +646,7 @@ awful.screen.connect_for_each_screen(function(s)
             APW,
             space,
             --mytextclock,
-            mytextclockicon,
+            micon,
             mytextclock1,
             --space3,
             space2,
