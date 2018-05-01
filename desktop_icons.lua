@@ -62,7 +62,7 @@ desktop_wibox1:set_widget(my_widget1)
 -------------------------
 my_widget3 = awful.widget.launchers({ name = "desktop",
                                      image = "/home/valera/.config/awesome/appicons/desktop.png",
-                                     command = "thunar /"
+                                     command = "pcmanfm / && sleep 3 && xdotool key F3"
                                      })
 function my_widget3:fit(context, width, height) return width, height end
 local desktop_wibox3 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
@@ -80,7 +80,7 @@ desktop_wibox4:set_widget(my_widget4)
 -----------
 my_widget5 = awful.widget.launchers({ name = "desktop",
                                      image = "/home/valera/.config/awesome/appicons/gnome-fs-desktop.png",
-                                     command = "thunar"
+                                     command = "pcmanfm && sleep 3 && xdotool key F3"
                                      })
 function my_widget5:fit(context, width, height) return width, height end
 local desktop_wibox5 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
@@ -99,7 +99,7 @@ desktop_wibox6:set_widget(my_widget6)
 -------------
 my_widget7 = awful.widget.launchers({ name = "trash",
                                      image = "/home/valera/.config/awesome/appicons/user-trash.png",
-                                     command = "thunar trash://"
+                                     command = "pcmanfm trash:// && sleep 3 && xdotoll key F3"
                                      })
 function my_widget7:fit(context, width, height) return width, height end
 local desktop_wibox7 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
@@ -123,7 +123,7 @@ my_widget9 = awful.widget.launcher({ name = "acestream",
                                      })
 function my_widget9:fit(context, width, height) return width, height end
 local desktop_wibox9 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox9:geometry({ x = 1300, y = 500, width = 32, height = 32 })
+desktop_wibox9:geometry({ x = 1310, y = 500, width = 32, height = 32 })
 desktop_wibox9:set_widget(my_widget9)
 --
 local my_widget10 = wibox.widget.textbox()
@@ -135,7 +135,22 @@ desktop_wibox10:geometry({ x = 1286, y = 540, width = 70, height = 18 })
 desktop_wibox10:set_widget(my_widget10)
 
 ------------
-------------
+--my_widget01 = awful.widget.launchers({ name = "Gimp",
+  --                                   image = "/usr/share/icons/Black Diamond-V2/scalable/apps/gnome-panel-fish.png",
+  --                                   command = "/var/lib/flatpak/exports/bin/org.gimp.GIMP"
+  --                                   })
+--function my_widget01:fit(context, width, height) return width, height end
+--local desktop_wibox02 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
+--desktop_wibox02:geometry({ x = 1305, y = 600, width = 32, height = 32 })
+--desktop_wibox02:set_widget(my_widget01)
+--
+--local my_widget03 = wibox.widget.textbox()
+--my_widget03.markup = "<span color=\"#e74f12\"><span font=\"odstemplik 15\"><b>Gimp-2.10</b></span></span>"
+--function my_widget03:fit(context, width, height) return width, height end
+--local desktop_wibox04 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
+--desktop_wibox04:geometry({ x = 1290, y = 640, width = 70, height = 18 })
+--desktop_wibox04:set_widget(my_widget03)
+-----------
 -----------
 cpu_graph = blingbling.line_graph({ height = 50,
                                         width = 400,

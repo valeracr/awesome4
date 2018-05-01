@@ -257,7 +257,7 @@ widget:set_align("center")
 --Sensors
 tempwidget = awful.widget.launcher({ name = "weather",
                                      image = "/home/valera/sharingan-icons-1.5/speedownload.png",
-                                     command = "/home/valera/Документы/ww"})
+                                     command = "gis-weather"})
 sensors = wibox.widget.textbox()
 vicious.register(sensors, vicious.widgets.thermal, "<span color=\"#e65117\"><span font=\"odstemplik Bold 14\"><b>$1°C</b></span></span>", 3, { "coretemp.0/hwmon/hwmon1", "core"})
 fixedwidget1 = wibox.layout.constraint(sensors, "exact", 32)
@@ -1118,6 +1118,6 @@ awful.util.spawn_with_shell("run_once sleep 3 && /usr/bin/nm-applet --sm-disable
 --awful.util.spawn_with_shell("run_once start-pulseaudio-x11")
 --awful.util.spawn_with_shell("run_once /usr/bin/synclient TouchpadOff=1")
 --awful.util.spawn_with_shell (awful.tag.incncol( 4, nil, true))
---awful.util.spawn_with_shell("run_once thunderbird")
+awful.util.spawn_with_shell("run_once gis-weather")
 --awful.util.spawn_with_shell("run_once nm-applet")
 awful.util.spawn_with_shell("setxkbmap")
