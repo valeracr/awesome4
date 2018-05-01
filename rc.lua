@@ -28,6 +28,8 @@ local hotkeys_popup = require("awful.hotkeys_popup").widget
 local desktop_icons = require("desktop_icons")
 local mpd = require("mpd")
 require("mic")
+local ramgraph_widget = require("ram-widget") 
+local watch = require("awful.widget.watch")
 
 awful.util.spawn_with_shell("sleep 14 && xcompmgr -cCfF -r7 -o.65 -l-10 -t-8 -D7 &")
 --awful.util.spawn_with_shell("xcompmgr -cCfF &")
@@ -242,8 +244,10 @@ kbdwidget:set_align("center")
 --vicious.register(cpuwidget2, vicious.widgets.cpu, "$2%" ,2)
 --fixedwidget = wibox.layout.constraint(cpuwidget2, "exact", 35)
 ---cpuwidget2:set_align("center")
-cpu_icon = wibox.widget.imagebox()
-cpu_icon.image = "/home/valera/.config/awesome/appicons/cp1.png"
+
+cpu_icon = awful.widget.launcher({ name = "htop",
+                                     image = "/home/valera/.config/awesome/appicons/cp21.png",
+                                     command = "xfce4-terminal -e htop"})
 local markup = lain.util.markup
 local cpu = lain.widget.cpu({
     settings = function()
@@ -262,13 +266,6 @@ sensors = wibox.widget.textbox()
 vicious.register(sensors, vicious.widgets.thermal, "<span color=\"#e65117\"><span font=\"odstemplik Bold 14\"><b>$1°C</b></span></span>", 3, { "coretemp.0/hwmon/hwmon1", "core"})
 fixedwidget1 = wibox.layout.constraint(sensors, "exact", 32)
 sensors.align = "center"
------------
-
---memicon = wibox.widget.imagebox()
---memicon.image = "/home/valera/.icons/Black Diamond-V2/scalable/apps/gnome-system-monitor.png"
-memicon = awful.widget.launcher({ name = "prev",
-                                     image = "/home/valera/.config/awesome/appicons/xfce4-terminal.png",
-                                     command = "xfce4-terminal -e htop"})
 local function disptemp()
 	local f, infos
 	local capi = {
@@ -294,8 +291,16 @@ local function disptemp()
 		screen	= capi.mouse.screen })
 end
 
-memicon:connect_signal('mouse::enter', function () disptemp(path) end)
-memicon:connect_signal('mouse::leave', function () naughty.destroy(showtempinfo) end)
+sensors:connect_signal('mouse::enter', function () disptemp(path) end)
+sensors:connect_signal('mouse::leave', function () naughty.destroy(showtempinfo) end)
+
+-----------
+
+--memicon = wibox.widget.imagebox()
+--memicon.image = "/home/valera/.icons/Black Diamond-V2/scalable/apps/gnome-system-monitor.png"
+memicon = awful.widget.launchers({ name = "prev",
+                                     image = "/home/valera/.config/awesome/appicons/xfce4-terminal.png",
+                                     command = "xfce4-terminal -e htop"})
 
 -- Memory
 memwidget = wibox.widget.textbox()
@@ -306,6 +311,73 @@ fixedmemwidget = wibox.layout.constraint(memwidget, "exact", 147)
 memwidget.align = "center"
 fixedwidget3 = wibox.layout.constraint(memwidget, "exact", 50)
 --fixedwidget3:set_width(50)
+-----------
+-----------
+--- Widget which is shown when user clicks on the ram widget
+local w = wibox {
+    height = 200,
+    width = 400,
+    ontop = true,
+    screen = mouse.screen,
+    expand = true,
+   -- bg = '#1e252c',
+    font = "Z003",
+    bg = '#00000030',
+    max_widget_size = 500
+}
+
+w:setup {
+    border_width = 2,
+    font = "odstemplik Bold",
+    colors = {
+        '#f92603',
+        '#e65117',
+        '#2a0000',
+    },
+    display_labels = false,
+    forced_width = 25,
+    id = 'pie',
+    widget = wibox.widget.piechart,
+}
+
+local total, used, free, shared, buff_cache, available, total_swap, used_swap, free_swap
+
+local function getPercentage(value)
+    return math.floor(value / (total+total_swap) * 100 + 0.5) .. '%'
+end
+
+watch('bash -c "free | grep -z Mem.*Swap.*"', 1,
+    function(widget, stdout, stderr, exitreason, exitcode)
+        total, used, free, shared, buff_cache, available, total_swap, used_swap, free_swap =
+            stdout:match('(%d+)%s*(%d+)%s*(%d+)%s*(%d+)%s*(%d+)%s*(%d+)%s*Swap:%s*(%d+)%s*(%d+)%s*(%d+)')
+
+        widget.data = { used, total-used } widget.data = { used, total-used }
+
+        if w.visible then
+            w.pie.data_list = {
+                {'used ' .. getPercentage(used + used_swap), used + used_swap},
+                {'free ' .. getPercentage(free + free_swap), free + free_swap},
+                {'buff_cache ' .. getPercentage(buff_cache), buff_cache}
+            }
+        end
+    end,
+   memicon
+)
+
+memicon:buttons(
+    awful.util.table.join(
+        awful.button({}, 1, function()
+            awful.placement.top_right(w, { margins = {top = 25, right = 168}})
+            w.pie.data_list = {
+                {'used ' .. getPercentage(used + used_swap), used + used_swap},
+                {'free ' .. getPercentage(free + free_swap), free + free_swap},
+                {'buff_cache ' .. getPercentage(buff_cache), buff_cache}
+            }
+            w.pie.display_labels = true
+            w.visible = not w.visible
+        end)
+    )
+)
 -----------------
 
 volicon = awful.widget.launchers({ name = "pavucontrol",
@@ -618,6 +690,7 @@ awful.screen.connect_for_each_screen(function(s)
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
            -- mykeyboardlayout,
+ --         ramgraph_widget,
           space,
           wibox.widget.systray(),
           space2,

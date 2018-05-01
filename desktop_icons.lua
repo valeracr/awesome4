@@ -316,4 +316,40 @@ end
 --desktop_wibox43:geometry({ x = 59, y = 60, width = 50, height = 50 })
 --desktop_wibox43:set_widget(email_widget)
 
+my_widget51 = awful.widget.launchers({ name = "desktop",
+                                     image = "/home/valera/.config/awesome/appicons/111.png",
+                                     command = "xfce4-terminal -e 'yaourt -Syyu --aur'"
+                                     })
+function my_widget51:fit(context, width, height) return width, height end
+local desktop_wibox52 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
+desktop_wibox52:geometry({ x = 91, y = 890, width = 20, height = 20 })
+desktop_wibox52:set_widget(my_widget51)
 
+-- Pacman Widget
+pacwidget1 = wibox.widget.textbox()
+
+pacwidget1_t = awful.tooltip({ objects = { pacwidget1},})
+
+vicious.register(pacwidget1, vicious.widgets.pkg,
+                function(widget,args)
+                    local io = { popen = io.popen }
+                    --local s = io.popen("pacman -Qu -b /tmp/checkup-db-valera")
+                    local s = io.popen("/usr/bin/checkupdates")
+                    local str = ''
+		    local i = 0
+
+                    for line in s:lines() do
+                        --str = str .. line .. "\n"
+                         str = "<span color=\"#e65117\"><span font=\"Sony Sketch EF Bold 11\">" .. str .. " " .. line .. "</span></span>\n"
+                        i = i + 1
+		    end
+                    pacwidget1_t:set_markup(str)
+                    s:close()
+                    return "<span color=\"#e6511750\"><b>"  .. i ..  "</b></span>"
+                end, 1800, "Arch C")
+pacwidget1:set_font("odstemplik Bold 56")
+
+function pacwidget1:fit(context, width, height) return width, height end
+local wibox50 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
+wibox50:geometry({ x = 175, y = 830, width = 60, height = 60 })
+wibox50:set_widget(pacwidget1)
