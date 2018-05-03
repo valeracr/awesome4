@@ -25,7 +25,8 @@ local APW = require("apw/widget")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
 --local radical = require("radical")
 --require("collision")()
-
+local spawn = require("awful.spawn")
+mpdarc = require("mpdarc")
 -------------------------------------
 -------------------------------------
 -- MPD
@@ -87,18 +88,28 @@ function () awful.util.spawn_with_shell(ncmpcpp) end)))
 -------
 
 local desktop_wibox30 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox30:geometry({ x = 1224, y = 755, width = 10, height = 32 })
+desktop_wibox30:geometry({ x = 456, y = 700, width = 10, height = 32 })
 desktop_wibox30:set_widget(sep1)
+
+function mpdarc:fit(context, width, height) return width, height end
+--mpdarc = wibox.container.mirror(midget, { horizontal = true })
+local desktop_wibox81 = wibox({ type = "desktop", visible = true, bg = "#2a0000" })
+desktop_wibox81:geometry({ x = 467, y = 700, width = 32, height = 32 })
+desktop_wibox81:set_widget(mpdarc)
+
+local desktop_wibox30a = wibox({ type = "desktop", visible = true, bg = "#00000000" })
+desktop_wibox30a:geometry({ x = 500, y = 700, width = 10, height = 32 })
+desktop_wibox30a:set_widget(sep)
 
 prev_icon = awful.widget.launchers({ name = "prev",
                                      image = "/home/valera/.config/awesome/icons/mpd/mpd_prev.png",
                                      command = "mpc prev || ncmpcpp prev"})
 local desktop_wibox18 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox18:geometry({ x = 1235, y = 755, width = 32, height = 32 })
+desktop_wibox18:geometry({ x = 511, y = 700, width = 32, height = 32 })
 desktop_wibox18:set_widget(prev_icon)
 
 local desktop_wibox31 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox31:geometry({ x = 1268, y = 755, width = 10, height = 32 })
+desktop_wibox31:geometry({ x = 544, y = 700, width = 10, height = 32 })
 desktop_wibox31:set_widget(sep)
 
 stop_icon:buttons(awful.util.table.join(
@@ -107,22 +118,22 @@ stop_icon:buttons(awful.util.table.join(
 ))
 --function stop_icon:fit(context, width, height) return width, height end
 local desktop_wibox15 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox15:geometry({ x = 1279, y = 755, width = 32, height = 32 })
+desktop_wibox15:geometry({ x = 555, y = 700, width = 32, height = 32 })
 desktop_wibox15:set_widget(stop_icon)
 
 local desktop_wibox32 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox32:geometry({ x = 1312, y = 755, width = 10, height = 32 })
+desktop_wibox32:geometry({ x = 588, y = 700, width = 10, height = 32 })
 desktop_wibox32:set_widget(sep)
 
 next_icon = awful.widget.launchers({ name = "next",
                                      image = "/home/valera/.config/awesome/icons/mpd/mpd_next.png",
                                      command = "mpc next || ncmpcpp next"})
 local desktop_wibox14 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox14:geometry({ x = 1323, y = 755, width = 32, height = 32 })
+desktop_wibox14:geometry({ x = 599, y = 700, width = 32, height = 32 })
 desktop_wibox14:set_widget(next_icon)
 
 local desktop_wibox33 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox33:geometry({ x = 1356, y = 755, width = 10, height = 32 })
+desktop_wibox33:geometry({ x = 632, y = 700, width = 10, height = 32 })
 desktop_wibox33:set_widget(sep)
 
 ------------------
@@ -137,12 +148,12 @@ volume_master:set_font("odstemplik Bold")
 volume_master:set_font_size(18)
 function volume_master:fit(context, width, height) return width, height end
 local desktop_wibox19 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox19:geometry({ x = 1367, y = 755, width = 58, height = 32 })
+desktop_wibox19:geometry({ x = 643, y = 700, width = 58, height = 32 })
 desktop_wibox19:set_widget(volume_master)
 --------
 
 local desktop_wibox34 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox34:geometry({ x = 1426, y = 755, width = 10, height = 32 })
+desktop_wibox34:geometry({ x = 702, y = 700, width = 10, height = 32 })
 desktop_wibox34:set_widget(sep2)
-
-
+----------------------
+--------------

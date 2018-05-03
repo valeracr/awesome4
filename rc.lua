@@ -31,10 +31,10 @@ require("mic")
 local ramgraph_widget = require("ram-widget") 
 local watch = require("awful.widget.watch")
 
-awful.util.spawn_with_shell("sleep 14 && xcompmgr -cCfF -r7 -o.65 -l-10 -t-8 -D7 &")
+--awful.util.spawn_with_shell("sleep 14 && xcompmgr -cCfF -r7 -o.65 -l-10 -t-8 -D7 &")
 --awful.util.spawn_with_shell("xcompmgr -cCfF &")
 --awful.util.spawn_with_shell("sleep 7 && killall xcompmgr &")
---awful.spawn.with_shell("sleep 17 && compton -icCfF -r7 -o.65 -l-10 -t-8 -D7 &")
+awful.spawn.with_shell("sleep 17 && compton -icCfF -r7 -o.65 -l-10 -t-8 -D7 &")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -431,7 +431,6 @@ netwidget.height = 0.50
 fixedwidget5 = wibox.layout.constraint(netwidget, "exact", 19)
 -----------
 
---------
 
 ----------
 spr = wibox.widget.imagebox()
@@ -690,7 +689,6 @@ awful.screen.connect_for_each_screen(function(s)
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
            -- mykeyboardlayout,
- --         ramgraph_widget,
           space,
           wibox.widget.systray(),
           space2,

@@ -3,6 +3,7 @@
 --local awful = require("awful")
 --local lain       = require("lain")
 require("mic")
+
 -------
 ----------
 -- Standard awesome library
@@ -205,7 +206,7 @@ mem:set_font_size("18")
 vicious.register(mem, vicious.widgets.mem,'$1', 3)
 function mem:fit(context, width, height) return width, height end
 local desktop_wibox12 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox12:geometry({ x = 1040, y = 799, width = 260, height = 50 })
+desktop_wibox12:geometry({ x = 1040, y = 799, width = 400, height = 50 })
 desktop_wibox12:set_widget(mem)
 
 ---------------
@@ -223,7 +224,7 @@ netwidget.height = 0.70
 
 function netwidget:fit(context, width, height) return width, height end
 local desktop_wibox12 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox12:geometry({ x = 1040, y = 749, width = 170, height = 50 })
+desktop_wibox12:geometry({ x = 1040, y = 749, width = 200, height = 50 })
 desktop_wibox12:set_widget(netwidget)
 
 -----------
@@ -271,15 +272,15 @@ home_fs_usage=blingbling.value_text_box({height = 50, width = 140, v_margin = 4 
 --home_fs_usage:set_v_margin(2)
 
 --home_fs_usage:set_font_size("18")
-home_fs_usage:set_text_background_color("#2a000090")
+home_fs_usage:set_text_background_color("#2a000000")
 home_fs_usage:set_values_text_color({{"#f43b0aff",0}, --all value > 0 will be displayed using this color
                           {"#e65117ff", 0.75},
                           {"#e65117ff", 0.77}})
 --There is no maximum number of color that users can set, just put the lower values at first. 
 home_fs_usage:set_text_color("#e65117ff")
 home_fs_usage:set_rounded_size(0.4)
-home_fs_usage:set_background_color("#2a000080")
-home_fs_usage:set_label("/sda1: $percent %")
+home_fs_usage:set_background_color("#2a000010")
+home_fs_usage:set_label("Fs:/sda1: $percent %")
 home_fs_usage:set_font("odstemplik")
 home_fs_usage:set_font_size(26)
 
@@ -289,7 +290,7 @@ home_fs_usage:buttons(awful.util.table.join(
 
 function home_fs_usage:fit(context, width, height) return width, height end
 local desktop_wibox20 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox20:geometry({ x = 1300, y = 799, width = 126, height = 50 })
+desktop_wibox20:geometry({ x = 1260, y = 749, width = 200, height = 50 })
 desktop_wibox20:set_widget(home_fs_usage)
 ----------
 ---------
@@ -303,7 +304,7 @@ end
 for i=1,4 do
 --function cores_graphs[i]:fit(context, width, height) return width, height end
 local desktop_wibox41 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox41:geometry({ x = 1426, y = 799, width = 14, height = 50 })
+desktop_wibox41:geometry({ x = 1420, y = 749, width = 14, height = 50 })
 desktop_wibox41:set_widget(cores_graphs[i])
 end
 ----------
@@ -353,3 +354,9 @@ function pacwidget1:fit(context, width, height) return width, height end
 local wibox50 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
 wibox50:geometry({ x = 175, y = 830, width = 60, height = 60 })
 wibox50:set_widget(pacwidget1)
+-------------------------------
+
+
+
+
+

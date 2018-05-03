@@ -169,17 +169,17 @@ function net.draw(n_graph, wibox, cr, width, height)
     local _, logical = layout:get_pixel_extents()
 
     local text_width = logical.width
-    local arrow_width = 20
-    local arrow_height = 20
-    local arrows_separator = 10
+    local arrow_width = 30
+    local arrow_height = 30
+    local arrows_separator = 15
     local total_width = (2* text_width) +(2*arrow_width) + arrows_separator + (4*props.h_margin) 
      --local total_height = (2* text_height) +(2*arrow_height) + (2*arrows_separator) + (2*props.h_margin)
     data[n_graph].width = total_width
    -- data[n_graph].height = (arrow_height * 2) + arrows_separator + (2* props.h_margin)
   else
-    local arrow_width = 20
-    local arrow_height = 20
-    local arrows_separator = 10
+    local arrow_width = 30
+    local arrow_height = 30
+    local arrows_separator = 15
     data[n_graph].width = (arrow_width * 2) + arrows_separator + (4* props.h_margin)
     --data[n_graph].height = (arrow_height * 2) + arrows_separator + (2* props.h_margin)
   end
