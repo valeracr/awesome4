@@ -91,22 +91,23 @@ local desktop_wibox30 = wibox({ type = "desktop", visible = true, bg = "#0000000
 desktop_wibox30:geometry({ x = 456, y = 700, width = 10, height = 32 })
 desktop_wibox30:set_widget(sep1)
 
-function mpdarc:fit(context, width, height) return width, height end
---mpdarc = wibox.container.mirror(midget, { horizontal = true })
-local desktop_wibox81 = wibox({ type = "desktop", visible = true, bg = "#2a0000" })
-desktop_wibox81:geometry({ x = 467, y = 700, width = 32, height = 32 })
-desktop_wibox81:set_widget(mpdarc)
+prev_icon = awful.widget.launchers({ name = "prev",
+                                     image = "/home/valera/.config/awesome/icons/mpd/mpd_prev.png",
+                                     command = "mpc prev || ncmpcpp prev"})
+local desktop_wibox18 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
+desktop_wibox18:geometry({ x = 467, y = 700, width = 32, height = 32 })
+desktop_wibox18:set_widget(prev_icon)
 
 local desktop_wibox30a = wibox({ type = "desktop", visible = true, bg = "#00000000" })
 desktop_wibox30a:geometry({ x = 500, y = 700, width = 10, height = 32 })
 desktop_wibox30a:set_widget(sep)
 
-prev_icon = awful.widget.launchers({ name = "prev",
-                                     image = "/home/valera/.config/awesome/icons/mpd/mpd_prev.png",
-                                     command = "mpc prev || ncmpcpp prev"})
-local desktop_wibox18 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox18:geometry({ x = 511, y = 700, width = 32, height = 32 })
-desktop_wibox18:set_widget(prev_icon)
+
+function mpdarc:fit(context, width, height) return width, height end
+--mpdarc = wibox.container.mirror(midget, { horizontal = true })
+local desktop_wibox81 = wibox({ type = "desktop", visible = true, bg = "#2a0000" })
+desktop_wibox81:geometry({ x = 511, y = 700, width = 32, height = 32 })
+desktop_wibox81:set_widget(mpdarc)
 
 local desktop_wibox31 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
 desktop_wibox31:geometry({ x = 544, y = 700, width = 10, height = 32 })
@@ -161,19 +162,19 @@ mpicon1 = wibox.widget.imagebox()
 mpicon1.image = "/home/valera/.config/awesome/icons/15.png"
 
 local desktop_wibox34a = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox34a:geometry({ x = 466, y = 664, width = 46, height = 31 })
+desktop_wibox34a:geometry({ x = 468, y = 664, width = 46, height = 31 })
 desktop_wibox34a:set_widget(mpicon1)
 
 mpicon = wibox.widget.imagebox()
 mpicon.image = "/home/valera/.config/awesome/icons/14.png"
 
 local desktop_wibox34 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox34:geometry({ x = 513, y = 655, width = 150, height = 46 })
+desktop_wibox34:geometry({ x = 515, y = 655, width = 150, height = 46 })
 desktop_wibox34:set_widget(mpicon)
 
 mpicon3 = wibox.widget.imagebox()
 mpicon3.image = "/home/valera/.config/awesome/icons/16.png"
 
 local desktop_wibox34c = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox34c:geometry({ x = 647,  y = 662, width = 46, height = 31 })
+desktop_wibox34c:geometry({ x = 650,  y = 662, width = 46, height = 31 })
 desktop_wibox34c:set_widget(mpicon3)
