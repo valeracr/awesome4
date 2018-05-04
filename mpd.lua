@@ -53,7 +53,7 @@ function sep:fit(context, width, height) return width, height end
 mpdwidget = lain.widget.mpd({
     settings = function ()
         if mpd_now.state == "play" then
-            mpd_notification_preset.font = "Z003 15"
+            mpd_notification_preset.font = "Z003 17"
             mpd_now.artist = mpd_now.artist:upper():gsub("&.-;", string.lower)
             mpd_now.title = mpd_now.title:upper():gsub("&.-;", string.lower)
             --widget:set_markup(markup.font("odstemplik Bold 18", " ")
@@ -157,3 +157,23 @@ desktop_wibox34:geometry({ x = 702, y = 700, width = 10, height = 32 })
 desktop_wibox34:set_widget(sep2)
 ----------------------
 --------------
+mpicon1 = wibox.widget.imagebox()
+mpicon1.image = "/home/valera/.config/awesome/icons/15.png"
+
+local desktop_wibox34a = wibox({ type = "desktop", visible = true, bg = "#00000000" })
+desktop_wibox34a:geometry({ x = 466, y = 664, width = 46, height = 31 })
+desktop_wibox34a:set_widget(mpicon1)
+
+mpicon = wibox.widget.imagebox()
+mpicon.image = "/home/valera/.config/awesome/icons/14.png"
+
+local desktop_wibox34 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
+desktop_wibox34:geometry({ x = 513, y = 655, width = 150, height = 46 })
+desktop_wibox34:set_widget(mpicon)
+
+mpicon3 = wibox.widget.imagebox()
+mpicon3.image = "/home/valera/.config/awesome/icons/16.png"
+
+local desktop_wibox34c = wibox({ type = "desktop", visible = true, bg = "#00000000" })
+desktop_wibox34c:geometry({ x = 647,  y = 662, width = 46, height = 31 })
+desktop_wibox34c:set_widget(mpicon3)

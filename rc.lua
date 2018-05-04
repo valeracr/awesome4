@@ -31,6 +31,7 @@ require("mic")
 local ramgraph_widget = require("ram-widget") 
 local watch = require("awful.widget.watch")
 
+
 --awful.util.spawn_with_shell("sleep 14 && xcompmgr -cCfF -r7 -o.65 -l-10 -t-8 -D7 &")
 --awful.util.spawn_with_shell("xcompmgr -cCfF &")
 --awful.util.spawn_with_shell("sleep 7 && killall xcompmgr &")
