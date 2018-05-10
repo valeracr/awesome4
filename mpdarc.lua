@@ -86,9 +86,9 @@ function show_MPD_status()
                 text = stdout,
                 font = "Z003 14",
                 title = "MPD",
-                timeout = 5,
-                hover_timeout = 0.5,
-                width = 400,
+               -- timeout = 5,
+                --hover_timeout = 0.5,
+                width = 270,
             }
         end)
 end

@@ -251,6 +251,7 @@ cpu_icon = awful.widget.launcher({ name = "htop",
                                      command = "xfce4-terminal -e htop"})
 local markup = lain.util.markup
 local cpu = lain.widget.cpu({
+    timeout = 5,
     settings = function()
         widget:set_markup(markup.fontfg("odstemplik Bold 15", "#e65117", ":".. cpu_now.usage .. "%"))
     end
@@ -264,7 +265,7 @@ tempwidget = awful.widget.launcher({ name = "weather",
                                      image = "/home/valera/sharingan-icons-1.5/speedownload.png",
                                      command = "gis-weather"})
 sensors = wibox.widget.textbox()
-vicious.register(sensors, vicious.widgets.thermal, "<span color=\"#e65117\"><span font=\"odstemplik Bold 14\"><b>$1°C</b></span></span>", 3, { "coretemp.0/hwmon/hwmon1", "core"})
+vicious.register(sensors, vicious.widgets.thermal, "<span color=\"#e65117\"><span font=\"odstemplik Bold 14\"><b>$1°C</b></span></span>", 3, { "coretemp.0/hwmon/hwmon1", "core"} ,5)
 fixedwidget1 = wibox.layout.constraint(sensors, "exact", 32)
 sensors.align = "center"
 local function disptemp()
@@ -419,7 +420,7 @@ pacwidget:set_font("odstemplik Bold 17")
 
 --
 -- Network Widget
-netwidget = blingbling.net({ interface = "enp3s0", show_text = false })
+netwidget = blingbling.net({ interface = "enp3s0", show_text = false, timeout = 5 })
 netwidget:set_ippopup()
 netwidget:set_graph_line_color("#e65117ff")
 ----netwidget:set_background_color("#f7010150")
