@@ -35,7 +35,7 @@ local mpdarc = wibox.widget {
     mirrored_icon,
     max_value = 1,
     value = 0.75,
-    thickness = 2,
+    thickness = 1,
     start_angle = 4.71238898, -- 2pi*3/4
    forced_height = 16,
     forced_width = 16,

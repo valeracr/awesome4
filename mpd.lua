@@ -114,8 +114,8 @@ desktop_wibox31:geometry({ x = 694, y = 700, width = 10, height = 32 })
 desktop_wibox31:set_widget(sep)
 
 stop_icon:buttons(awful.util.table.join(
-    awful.button({ }, 1, function () stop_icon:set_image("/home/valera/.config/awesome/icons/mpd/mpd_pause.png") awful.util.spawn_with_shell("mpd") mpdwidget.update()  end),
-    awful.button({ }, 2, function () stop_icon:set_image("/home/valera/.config/awesome/icons/mpd/mpd_play.png") awful.util.spawn_with_shell("killall mpd") mpdwidget.update() end)
+    awful.button({ }, 1, function () stop_icon:set_image("/home/valera/.config/awesome/icons/mpd/mpd_pause.png") mpicon:set_image("/home/valera/.config/awesome/icons/14a.png") mpicon1:set_image("/home/valera/.config/awesome/icons/15a.png") mpicon3:set_image("/home/valera/.config/awesome/icons/16a.png") awful.util.spawn_with_shell("mpd") mpdwidget.update()  end),
+    awful.button({ }, 2, function () stop_icon:set_image("/home/valera/.config/awesome/icons/mpd/mpd_play.png") mpicon:set_image("/home/valera/.config/awesome/icons/14.png") mpicon1:set_image("/home/valera/.config/awesome/icons/15.png") mpicon3:set_image("/home/valera/.config/awesome/icons/16.png") awful.util.spawn_with_shell("killall mpd") mpdwidget.update() end)
 ))
 --function stop_icon:fit(context, width, height) return width, height end
 local desktop_wibox15 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
@@ -169,7 +169,7 @@ mpicon = wibox.widget.imagebox()
 mpicon.image = "/home/valera/.config/awesome/icons/14.png"
 
 local desktop_wibox34 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox34:geometry({ x = 661, y = 655, width = 150, height = 46 })
+desktop_wibox34:geometry({ x = 657, y = 660, width = 150, height = 40 })
 desktop_wibox34:set_widget(mpicon)
 
 mpicon3 = wibox.widget.imagebox()
