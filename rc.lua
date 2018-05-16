@@ -298,6 +298,14 @@ sensors:connect_signal('mouse::leave', function () naughty.destroy(showtempinfo)
 
 -----------
 
+function sensors:fit(context, width, height) return width, height end
+local sensors1 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
+sensors1:geometry({ x = 1413, y = 799, width = 24, height = 50 })
+sensors1:set_widget(sensors)
+
+--------------
+----------------
+
 --memicon = wibox.widget.imagebox()
 --memicon.image = "/home/valera/.icons/Black Diamond-V2/scalable/apps/gnome-system-monitor.png"
 memicon = awful.widget.launchers({ name = "prev",

@@ -159,7 +159,7 @@ my_widget19a = awful.widget.launcher({ name = "coolreader",
                                      })
 function my_widget19a:fit(context, width, height) return width, height end
 local desktop_wibox19a = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox19a:geometry({ x = 50, y = 560, width = 32, height = 32 })
+desktop_wibox19a:geometry({ x = 50, y = 590, width = 32, height = 32 })
 desktop_wibox19a:set_widget(my_widget19a)
 --
 local my_widget10a = wibox.widget.textbox()
@@ -167,7 +167,7 @@ local my_widget10a = wibox.widget.textbox()
 my_widget10a.markup = "<span color=\"#e74f12\"><span font=\"odstemplik 14\"><b>CoolReader</b></span></span>"
 function my_widget10a:fit(context, width, height) return width, height end
 local desktop_wibox10a = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox10a:geometry({ x = 26, y = 600, width = 79, height = 18 })
+desktop_wibox10a:geometry({ x = 26, y = 630, width = 79, height = 18 })
 desktop_wibox10a:set_widget(my_widget10a)
 ---------------
 
@@ -178,7 +178,7 @@ my_widget9aa = awful.widget.launcher({ name = "firefox",
                                      })
 function my_widget9aa:fit(context, width, height) return width, height end
 local desktop_wibox9aa = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox9aa:geometry({ x = 150, y = 560, width = 32, height = 32 })
+desktop_wibox9aa:geometry({ x = 150, y = 590, width = 32, height = 32 })
 desktop_wibox9aa:set_widget(my_widget9aa)
 --
 local my_widget10aa = wibox.widget.textbox()
@@ -186,7 +186,7 @@ local my_widget10aa = wibox.widget.textbox()
 my_widget10aa.markup = "<span color=\"#e74f12\"><span font=\"odstemplik 14\"><b>Firefox</b></span></span>"
 function my_widget10aa:fit(context, width, height) return width, height end
 local desktop_wibox10aa = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox10aa:geometry({ x = 141, y = 600, width = 70, height = 18 })
+desktop_wibox10aa:geometry({ x = 141, y = 630, width = 70, height = 18 })
 desktop_wibox10aa:set_widget(my_widget10aa)
 ----------------
 
@@ -197,7 +197,7 @@ my_widget9b = awful.widget.launcher({ name = "cantata",
                                      })
 function my_widget9b:fit(context, width, height) return width, height end
 local desktop_wibox9b = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox9b:geometry({ x = 250, y = 563, width = 32, height = 32 })
+desktop_wibox9b:geometry({ x = 250, y = 593, width = 32, height = 32 })
 desktop_wibox9b:set_widget(my_widget9b)
 --
 local my_widget10b = wibox.widget.textbox()
@@ -205,10 +205,18 @@ local my_widget10b = wibox.widget.textbox()
 my_widget10b.markup = "<span color=\"#e74f12\"><span font=\"odstemplik 14\"><b>Cantata</b></span></span>"
 function my_widget10b:fit(context, width, height) return width, height end
 local desktop_wibox10b = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox10b:geometry({ x = 238, y = 600, width = 70, height = 18 })
+desktop_wibox10b:geometry({ x = 238, y = 630, width = 70, height = 18 })
 desktop_wibox10b:set_widget(my_widget10b)
 
 -----------
+cpu1a = wibox.widget.imagebox()
+cpu1a.image = "/home/valera/.config/awesome/appicons/cp1.png"
+function cpu1a:fit(context, width, height) return width, height end
+local cpu1aa = wibox({ type = "desktop", visible = true, bg = "#00000000" })
+cpu1aa:geometry({ x = 1040, y = 850, width = 50, height = 50 })
+cpu1aa:set_widget(cpu1a)
+---------------
+---------------
 cpu_graph = blingbling.line_graph({ height = 50,
                                         width = 400,
                                         show_text = true,
@@ -234,11 +242,18 @@ vicious.register(cpu_graph, vicious.widgets.cpu,'$1', 5)
 --vicious.register(cpu_graph, vicious.widgets.fs, "${/ used_a}", 120 )
 function cpu_graph:fit(context, width, height) return width, height end
 local desktop_wibox11 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox11:geometry({ x = 1040, y = 850, width = 400, height = 50 })
+desktop_wibox11:geometry({ x = 1090, y = 850, width = 350, height = 50 })
 desktop_wibox11:set_widget(cpu_graph)
 
 ------------
 ------------
+mem1a = wibox.widget.imagebox()
+mem1a.image = "/home/valera/.config/awesome/appicons/mem.png"
+function mem1a:fit(context, width, height) return width, height end
+local mem1aa = wibox({ type = "desktop", visible = true, bg = "#00000000" })
+mem1aa:geometry({ x = 1040, y = 799, width = 50, height = 50 })
+mem1aa:set_widget(mem1a)
+----------
 mem = blingbling.line_graph({ height = 50,
                                         width = 400,
                                         show_text = true,
@@ -262,11 +277,18 @@ mem:set_font_size("18")
 vicious.register(mem, vicious.widgets.mem,'$1', 5)
 function mem:fit(context, width, height) return width, height end
 local desktop_wibox12 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox12:geometry({ x = 1040, y = 799, width = 400, height = 50 })
+desktop_wibox12:geometry({ x = 1090, y = 799, width = 307, height = 50 })
 desktop_wibox12:set_widget(mem)
 
 ---------------
 --------------
+net1a = wibox.widget.imagebox()
+net1a.image = "/home/valera/.config/awesome/appicons/net.png"
+function net1a:fit(context, width, height) return width, height end
+local net1aa = wibox({ type = "desktop", visible = true, bg = "#00000000" })
+net1aa:geometry({ x = 1043, y = 749, width = 36, height = 50 })
+net1aa:set_widget(net1a)
+----------------
 netwidget = blingbling.net1({ interface = "enp3s0", show_text = true, timeout = 5, text_background_color = "#2a000080" })
 netwidget:set_ippopup()
 netwidget:set_graph_line_color("#e65117ff")
@@ -280,7 +302,7 @@ netwidget.height = 0.70
 
 function netwidget:fit(context, width, height) return width, height end
 local desktop_wibox12 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox12:geometry({ x = 1040, y = 749, width = 200, height = 50 })
+desktop_wibox12:geometry({ x = 1078, y = 749, width = 214, height = 50 })
 desktop_wibox12:set_widget(netwidget)
 
 -----------
@@ -322,7 +344,7 @@ desktop_wibox12:set_widget(netwidget)
 
 --------
 
-home_fs_usage=blingbling.value_text_box({height = 50, width = 140, v_margin = 4 })
+home_fs_usage=blingbling.value_text_box({height = 50, width = 110, v_margin = 4 })
 --home_fs_usage:set_height(16)
 --home_fs_usage:set_width(40)
 --home_fs_usage:set_v_margin(2)
@@ -336,7 +358,7 @@ home_fs_usage:set_values_text_color({{"#f43b0aff",0}, --all value > 0 will be di
 home_fs_usage:set_text_color("#e65117ff")
 home_fs_usage:set_rounded_size(0.4)
 home_fs_usage:set_background_color("#2a000010")
-home_fs_usage:set_label("Fs:/sda1: $percent %")
+home_fs_usage:set_label("/sda1: $percent %")
 home_fs_usage:set_font("odstemplik")
 home_fs_usage:set_font_size(26)
 
@@ -346,7 +368,7 @@ home_fs_usage:buttons(awful.util.table.join(
 
 function home_fs_usage:fit(context, width, height) return width, height end
 local desktop_wibox20 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox20:geometry({ x = 1260, y = 749, width = 200, height = 50 })
+desktop_wibox20:geometry({ x = 1270, y = 749, width = 120, height = 50 })
 desktop_wibox20:set_widget(home_fs_usage)
 ----------
 ---------
@@ -360,7 +382,7 @@ end
 for i=1,4 do
 --function cores_graphs[i]:fit(context, width, height) return width, height end
 local desktop_wibox41 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox41:geometry({ x = 1420, y = 749, width = 14, height = 50 })
+desktop_wibox41:geometry({ x = 1410, y = 749, width = 14, height = 50 })
 desktop_wibox41:set_widget(cores_graphs[i])
 end
 ----------
@@ -411,8 +433,9 @@ local wibox50 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
 wibox50:geometry({ x = 175, y = 830, width = 60, height = 60 })
 wibox50:set_widget(pacwidget1)
 -------------------------------
-
-
-
-
-
+temp1 = wibox.widget.imagebox()
+temp1.image = "/home/valera/.config/awesome/appicons/temp.png"
+function temp1:fit(context, width, height) return width, height end
+local temp11 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
+temp11:geometry({ x = 1397, y = 799, width = 16, height = 50 })
+temp11:set_widget(temp1)
