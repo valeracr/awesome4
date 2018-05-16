@@ -343,6 +343,13 @@ desktop_wibox12:set_widget(netwidget)
 ------------------
 
 --------
+fs1 = wibox.widget.imagebox()
+fs1.image = "/home/valera/.config/awesome/appicons/hdd.png"
+function fs1:fit(context, width, height) return width, height end
+local fs11 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
+fs11:geometry({ x = 1277, y = 749, width = 50, height = 50 })
+fs11:set_widget(fs1)
+---------------
 
 home_fs_usage=blingbling.value_text_box({height = 50, width = 110, v_margin = 4 })
 --home_fs_usage:set_height(16)
@@ -358,7 +365,7 @@ home_fs_usage:set_values_text_color({{"#f43b0aff",0}, --all value > 0 will be di
 home_fs_usage:set_text_color("#e65117ff")
 home_fs_usage:set_rounded_size(0.4)
 home_fs_usage:set_background_color("#2a000010")
-home_fs_usage:set_label("/sda1: $percent %")
+home_fs_usage:set_label(": $percent %")
 home_fs_usage:set_font("odstemplik")
 home_fs_usage:set_font_size(26)
 
@@ -368,7 +375,7 @@ home_fs_usage:buttons(awful.util.table.join(
 
 function home_fs_usage:fit(context, width, height) return width, height end
 local desktop_wibox20 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox20:geometry({ x = 1270, y = 749, width = 120, height = 50 })
+desktop_wibox20:geometry({ x = 1320, y = 749, width = 70, height = 50 })
 desktop_wibox20:set_widget(home_fs_usage)
 ----------
 ---------
