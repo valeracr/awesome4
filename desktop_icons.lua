@@ -35,7 +35,7 @@ local hotkeys_popup = require("awful.hotkeys_popup").widget
 --require("collision")()
 blingbling.superproperties.init('the_theme_path')
 mygraph = blingbling.line_graph()
---local mpd = require("mpd")
+
 --------
 -------
 
@@ -136,21 +136,21 @@ desktop_wibox10:geometry({ x = 1286, y = 540, width = 70, height = 18 })
 desktop_wibox10:set_widget(my_widget10)
 
 ------------
---my_widget01 = awful.widget.launchers({ name = "Gimp",
-  --                                   image = "/usr/share/icons/Black Diamond-V2/scalable/apps/gnome-panel-fish.png",
-  --                                   command = "/var/lib/flatpak/exports/bin/org.gimp.GIMP"
-  --                                   })
---function my_widget01:fit(context, width, height) return width, height end
---local desktop_wibox02 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
---desktop_wibox02:geometry({ x = 1305, y = 600, width = 32, height = 32 })
---desktop_wibox02:set_widget(my_widget01)
---
---local my_widget03 = wibox.widget.textbox()
---my_widget03.markup = "<span color=\"#e74f12\"><span font=\"odstemplik 15\"><b>Gimp-2.10</b></span></span>"
---function my_widget03:fit(context, width, height) return width, height end
---local desktop_wibox04 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
---desktop_wibox04:geometry({ x = 1290, y = 640, width = 70, height = 18 })
---desktop_wibox04:set_widget(my_widget03)
+my_widget01 = awful.widget.launcher({ name = "PkgBrowser",
+                                     image = "/home/valera/.config/awesome/appicons/blackarch1.png",
+                                     command = "pkgbrowser"
+                                     })
+function my_widget01:fit(context, width, height) return width, height end
+local desktop_wibox02 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
+desktop_wibox02:geometry({ x = 1306, y = 600, width = 32, height = 32 })
+desktop_wibox02:set_widget(my_widget01)
+
+local my_widget03 = wibox.widget.textbox()
+my_widget03.markup = "<span color=\"#e74f12\"><span font=\"odstemplik 15\"><b>PkgBrowser</b></span></span>"
+function my_widget03:fit(context, width, height) return width, height end
+local desktop_wibox04 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
+desktop_wibox04:geometry({ x = 1275, y = 640, width = 90, height = 18 })
+desktop_wibox04:set_widget(my_widget03)
 -----------
 
 my_widget19a = awful.widget.launcher({ name = "coolreader",
@@ -404,7 +404,7 @@ end
 
 my_widget51 = awful.widget.launchers({ name = "desktop",
                                      image = "/home/valera/.config/awesome/appicons/111.png",
-                                     command = "xfce4-terminal -e 'yaourt -Syyu --aur'"
+                                     command = "xfce4-terminal -e 'aurman -Syyu'"
                                      })
 function my_widget51:fit(context, width, height) return width, height end
 local desktop_wibox52 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
@@ -416,7 +416,7 @@ pacwidget1 = wibox.widget.textbox()
 
 pacwidget1_t = awful.tooltip({ objects = { pacwidget1},})
 
-vicious.register(pacwidget1, vicious.widgets.pkg,
+vicious.register(pacwidget1, vicious.widgets.pkg1,
                 function(widget,args)
                     local io = { popen = io.popen }
                     --local s = io.popen("pacman -Qu -b /tmp/checkup-db-valera")
@@ -437,7 +437,7 @@ pacwidget1:set_font("odstemplik Bold 56")
 
 function pacwidget1:fit(context, width, height) return width, height end
 local wibox50 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-wibox50:geometry({ x = 175, y = 830, width = 60, height = 60 })
+wibox50:geometry({ x = 175, y = 830, width = 70, height = 60 })
 wibox50:set_widget(pacwidget1)
 -------------------------------
 temp1 = wibox.widget.imagebox()

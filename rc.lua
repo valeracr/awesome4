@@ -134,7 +134,7 @@ myawesomemenu = {
 standart_menu = {
     { "Opera", "opera-developer","/usr/share/pixmaps/opera-developer.xpm" },
     { "KDE", "systemsettings5", "/home/valera/.icons/Black Diamond-V2/scalable/devices/gnome-dev-harddisk-1394.png" },
-    { "Pcmanfm", "pcmanfm", "/home/valera/.icons/Black Diamond-V2/scalable/apps/folder_wine_burgunder.png" },
+    { "Thunar", "thunar", "/home/valera/.icons/Black Diamond-V2/scalable/apps/folder_wine_burgunder.png" },
     { "CHROME", "google-chrome-stable", "/home/valera/.icons/Black Diamond-V2/scalable/apps/22/chromium-browser.png" },
     { "KlaVa", "onboard", "/home/valera/.icons/Black Diamond-V2/scalable/apps/gnutella.png" },
     { "FiReFox", "firefox", "/home/valera/.icons/Black Diamond-V2/scalable/apps/firefox.png" },
@@ -402,7 +402,7 @@ volicon = awful.widget.launchers({ name = "pavucontrol",
 
 pacman=awful.widget.launcher({ name = "pacman",
                                      image = "/home/valera/.config/awesome/appicons/skull32.png",
-                                     command = "xfce4-terminal -e 'yaourt -Syyu --aur'"})
+                                     command = "xfce4-terminal -e 'yaourt -Suy --aur '"})
 -- Pacman Widget
 pacwidget = wibox.widget.textbox()
 
@@ -411,8 +411,8 @@ pacwidget_t = awful.tooltip({ objects = { pacwidget},})
 vicious.register(pacwidget, vicious.widgets.pkg,
                 function(widget,args)
                     local io = { popen = io.popen }
-                    --local s = io.popen("pacman -Qu -b /tmp/checkup-db-valera")
-                    local s = io.popen("/usr/bin/checkupdates")
+                    local s = io.popen("pacman -Qu -b /tmp/checkup-db-valera")
+                    --local s = io.popen("/usr/bin/checkupdates")
                     local str = ''
 		    local i = 0
 
@@ -498,6 +498,12 @@ space3.text = " "
 space1 = wibox.widget.textbox()
 space1.text = "  "
 
+-----------
+-----------
+
+-----------
+----------
+
 -- {{{ Wibar
 -- Create a textclock widget
 mytextclock = wibox.widget.textclock()
@@ -550,9 +556,9 @@ local taglist_buttons = awful.util.table.join(
 
 local t1 = awful.tag.find_by_name(awful.client.movetotag( "Ƅ" ),"Ƅ" )  
 local t2 = awful.tag.find_by_name(awful.client.movetotag( "ƀ" ),"ƀ" )
-local t2 = awful.tag.find_by_name(awful.client.movetotag( "Ɵ" ),"Ɵ" )
-local t3 = awful.tag.find_by_name(awful.client.movetotag( "ƈ" ),"ƈ" )
-local t4 = awful.tag.find_by_name(awful.client.movetotag( "Ɗ" ),"Ɗ" )
+local t3 = awful.tag.find_by_name(awful.client.movetotag( "Ɵ" ),"Ɵ" )
+local t4 = awful.tag.find_by_name(awful.client.movetotag( "ƈ" ),"ƈ" )
+local t5 = awful.tag.find_by_name(awful.client.movetotag( "Ɗ" ),"Ɗ" )
 
 
 local t_menu ={ 
@@ -635,7 +641,8 @@ awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
     set_wallpaper(s)
 
-
+   s.systray = wibox.widget.systray()
+   s.systray.visible = true
 
 
     -- Create a promptbox for each screen
@@ -702,6 +709,7 @@ awful.screen.connect_for_each_screen(function(s)
            -- mykeyboardlayout,
           space,
           wibox.widget.systray(),
+          --s.systray,
           space2,
          -- space1,
             fixedwidget5,
@@ -749,6 +757,9 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
+    awful.key({ modkey }, "=", function ()
+    awful.screen.focused().systray.visible = not awful.screen.focused().systray.visible
+    end, {description = "Toggle systray visibility", group = "custom"}),  
     awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
