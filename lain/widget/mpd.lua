@@ -50,19 +50,19 @@ local function factory(args)
                 single_mode  = false,
                 repeat_mode  = false,
                 consume_mode = false,
-                pls_pos      = "X/З",
-                pls_len      = "X/З",
-                state        = "X/З",
-                file         = "X/З",
-                name         = "X/З",
-                artist       = "X/З",
-                title        = "X/З",
-                album        = "X/З",
-                genre        = "X/З",
-                track        = "X/З",
-                date         = "X/З",
-                time         = "X/З",
-                elapsed      = "X/З"
+                pls_pos      = "N/A",
+                pls_len      = "N/A",
+                state        = "N/A",
+                file         = "N/A",
+                name         = "N/A",
+                artist       = "N/A",
+                title        = "N/A",
+                album        = "N/A",
+                genre        = "N/A",
+                track        = "N/A",
+                date         = "N/A",
+                time         = "N/A",
+                elapsed      = "N/A"
             }
 
             for line in string.gmatch(f, "[^\n]+") do
@@ -87,7 +87,7 @@ local function factory(args)
                     end
                 end
             end
-            
+
             mpd_notification_preset.text = string.format("%s (%s) - %s\n%s", mpd_now.artist,
                                            mpd_now.album, mpd_now.date, mpd_now.title)
             widget = mpd.widget

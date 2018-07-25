@@ -1,9 +1,8 @@
-
 --[[
-                                                  
-     Licensed under GNU General Public License v2 
-      * (c) 2013, Luke Bonham                     
-                                                  
+
+     Licensed under GNU General Public License v2
+      * (c) 2013, Luca CPZ
+
 --]]
 
 local helpers      = require("lain.helpers")
@@ -38,8 +37,8 @@ function calendar.show(t_out, inc_offset, scr)
 
     if current_month then -- today highlighted
         calendar.offset = 0
-        calendar.icon = string.format("%s%s.png", calendar.icons, tonumber(os.date("%d")))
-        f = calendar.cal
+        calendar.icon   = calendar.icons:len() > 0 and string.format("%s%s.png", calendar.icons, tonumber(os.date("%d")))
+        f               = calendar.cal
     else -- no current month showing, no day to highlight
        local month = tonumber(os.date("%m"))
        local year  = tonumber(os.date("%Y"))
@@ -63,11 +62,11 @@ function calendar.show(t_out, inc_offset, scr)
     helpers.async(f, function(ws)
         local fg, bg = calendar.notification_preset.fg, calendar.notification_preset.bg
         calendar.notification_preset.text = ws:gsub("%c%[%d+[m]?%s?%d+%c%[%d+[m]?",
-        markup.bold(markup.color(bg, fg, os.date("%e")))):gsub("\n*$", "")
+        markup.bold(markup.color(bg, fg, os.date("%e")))):gsub("[\n%s]*$", "")
 
         local widget_focused = true
 
-        if t_out == 0 then
+        if t_out == 0 and mouse.current_widgets then
             widget_focused = false
             for i, widget in ipairs(calendar.attach_to) do
                 for _,v in ipairs(mouse.current_widgets) do
@@ -90,13 +89,20 @@ function calendar.show(t_out, inc_offset, scr)
     end)
 end
 
+function calendar.hover_on() calendar.show(0) end
+function calendar.hover_off() calendar.hide() end
+function calendar.prev() calendar.show(0, -1) end
+function calendar.next() calendar.show(0, 1) end
+
 function calendar.attach(widget)
-    widget:connect_signal("mouse::enter", function () calendar.show(0) end)
-    widget:connect_signal("mouse::leave", function () calendar.hide() end)
-    widget:buttons(awful.util.table.join(awful.button({ }, 1, function () calendar.show(0, -1) end),
-                                         awful.button({ }, 3, function () calendar.show(0,  1) end),
-                                         awful.button({ }, 4, function () calendar.show(0, -1) end),
-                                         awful.button({ }, 5, function () calendar.show(0,  1) end)))
+    widget:connect_signal("mouse::enter", calendar.hover_on)
+    widget:connect_signal("mouse::leave", calendar.hover_off)
+    widget:buttons(awful.util.table.join(
+                awful.button({}, 1, calendar.prev),
+                awful.button({}, 3, calendar.next),
+                awful.button({}, 2, calendar.hover_on),
+                awful.button({}, 4, calendar.prev),
+                awful.button({}, 5, calendar.next)))
 end
 
 local function factory(args)
@@ -109,9 +115,9 @@ local function factory(args)
 
     if not calendar.notification_preset then
         calendar.notification_preset = {
-            font = "monospace 10",
+            font = "Monospace 10",
             fg   = "#f00606",
-            bg   = "#080808"
+            bg   = "#000000"
         }
     end
 
