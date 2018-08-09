@@ -19,7 +19,7 @@ local freedesktop = require("freedesktop")
 --local persistent = require("actionless.persistent")
 --require("applicationsmenu")
 --cal = require("calendar")
-local calendar = lain.widget.calendar()
+--local calendar = lain.widget.calendar()
 scratch = require("scratch")
 local APW = require("apw/widget")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
