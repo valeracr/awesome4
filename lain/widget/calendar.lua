@@ -117,7 +117,7 @@ local function factory(args)
         calendar.notification_preset = {
             font = "Monospace 10",
             fg   = "#f00606",
-            bg   = "#000000"
+            bg   = "#08080860"
         }
     end
 

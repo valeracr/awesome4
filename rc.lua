@@ -66,6 +66,7 @@ end
 -- Themes define colours, icons, font and wallpapers.
 --beautiful.init(awful.util.get_themes_dir() .. "default/theme.lua")
 beautiful.init("/home/valera/.config/awesome/themes/colored/theme.lua")
+--scripts_dir = "/home/valera/.config/awesome/themes/colored/scripts"
 -- This is used later as the default terminal and editor to run.
 terminal = "xfce4-terminal"
 editor = os.getenv("EDITOR") or "leafpad"
@@ -132,7 +133,8 @@ myawesomemenu = {
 }
 
 standart_menu = {
-    { "Opera", "opera-developer","/usr/share/pixmaps/opera-developer.xpm" },
+    { "AlReader", "wine /home/valera/Документы/books/alreader2.win32.ru__0/AlReader2.win32.ru/AlReader2.exe", "/usr/share/icons/Black Diamond-V2/scalable/apps/contacts.png" },
+--    { "Opera", "opera-developer","/usr/share/pixmaps/opera-developer.xpm" },
     { "KDE", "systemsettings5", "/home/valera/.icons/Black Diamond-V2/scalable/devices/gnome-dev-harddisk-1394.png" },
     { "Thunar", "thunar", "/home/valera/.icons/Black Diamond-V2/scalable/apps/folder_wine_burgunder.png" },
     { "CHROME", "google-chrome-stable", "/home/valera/.icons/Black Diamond-V2/scalable/apps/22/chromium-browser.png" },
@@ -1106,7 +1108,9 @@ awful.rules.rules = {
     { rule = { class = "Gxmessage" },
       properties = { floating = true, ontop = true } },    
       { rule = { class = "Florence" },
-      properties = { floating = true, focus = false, offfocus = true, onfocus = false, ontop = true, top = false, border_width = 0 } }, 
+      properties = { floating = true, focus = false, offfocus = true, onfocus = false, ontop = true, top = false, border_width = 0 } },
+    { rule = { class = "Plank" },
+      properties = { floating = true, border_width = 0 } },  
     { rule = { class = "Xfce4-appfinder" },
       properties = { floating = true } }, 
     { rule = { class = "pinentry" },
@@ -1214,3 +1218,4 @@ awful.util.spawn_with_shell("run_once sleep 3 && /usr/bin/nm-applet --sm-disable
 awful.util.spawn_with_shell("run_once gis-weather")
 --awful.util.spawn_with_shell("run_once nm-applet")
 awful.util.spawn_with_shell("setxkbmap")
+----awful.util.spawn_with_shell("sleep 2 && /home/valera/.config/awesome/themes/colored/scripts/startup-sound.sh")
