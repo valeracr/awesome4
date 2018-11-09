@@ -8,7 +8,7 @@
 
 theme = {}
 theme.confdir = os.getenv("HOME") .. "/.config/awesome/themes/colored"
-theme.wallpaper = "/home/valera/.config/awesome/11111.png"
+theme.wallpaper = "/home/valera/.config/awesome/NPp1.png"
 -- }}}
 theme.widget_ac = "~/.config/awesome/icons/ac.png"
 theme.widget_acblink = "~/.config/awesome/icons/acblink.png"

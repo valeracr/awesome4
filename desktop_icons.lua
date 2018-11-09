@@ -191,7 +191,7 @@ desktop_wibox10aa:set_widget(my_widget10aa)
 ----------------
 
 my_widget9b = awful.widget.launcher({ name = "cantata",
-                                     --image = "/home/valera/.config/awesome/appicons/12.png",
+                                     --image = "/home/valera/.config/awesome/appicons/speaker.png",
                                      image = "/home/valera/.config/awesome/appicons/armagetronad.png",
                                      command = "cantata"
                                      })

@@ -1128,7 +1128,11 @@ awful.rules.rules = {
       properties = { floating = true } },
     { rule = { class = "Gis-weather.py" },
       properties = {  floating = true, border_width = 0 } },
-
+    { rule = { class = "Tilda" },
+      properties = { border_width = 0 } },
+    { rule = { class = "Run.py" },
+     properties = { border_width = 0, geometry = { x = 606, y = 400, width = 247, height = 270 } } },
+     -- properties = { border_width = 0, geometry = { x = 657, y = 660, width = 150, height = 40 } } },
     -- Set Firefox to always map on tags number 2 of screen 1.
     -- { rule = { class = "Firefox" },
     --   properties = { tag = tags[1][2] } },
