@@ -32,10 +32,10 @@ local ramgraph_widget = require("ram-widget")
 local watch = require("awful.widget.watch")
 mpdarc = require("mpdarc")
 
---awful.util.spawn_with_shell("sleep 14 && xcompmgr -cCfF -r7 -o.65 -l-10 -t-8 -D7 &")
+awful.util.spawn_with_shell("sleep 14 && xcompmgr -cCfF -r7 -o.65 -l-10 -t-8 -D7 &")
 --awful.util.spawn_with_shell("xcompmgr -cCfF &")
 --awful.util.spawn_with_shell("sleep 7 && killall xcompmgr &")
-awful.spawn.with_shell("sleep 17 && compton -icCfF -r7 -o.65 -l-10 -t-8 -D7 &")
+----awful.spawn.with_shell("sleep 17 && compton -icCfF -r7 -o.65 -l-10 -t-8 -D7 &")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -1126,6 +1126,8 @@ awful.rules.rules = {
       properties = { floating = true } },
      { rule = { class = "Galculator" },
       properties = { floating = true } },
+    { rule = { class = "Crow Translate" },
+      properties = { floating = true } }, 
     { rule = { class = "Gis-weather.py" },
       properties = {  floating = true, border_width = 0 } },
     { rule = { class = "Tilda" },
