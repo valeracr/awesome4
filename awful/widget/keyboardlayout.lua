@@ -46,6 +46,7 @@ keyboardlayout.xkeyboard_country_code = {
     ["epo"] = true,   -- Esperanto
     ["es"] = true,    -- Spain
     ["et"] = true,    -- Ethiopia
+    ["eu"] = true,    -- EurKey
     ["fi"] = true,    -- Finland
     ["fo"] = true,    -- Faroe Islands
     ["fr"] = true,    -- France
@@ -115,12 +116,15 @@ keyboardlayout.xkeyboard_country_code = {
 
 -- Callback for updating current layout.
 local function update_status (self)
-    self._current = awesome.xkb_get_layout_group();
+    self._current = awesome.xkb_get_layout_group()
     local text = ""
-    if (#self._layout > 0) then
+    if #self._layout > 0 then
         -- Please note that the group number reported by xkb_get_layout_group
         -- is lower by one than the group numbers reported by xkb_get_group_names.
-        text = (" " .. self._layout[self._current+1] .. " ")
+        local name = self._layout[self._current+1]
+        if name then
+            text = " " .. name .. " "
+        end
     end
     self.widget:set_text(text)
 end

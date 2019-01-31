@@ -9,6 +9,8 @@
 -- @module awful.completion
 ---------------------------------------------------------------------------
 
+local gfs = require("gears.filesystem")
+
 -- Grab environment we need
 local io = io
 local os = os
@@ -19,6 +21,7 @@ local pairs = pairs
 local string = string
 
 local gears_debug = require("gears.debug")
+local gstring = require("gears.string")
 
 local completion = {}
 
@@ -154,7 +157,7 @@ function completion.shell(command, cur_pos, ncomp, shell)
         while true do
             local line = c:read("*line")
             if not line then break end
-            if os.execute("test -d " .. string.format('%q', line)) == 0 then
+            if gstring.startswith(line, "./") and gfs.is_dir(line) then
                 line = line .. "/"
             end
             table.insert(output, bash_escape(line))

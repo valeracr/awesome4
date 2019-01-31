@@ -279,16 +279,19 @@ local resize_to_point_map = {
 }
 
 -- Outer position matrix
--- 1=best case, 2=fallback
 local outer_positions = {
-    left1   = function(r, w, _) return {x=r.x-w        , y=r.y            }, "down"  end,
-    left2   = function(r, w, h) return {x=r.x-w        , y=r.y-h+r.height }, "up"    end,
-    right1  = function(r, _, _) return {x=r.x          , y=r.y            }, "down"  end,
-    right2  = function(r, _, h) return {x=r.x          , y=r.y-h+r.height }, "up"    end,
-    top1    = function(r, _, h) return {x=r.x          , y=r.y-h          }, "right" end,
-    top2    = function(r, w, h) return {x=r.x-w+r.width, y=r.y-h          }, "left"  end,
-    bottom1 = function(r, _, _) return {x=r.x          , y=r.y            }, "right" end,
-    bottom2 = function(r, w, _) return {x=r.x-w+r.width, y=r.y            }, "left"  end,
+    left_front    = function(r, w, _) return {x=r.x-w            , y=r.y                }, "front"  end,
+    left_back     = function(r, w, h) return {x=r.x-w            , y=r.y-h+r.height     }, "back"   end,
+    left_middle   = function(r, w, h) return {x=r.x-w            , y=r.y-h/2+r.height/2 }, "middle" end,
+    right_front   = function(r, _, _) return {x=r.x              , y=r.y                }, "front"  end,
+    right_back    = function(r, _, h) return {x=r.x              , y=r.y-h+r.height     }, "back"   end,
+    right_middle  = function(r, _, h) return {x=r.x              , y=r.y-h/2+r.height/2 }, "middle" end,
+    top_front     = function(r, _, h) return {x=r.x              , y=r.y-h              }, "front"  end,
+    top_back      = function(r, w, h) return {x=r.x-w+r.width    , y=r.y-h              }, "back"   end,
+    top_middle    = function(r, w, h) return {x=r.x-w/2+r.width/2, y=r.y-h              }, "middle" end,
+    bottom_front  = function(r, _, _) return {x=r.x              , y=r.y                }, "front"  end,
+    bottom_back   = function(r, w, _) return {x=r.x-w+r.width    , y=r.y                }, "back"   end,
+    bottom_middle = function(r, w, _) return {x=r.x-w/2+r.width/2, y=r.y                }, "middle" end,
 }
 
 --- Add a context to the arguments.
@@ -661,7 +664,6 @@ local function get_cross_sections(abs_geo, mode)
         }
     elseif mode == "geometry" then
         -- The widget geometry extended to reach the end of the drawable
-
         return {
             h = {
                 x      = abs_geo.drawable_geo.x     ,
@@ -719,23 +721,39 @@ local function get_relative_regions(geo, mode, is_absolute)
         end
     end
 
-    -- Get the drawable geometry
-    local dpos = geo.drawable and (
-        geo.drawable.drawable and
-            geo.drawable.drawable:geometry()
-            or geo.drawable:geometry()
-    ) or {x=0, y=0}
+    -- Get the parent geometry using one way or another depending on the object
+    -- Type
+    local bw, dgeo = 0, {x=0, y=0, width=1, height=1}
+
+    -- Detect various types of geometry table and (try) to get rid of the
+    -- differences so the code below don't have to care anymore.
+    if geo.drawin then
+        bw, dgeo = geo.drawin.border_width, geo.drawin:geometry()
+    elseif geo.drawable and geo.drawable.get_wibox then
+        bw   = geo.drawable.get_wibox().border_width
+        dgeo = geo.drawable.get_wibox():geometry()
+    elseif geo.drawable and geo.drawable.drawable then
+        bw, dgeo = 0, geo.drawable.drawable:geometry()
+    else
+        -- The placement isn't done on an object at all, having no border is
+        -- normal.
+        assert(mode == "geometry")
+    end
+
+    -- Add the infamous border size
+    dgeo.width  = dgeo.width  + 2*bw
+    dgeo.height = dgeo.height + 2*bw
 
     -- Compute the absolute widget geometry
-    local abs_widget_geo = is_absolute and geo or {
-        x            = dpos.x + geo.x              ,
-        y            = dpos.y + geo.y              ,
-        width        = geo.width                   ,
-        height       = geo.height                  ,
-        drawable     = geo.drawable                ,
+    local abs_widget_geo = is_absolute and dgeo or {
+        x            = dgeo.x + geo.x + bw,
+        y            = dgeo.y + geo.y + bw,
+        width        = geo.width          ,
+        height       = geo.height         ,
+        drawable     = geo.drawable       ,
     }
 
-    abs_widget_geo.drawable_geo = geo.drawable and dpos or geo
+    abs_widget_geo.drawable_geo = geo.drawable and dgeo or geo
 
     -- Get the point for comparison.
     local center_point = mode:match("cursor") and capi.mouse.coords() or {
@@ -789,6 +807,13 @@ local function fit_in_bounding(obj, geo, args)
 
     -- If the geometry is the same then it fits, otherwise it will be cropped.
     return geo2.width == geo.width and geo2.height == geo.height
+end
+
+-- Remove border from drawable geometry
+local function remove_border(drawable, args, geo)
+    local bw    = (not args.ignore_border_width) and drawable.border_width or 0
+    geo.width  = geo.width  - 2*bw
+    geo.height = geo.height - 2*bw
 end
 
 --- Move a drawable to the closest corner of the parent geometry (such as the
@@ -867,23 +892,31 @@ end
 --**Usage example output**:
 --
 --    Before:	x=-30, y=-30, width=100, height=100
---    After:	x=10, y=10, width=100, height=100
+--    After:	x=50, y=50, width=100, height=100
 --
 --
 -- @usage
--- awful.placement.no_offscreen(c)--, {honor_workarea=true, margins=40})
+-- awful.placement.no_offscreen(c, {honor_workarea=true, margins=40})
 -- @client c The client.
--- @tparam[opt=client's screen] integer screen The screen.
+-- @tparam[opt={}] table args The arguments
+-- @tparam[opt=client's screen] integer args.screen The screen.
 -- @treturn table The new client geometry.
-function placement.no_offscreen(c, screen)
-    --HACK necessary for composition to work. The API will be changed soon
-    if type(screen) == "table" then
-        screen = nil
+function placement.no_offscreen(c, args)
+
+    --compatibility with the old API
+    if type(args) == "number" or type(args) == "screen" then
+        gdebug.deprecate(
+            "awful.placement.no_offscreen screen argument is deprecated"..
+            " use awful.placement.no_offscreen(c, {screen=...})",
+            {deprecated_in=5}
+        )
+        args = { screen = args }
     end
 
     c = c or capi.client.focus
-    local geometry = area_common(c)
-    screen = get_screen(screen or c.screen or a_screen.getbycoord(geometry.x, geometry.y))
+    args = add_context(args, "no_offscreen")
+    local geometry = geometry_common(c, args)
+    local screen = get_screen(args.screen or c.screen or a_screen.getbycoord(geometry.x, geometry.y))
     local screen_geometry = screen.workarea
 
     if geometry.x + geometry.width > screen_geometry.x + screen_geometry.width then
@@ -900,10 +933,9 @@ function placement.no_offscreen(c, screen)
         geometry.y = screen_geometry.y
     end
 
-    return c:geometry {
-        x = geometry.x,
-        y = geometry.y
-    }
+    remove_border(c, args, geometry)
+    geometry_common(c, args, geometry)
+    return fix_new_geometry(geometry, args, true)
 end
 
 --- Place the client where there's place available with minimum overlap.
@@ -915,16 +947,21 @@ end
 -- awful.placement.no_overlap(client.focus)
 -- local x,y = screen[4].geometry.x, screen[4].geometry.y
 -- @param c The client.
+-- @tparam[opt={}] table args Other arguments
 -- @treturn table The new geometry
-function placement.no_overlap(c)
+function placement.no_overlap(c, args)
     c = c or capi.client.focus
-    local geometry = area_common(c)
+    args = add_context(args, "no_overlap")
+    local geometry = geometry_common(c, args)
     local screen   = get_screen(c.screen or a_screen.getbycoord(geometry.x, geometry.y))
     local cls = client.visible(screen)
     local curlay = layout.get()
     local areas = { screen.workarea }
     for _, cl in pairs(cls) do
-        if cl ~= c and cl.type ~= "desktop" and (cl.floating or curlay == layout.suit.floating) then
+        if cl ~= c
+           and cl.type ~= "desktop"
+           and (cl.floating or curlay == layout.suit.floating)
+           and not (cl.maximized or cl.fullscreen) then
             areas = grect.area_remove(areas, area_common(cl))
         end
     end
@@ -955,13 +992,18 @@ function placement.no_overlap(c)
     -- This makes sure to have the whole screen's area in case it has been
     -- removed.
     if not found then
-        if #areas == 0 then
-            areas = { screen.workarea }
-        end
-        for _, r in ipairs(areas) do
-            if r.width * r.height > new.width * new.height then
-                new = r
+        if #areas > 0 then
+            for _, r in ipairs(areas) do
+                if r.width * r.height > new.width * new.height then
+                    new = r
+                end
             end
+        elseif grect.area_intersect_area(geometry, screen.workarea) then
+            new.x = geometry.x
+            new.y = geometry.y
+        else
+            new.x = screen.workarea.x
+            new.y = screen.workarea.y
         end
     end
 
@@ -969,7 +1011,9 @@ function placement.no_overlap(c)
     new.width = geometry.width
     new.height = geometry.height
 
-    return c:geometry({ x = new.x, y = new.y })
+    remove_border(c, args, new)
+    geometry_common(c, args, new)
+    return fix_new_geometry(new, args, true)
 end
 
 --- Place the client under the mouse.
@@ -992,10 +1036,7 @@ function placement.under_mouse(d, args)
     ngeo.x = math.floor(m_coords.x - ngeo.width  / 2)
     ngeo.y = math.floor(m_coords.y - ngeo.height / 2)
 
-    local bw    = (not args.ignore_border_width) and d.border_width or 0
-    ngeo.width  = ngeo.width  - 2*bw
-    ngeo.height = ngeo.height - 2*bw
-
+    remove_border(d, args, ngeo)
     geometry_common(d, args, ngeo)
 
     return fix_new_geometry(ngeo, args, true)
@@ -1105,11 +1146,7 @@ function placement.resize_to_mouse(d, args)
         pts.x_only and ngeo.y + ngeo.height or math.max(p2.y, p1.y)
     )
 
-    local bw = (not args.ignore_border_width) and d.border_width or 0
-
-    for _, a in ipairs {"width", "height"} do
-        ngeo[a] = ngeo[a] - 2*bw
-    end
+    remove_border(d, args, ngeo)
 
     -- Now, correct the geometry by the given size_hints offset
     if d.apply_size_hints then
@@ -1158,7 +1195,6 @@ function placement.align(d, args)
 
     local sgeo = get_parent_geometry(d, args)
     local dgeo = geometry_common(d, args)
-    local bw   = (not args.ignore_border_width) and d.border_width or 0
 
     local pos  = align_map[args.position](
         sgeo.width ,
@@ -1170,10 +1206,10 @@ function placement.align(d, args)
     local ngeo = {
         x      = (pos.x and math.ceil(sgeo.x + pos.x) or dgeo.x)       ,
         y      = (pos.y and math.ceil(sgeo.y + pos.y) or dgeo.y)       ,
-        width  =            math.ceil(dgeo.width    )            - 2*bw,
-        height =            math.ceil(dgeo.height   )            - 2*bw,
+        width  =            math.ceil(dgeo.width    )                  ,
+        height =            math.ceil(dgeo.height   )                  ,
     }
-
+    remove_border(d, args, ngeo)
     geometry_common(d, args, ngeo)
 
     attach(d, placement[args.position], args)
@@ -1573,10 +1609,7 @@ function placement.scale(d, args)
         end
     end
 
-    local bw = (not args.ignore_border_width) and d.border_width or 0
-    ngeo.width  = ngeo.width  - 2*bw
-    ngeo.height = ngeo.height - 2*bw
-
+    remove_border(d, args, ngeo)
     geometry_common(d, args, ngeo)
 
     attach(d, placement.maximize, args)
@@ -1586,31 +1619,83 @@ end
 
 --- Move a drawable to a relative position next to another one.
 --
+-- This placement function offers two additional settings to align the drawable
+-- alongside the parent geometry. The first one, the position, sets the side
+-- relative to the parent. The second one, the anchor, set the alignment within
+-- the side selected by the `preferred_positions`. Both settings are tables of
+-- priorities. The first available slot will be used. If there isn't enough
+-- space, then it will fallback to the next until it is possible to fit the
+-- drawable. This is meant to avoid going offscreen.
+--
 -- The `args.preferred_positions` look like this:
 --
 --    {"top", "right", "left", "bottom"}
 --
--- In that case, if there is room on the top of the geomtry, then it will have
+-- The `args.preferred_anchors` are:
+--
+-- * "front": The closest to the origin (0,0)
+-- * "middle": Centered aligned with the parent
+-- * "back": The opposite side compared to `front`
+--
+-- In that case, if there is room on the top of the geometry, then it will have
 -- priority, followed by all the others, in order.
+--
+--
+--
+--![Usage example](../images/AUTOGEN_awful_placement_next_to.svg)
+--
+-- @usage
+-- for _, pos in ipairs{'left', 'right', 'top', 'bottom'} do
+--     for _, anchor in ipairs{'front', 'middle', 'back'} do
+--         awful.placement.next_to(
+--             client.focus,
+--             {
+--                 preferred_positions = pos,
+--                 preferred_anchors   = anchor,
+--                 geometry            = parent_client,
+--             }
+--         )
+--     end
+-- end
+--
+-- The `args.mode` parameters allows to control from which `next_to` takes its
+-- source object from. The valid values are:
+--
+-- * geometry: Next to this geometry, `args.geometry` has to be set.
+-- * cursor: Next to the mouse.
+-- * cursor_inside
+-- * geometry_inside
 --
 -- @tparam drawable d A wibox or client
 -- @tparam table args
 -- @tparam string args.mode The mode
--- @tparam string args.preferred_positions The preferred positions (in order)
+-- @tparam string|table args.preferred_positions The preferred positions (in order)
+-- @tparam string|table args.preferred_anchors The preferred anchor(s) (in order)
 -- @tparam string args.geometry A geometry inside the other drawable
 -- @treturn table The new geometry
--- @treturn string The choosen position
--- @treturn string The choosen direction
+-- @treturn string The choosen position ("left", "right", "top" or "bottom")
+-- @treturn string The choosen anchor ("front", "middle" or "back")
 function placement.next_to(d, args)
     args = add_context(args, "next_to")
     d    = d or capi.client.focus
 
-    local preferred_positions = {}
+    local osize = type(d.geometry) == "function"  and d:geometry() or nil
+    local original_pos, original_anchors = args.preferred_positions, args.preferred_anchors
 
-    if #(args.preferred_positions or {}) then
-        for k, v in ipairs(args.preferred_positions) do
-            preferred_positions[v] = k
-        end
+    if type(original_pos) == "string" then
+        original_pos = {original_pos}
+    end
+
+    if type(original_anchors) == "string" then
+        original_anchors = {original_anchors}
+    end
+
+    local preferred_positions = {}
+    local preferred_anchors = #(original_anchors or {}) > 0 and
+        original_anchors or {"front", "back", "middle"}
+
+    for k, v in ipairs(original_pos or {}) do
+        preferred_positions[v] = k
     end
 
     local dgeo = geometry_common(d, args)
@@ -1637,40 +1722,72 @@ function placement.next_to(d, args)
 
     local regions = get_relative_regions(wgeo, mode, is_absolute)
 
+    -- Order the regions with the preferred_positions, then the defaults
+    local sorted_regions, default_positions = {}, {"left", "right", "bottom", "top"}
+
+    for _, pos in ipairs(original_pos or {}) do
+        for idx, def in ipairs(default_positions) do
+            if def == pos then
+                table.remove(default_positions, idx)
+                break
+            end
+        end
+
+        table.insert(sorted_regions, {name = pos, region = regions[pos]})
+    end
+
+    for _, pos in ipairs(default_positions) do
+        table.insert(sorted_regions, {name = pos, region = regions[pos]})
+    end
+
     -- Check each possible slot around the drawable (8 total), see what fits
     -- and order them by preferred_positions
     local does_fit = {}
-    for k,v in pairs(regions) do
-        local geo, dir = outer_positions[k.."1"](v, dgeo.width, dgeo.height)
-        geo.width, geo.height = dgeo.width, dgeo.height
-        local fit = fit_in_bounding(v.screen, geo, args)
+    for _, pos in ipairs(sorted_regions) do
+        local geo, dir, fit
 
-        -- Try the other compatible geometry
-        if not fit then
-            geo, dir = outer_positions[k.."2"](v, dgeo.width, dgeo.height)
+        -- Try each anchor until one that fits is found
+        for _, anchor in ipairs(preferred_anchors) do
+            geo, dir = outer_positions[pos.name.."_"..anchor](pos.region, dgeo.width, dgeo.height)
+
             geo.width, geo.height = dgeo.width, dgeo.height
-            fit = fit_in_bounding(v.screen, geo, args)
+
+            fit = fit_in_bounding(pos.region.screen, geo, args)
+
+            if fit then break end
         end
 
-        does_fit[k] = fit and {geo, dir} or nil
+        does_fit[pos.name] = fit and {geo, dir} or nil
 
-        if fit and preferred_positions[k] and preferred_positions[k] < pref_idx then
-            pref_idx  = preferred_positions[k]
-            pref_name = k
+        if fit and preferred_positions[pos.name] and preferred_positions[pos.name] < pref_idx then
+            pref_idx  = preferred_positions[pos.name]
+            pref_name = pos.name
         end
 
         -- No need to continue
-        if fit and preferred_positions[k] == 1 then break end
+        if fit then break end
     end
 
-    local pos_name = pref_name or next(does_fit)
-    local ngeo, dir = unpack(does_fit[pos_name] or {}) --FIXME why does this happen
+    local ngeo, dir = unpack(does_fit[pref_name] or {}) --FIXME why does this happen
+
+    -- The requested placement isn't possible due to the lack of space, better
+    -- do nothing an try random things
+    if not ngeo then return end
+
+    remove_border(d, args, ngeo)
 
     geometry_common(d, args, ngeo)
 
     attach(d, placement.next_to, args)
 
-    return fix_new_geometry(ngeo, args, true), pos_name, dir
+    local ret = fix_new_geometry(ngeo, args, true)
+
+    -- Make sure the geometry didn't change, it would indicate an
+    -- "off by border" issue.
+    assert((not osize.width) or ret.width == d.width)
+    assert((not osize.height) or ret.height == d.height)
+
+    return ret, pref_name, dir
 end
 
 --- Restore the geometry.
@@ -1692,8 +1809,9 @@ function placement.restore(d, args)
     -- Some people consider that once moved to another screen, then
     -- the memento needs to be upgraded. For now this is only true for
     -- maximization until someone complains.
-    if memento.sgeo and memento.screen and args.context == "maximize"
-      and d.screen and get_screen(memento.screen) ~= get_screen(d.screen) then
+    if memento.sgeo and memento.screen and memento.screen.valid
+      and args.context == "maximize" and d.screen
+      and get_screen(memento.screen) ~= get_screen(d.screen) then
         -- Use the absolute geometry as the memento also does
         local sgeo = get_screen(d.screen).geometry
 

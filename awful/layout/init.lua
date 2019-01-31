@@ -21,6 +21,8 @@ local client = require("awful.client")
 local ascreen = require("awful.screen")
 local timer = require("gears.timer")
 local gmath = require("gears.math")
+local gtable = require("gears.table")
+local gdebug = require("gears.debug")
 local protected_call = require("gears.protected_call")
 
 local function get_screen(s)
@@ -73,6 +75,16 @@ layout.layouts = {
 --
 -- @field layout.layouts
 
+--- Return the tag layout index (from `awful.layout.layouts`).
+--
+-- If the layout isn't part of `awful.layout.layouts`, this function returns
+-- nil.
+--
+-- @tparam tag t The tag.
+-- @treturn nil|number The layout index.
+function layout.get_tag_layout_index(t)
+    return gtable.hasitem(layout.layouts, t.layout)
+end
 
 -- This is a special lock used by the arrange function.
 -- This avoids recurring call by emitted signals.
@@ -97,35 +109,42 @@ function layout.inc(i, s, layouts)
     if type(i) == "table" then
         -- Older versions of this function had arguments (layouts, i, s), but
         -- this was changed so that 'layouts' can be an optional parameter
+        gdebug.deprecate("Use awful.layout.inc(increment, screen, layouts) instead"..
+            " of awful.layout.inc(layouts, increment, screen)", {deprecated_in=5})
+
         layouts, i, s = i, s, layouts
     end
     s = get_screen(s or ascreen.focused())
     local t = s.selected_tag
-    layouts = layouts or layout.layouts
-    if t then
-        local curlayout = layout.get(s)
-        local curindex
-        for k, v in ipairs(layouts) do
-            if v == curlayout or curlayout._type == v then
-                curindex = k
-                break
-            end
-        end
-        if not curindex then
-            -- Safety net: handle cases where another reference of the layout
-            -- might be given (e.g. when (accidentally) cloning it).
-            for k, v in ipairs(layouts) do
-                if v.name == curlayout.name then
-                    curindex = k
-                    break
-                end
-            end
-        end
-        if curindex then
-            local newindex = gmath.cycle(#layouts, curindex + i)
-            layout.set(layouts[newindex], t)
-        end
+
+    if not t then return end
+
+    layouts = layouts or t.layouts or {}
+
+    if #layouts == 0 then
+        layouts = layout.layouts
     end
+
+    local cur_l = layout.get(s)
+
+    -- First try to match the object
+    local cur_idx =  gtable.find_first_key(
+        layouts, function(_, v) return v == cur_l or cur_l._type == v end, true
+    )
+
+    -- Safety net: handle cases where another reference of the layout
+    -- might be given (e.g. when (accidentally) cloning it).
+    cur_idx = cur_idx or gtable.find_first_key(
+        layouts, function(_, v) return v.name == cur_l.name end, true
+    )
+
+    -- Trying to come up with some kind of fallback layouts to iterate would
+    -- never produce a result the user expect, so if there is nothing to
+    -- iterate over, do not iterate.
+    if not cur_idx then return end
+
+    local newindex = gmath.cycle(#layouts, cur_idx + i)
+    layout.set(layouts[newindex], t)
 end
 
 --- Set the layout function of the current tag.
@@ -164,8 +183,15 @@ function layout.parameters(t, screen)
         gap_single_client = t.gap_single_client
     end
 
-    local min_clients       = gap_single_client and 1 or 2
-    local useless_gap       = t and (#clients >= min_clients and t.gap or 0) or 0
+    local useless_gap = 0
+    if t then
+        local skip_gap = layout.get(screen).skip_gap or function(nclients)
+            return nclients < 2
+        end
+        if gap_single_client or not skip_gap(#clients, t) then
+            useless_gap = t.gap
+        end
+    end
 
     p.workarea = screen:get_bounding_geometry {
         honor_padding  = true,

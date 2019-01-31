@@ -1,9 +1,63 @@
 ---------------------------------------------------------------------------
 --- Titlebars for awful.
+--**Create a titlebar:**
+--
+-- This example reproduces what the default `rc.lua` does. It shows how to
+-- handle the titlebars on a lower level.
+--
+-- 
+--
+--![Usage example](../images/AUTOGEN_awful_titlebar_default.svg)
+--
+-- 
+--     -- Create a titlebar for the client.
+--     -- By default, `awful.rules` will create one, but all it does is to call this
+--     -- function.
+--     local top_titlebar = awful.titlebar(c, {
+--         height    = 20,
+--         bg_normal = '#ff0000',
+--     })
+--     -- buttons for the titlebar
+--     local buttons = gears.table.join(
+--         awful.button({ }, 1, function()
+--             client.focus = c
+--             c:raise()
+--             awful.mouse.client.move(c)
+--         end),
+--         awful.button({ }, 3, function()
+--             client.focus = c
+--             c:raise()
+--             awful.mouse.client.resize(c)
+--         end)
+--     )
+--     top_titlebar : setup {
+--         { -- Left
+--             awful.titlebar.widget.iconwidget(c),
+--             buttons = buttons,
+--             layout  = wibox.layout.fixed.horizontal
+--         },
+--         { -- Middle
+--             { -- Title
+--                 align  = 'center',
+--                 widget = awful.titlebar.widget.titlewidget(c)
+--             },
+--             buttons = buttons,
+--             layout  = wibox.layout.flex.horizontal
+--         },
+--         { -- Right
+--             awful.titlebar.widget.floatingbutton (c),
+--             awful.titlebar.widget.maximizedbutton(c),
+--             awful.titlebar.widget.stickybutton   (c),
+--             awful.titlebar.widget.ontopbutton    (c),
+--             awful.titlebar.widget.closebutton    (c),
+--             layout = wibox.layout.fixed.horizontal()
+--         },
+--         layout = wibox.layout.align.horizontal
+--     }
 --
 -- @author Uli Schlachter
 -- @copyright 2012 Uli Schlachter
--- @module awful.titlebar
+-- @classmod awful.titlebar
 ---------------------------------------------------------------------------
 
 local error = error
@@ -21,9 +75,21 @@ local base = require("wibox.widget.base")
 local capi = {
     client = client
 }
+
+
 local titlebar = {
-    widget = {}
+    widget = {},
+    enable_tooltip = true,
+    fallback_name = '<unknown>'
 }
+
+
+--- Show tooltips when hover on titlebar buttons.
+-- @tfield[opt=true] boolean awful.titlebar.enable_tooltip
+
+--- Title to display if client name is not set.
+-- @field[opt='\<unknown\>'] awful.titlebar.fallback_name
+
 
 --- The titlebar foreground (text) color.
 -- @beautiful beautiful.titlebar_fg_normal
@@ -416,8 +482,6 @@ local titlebar = {
 -- @name setup
 -- @class function
 
---- Show tooltips when hover on titlebar buttons (defaults to 'true')
-titlebar.enable_tooltip = true
 
 local all_titlebars = setmetatable({}, { __mode = 'k' })
 
@@ -447,8 +511,33 @@ local function get_titlebar_function(c, position)
     end
 end
 
---- Get a client's titlebar
--- @class function
+--- Call `request::titlebars` to allow themes or rc.lua to create them even
+-- when `titlebars_enabled` is not set in the rules.
+-- @tparam client c The client.
+-- @tparam[opt=false] boolean hide_all Hide all titlebars except `keep`
+-- @tparam string keep Keep the titlebar at this position
+-- @treturn boolean If the titlebars were loaded
+local function load_titlebars(c, hide_all, keep)
+    if c._request_titlebars_called then return false end
+
+    c:emit_signal("request::titlebars", "awful.titlebar", {})
+
+    if hide_all then
+        -- Don't bother checking if it has been created, `.hide` don't works
+        -- anyway.
+        for _, tb in ipairs {"top", "bottom", "left", "right"} do
+            if tb ~= keep then
+                titlebar.hide(c, tb)
+            end
+        end
+    end
+
+    c._request_titlebars_called = true
+
+    return true
+end
+
+--- Get a client's titlebar.
 -- @tparam client c The client for which a titlebar is wanted.
 -- @tparam[opt={}] table args A table with extra arguments for the titlebar.
 -- @tparam[opt=font.height*1.5] number args.size The height of the titlebar.
@@ -461,7 +550,7 @@ end
 -- @tparam[opt=top] string args.fg_normal
 -- @tparam[opt=top] string args.fg_focus
 -- @tparam[opt=top] string args.font
--- @name titlebar
+-- @function awful.titlebar
 local function new(c, args)
     args = args or {}
     local position = args.position or "top"
@@ -513,6 +602,9 @@ local function new(c, args)
     -- Handle declarative/recursive widget container
     ret.setup = base.widget.setup
 
+    c._private = c._private or {}
+    c._private.titlebars = bars
+
     return ret
 end
 
@@ -522,6 +614,7 @@ end
 --   "right", "top", "bottom". Default is "top".
 function titlebar.show(c, position)
     position = position or "top"
+    if load_titlebars(c, true, position) then return end
     local bars = all_titlebars[c]
     local data = bars and bars[position]
     local args = data and data.args
@@ -543,6 +636,7 @@ end
 --   "right", "top", "bottom". Default is "top".
 function titlebar.toggle(c, position)
     position = position or "top"
+    if load_titlebars(c, true, position) then return end
     local _, size = get_titlebar_function(c, position)(c)
     if size == 0 then
         titlebar.show(c, position)
@@ -559,7 +653,7 @@ end
 function titlebar.widget.titlewidget(c)
     local ret = textbox()
     local function update()
-        ret:set_text(c.name or "<unknown>")
+        ret:set_text(c.name or titlebar.fallback_name)
     end
     c:connect_signal("property::name", update)
     update()

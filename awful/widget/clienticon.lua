@@ -31,7 +31,7 @@ end
 
 function clienticon:draw(_, cr, width, height)
     local c = self._private.client
-    if not c.valid then
+    if not c or not c.valid then
         return
     end
 
@@ -52,7 +52,7 @@ end
 
 function clienticon:fit(_, width, height)
     local c = self._private.client
-    if not c.valid then
+    if not c or not c.valid then
         return 0, 0
     end
 
@@ -80,6 +80,22 @@ function clienticon:fit(_, width, height)
     return w * aspect, h * aspect
 end
 
+--- The widget's @{client}.
+--
+-- @property client
+-- @param client
+
+function clienticon:get_client()
+    return self._private.client
+end
+
+function clienticon:set_client(c)
+    if self._private.client == c then return end
+    self._private.client = c
+    self:emit_signal("widget::layout_changed")
+    self:emit_signal("widget::redraw_needed")
+end
+
 --- Returns a new clienticon.
 -- @tparam client c The client whose icon should be displayed.
 -- @treturn widget A new `widget`
@@ -105,16 +121,14 @@ client.connect_signal("property::icon", function(c)
     end
 end)
 
---Imported documentation
-
-
---- Get a widex index.
+--
+--- Get a widget index.
 -- @param widget The widget to look for
 -- @param[opt] recursive Also check sub-widgets
--- @param[opt] ... Aditional widgets to add at the end of the \"path\"
+-- @param[opt] ... Additional widgets to add at the end of the path
 -- @return The index
 -- @return The parent layout
--- @return The path between \"self\" and \"widget\"
+-- @return The path between self and widget
 -- @function index
 
 --- Get all direct and indirect children widgets.
@@ -274,38 +288,36 @@ end)
 -- in its local coordinate system.
 -- @see mouse
 
-
---Imported documentation
-
-
---- Disconnect to a signal.
--- @tparam string name The name of the signal
--- @tparam function func The callback that should be disconnected
+--
+--- Disconnect from a signal.
+-- @tparam string name The name of the signal.
+-- @tparam function func The callback that should be disconnected.
 -- @function disconnect_signal
 
 --- Emit a signal.
 --
--- @tparam string name The name of the signal
+-- @tparam string name The name of the signal.
 -- @param ... Extra arguments for the callback functions. Each connected
---   function receives the object as first argument and then any extra arguments
---   that are given to emit_signal()
+--   function receives the object as first argument and then any extra
+--   arguments that are given to emit_signal().
 -- @function emit_signal
 
 --- Connect to a signal.
--- @tparam string name The name of the signal
--- @tparam function func The callback to call when the signal is emitted
+-- @tparam string name The name of the signal.
+-- @tparam function func The callback to call when the signal is emitted.
 -- @function connect_signal
 
---- Connect to a signal weakly. This allows the callback function to be garbage
--- collected and automatically disconnects the signal when that happens.
+--- Connect to a signal weakly.
+--
+-- This allows the callback function to be garbage collected and
+-- automatically disconnects the signal when that happens.
 --
 -- **Warning:**
 -- Only use this function if you really, really, really know what you
 -- are doing.
--- @tparam string name The name of the signal
--- @tparam function func The callback to call when the signal is emitted
+-- @tparam string name The name of the signal.
+-- @tparam function func The callback to call when the signal is emitted.
 -- @function weak_connect_signal
-
 
 return setmetatable(clienticon, {
     __call = function(_, ...)

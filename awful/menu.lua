@@ -51,6 +51,11 @@ end
 --- The icon used for sub-menus.
 -- @beautiful beautiful.menu_submenu_icon
 
+--- The menu text font.
+-- @beautiful beautiful.menu_font
+-- @param string
+-- @see string
+
 --- The item height.
 -- @beautiful beautiful.menu_height
 -- @tparam[opt=16] number menu_height
@@ -133,7 +138,7 @@ local function load_theme(a, b)
                  fallback.menu_height or dpi(16)
     ret.width = a.width or b.menu_width or b.width or
                 fallback.menu_width or dpi(100)
-    ret.font = a.font or b.font or fallback.font
+    ret.font = a.font or b.font or fallback.menu_font or fallback.font
     for _, prop in ipairs({"width", "height", "menu_width"}) do
         if type(ret[prop]) ~= "number" then ret[prop] = tonumber(ret[prop]) end
     end
@@ -445,7 +450,7 @@ function menu:add(args, index)
 
     item._mouse = function ()
         local num = gtable.hasitem(self.items, item)
-        self:item_enter(num, { hover = true, moue = true })
+        self:item_enter(num, { hover = true, mouse = true })
     end
     item.widget:connect_signal("mouse::enter", item._mouse)
 
@@ -534,6 +539,28 @@ function menu.clients(args, item_args, filter)
     local m = menu.new(args)
     m:show(args)
     return m
+end
+
+local clients_menu = nil
+
+--- Use menu.clients to build and open the client menu if it isn't already open.
+-- Close the client menu if it is already open.
+-- See `awful.menu.clients` for more information.
+-- @tparam[opt] table args Menu table, see `new()` for more information.
+-- @tparam[opt] table item_args Table that will be merged into each item, see
+--   `new()` for more information.
+-- @tparam[opt] func filter A function taking a client as an argument and
+--   returning `true` or `false` to indicate whether the client should be
+--   included in the menu.
+-- @return The menu.
+function menu.client_list(args, item_args, filter)
+    if clients_menu and clients_menu.wibox.visible then
+        clients_menu:hide()
+        clients_menu = nil
+    else
+        clients_menu = menu.clients(args, item_args, filter)
+    end
+    return clients_menu
 end
 
 --------------------------------------------------------------------------------
@@ -635,7 +662,7 @@ end
 -- @param args Table containing the menu informations.
 --
 -- * Key items: Table containing the displayed items. Each element is a table by default (when element 'new' is
---   awful.menu.entry) containing: item name, triggered action, submenu table or function, item icon (optional).
+--   awful.menu.entry) containing: item name, triggered action (submenu table or function), item icon (optional).
 -- * Keys theme.[fg|bg]_[focus|normal], theme.border_color, theme.border_width, theme.submenu_icon, theme.height
 --   and theme.width override the default display for your menu and/or of your menu entry, each of them are optional.
 -- * Key auto_expand controls the submenu auto expand behaviour by setting it to true (default) or false.

@@ -25,10 +25,12 @@ local function should_display_on(self, s)
     if not self._private.widget then
         return false
     end
-    local success, own_s = pcall(function()
-        return capi.screen[self._private.screen]
-    end)
-    return success and own_s == s
+    local own_s = self._private.screen
+    if type(own_s) == "number" and (own_s < 1 or own_s > capi.screen.count()) then
+        -- Invalid screen number
+        return false
+    end
+    return capi.screen[self._private.screen] == s
 end
 
 -- Layout this layout
@@ -138,16 +140,14 @@ capi.screen.connect_signal("property::outputs", function()
     end
 end)
 
---Imported documentation
-
-
---- Get a widex index.
+--
+--- Get a widget index.
 -- @param widget The widget to look for
 -- @param[opt] recursive Also check sub-widgets
--- @param[opt] ... Aditional widgets to add at the end of the \"path\"
+-- @param[opt] ... Additional widgets to add at the end of the path
 -- @return The index
 -- @return The parent layout
--- @return The path between \"self\" and \"widget\"
+-- @return The path between self and widget
 -- @function index
 
 --- Get all direct and indirect children widgets.
@@ -307,38 +307,36 @@ end)
 -- in its local coordinate system.
 -- @see mouse
 
-
---Imported documentation
-
-
---- Disconnect to a signal.
--- @tparam string name The name of the signal
--- @tparam function func The callback that should be disconnected
+--
+--- Disconnect from a signal.
+-- @tparam string name The name of the signal.
+-- @tparam function func The callback that should be disconnected.
 -- @function disconnect_signal
 
 --- Emit a signal.
 --
--- @tparam string name The name of the signal
+-- @tparam string name The name of the signal.
 -- @param ... Extra arguments for the callback functions. Each connected
---   function receives the object as first argument and then any extra arguments
---   that are given to emit_signal()
+--   function receives the object as first argument and then any extra
+--   arguments that are given to emit_signal().
 -- @function emit_signal
 
 --- Connect to a signal.
--- @tparam string name The name of the signal
--- @tparam function func The callback to call when the signal is emitted
+-- @tparam string name The name of the signal.
+-- @tparam function func The callback to call when the signal is emitted.
 -- @function connect_signal
 
---- Connect to a signal weakly. This allows the callback function to be garbage
--- collected and automatically disconnects the signal when that happens.
+--- Connect to a signal weakly.
+--
+-- This allows the callback function to be garbage collected and
+-- automatically disconnects the signal when that happens.
 --
 -- **Warning:**
 -- Only use this function if you really, really, really know what you
 -- are doing.
--- @tparam string name The name of the signal
--- @tparam function func The callback to call when the signal is emitted
+-- @tparam string name The name of the signal.
+-- @tparam function func The callback to call when the signal is emitted.
 -- @function weak_connect_signal
-
 
 return setmetatable(only_on_screen, only_on_screen.mt)
 

@@ -123,10 +123,7 @@ local function parse_cell_options(cell, args)
 
     for _, prop in ipairs(properties) do
         local default
-        if prop == 'markup' then
-            default = cell == "focus" and string.format('<span foreground="%s" background="%s"><b>%s</b></span>',
-                                                        beautiful.fg_focus, beautiful.bg_focus, "%s")
-        elseif prop == 'fg_color' then
+        if prop == 'fg_color' then
             default = cell == "focus" and beautiful.fg_focus or beautiful.fg_normal
         elseif prop == 'bg_color' then
             default = cell == "focus" and beautiful.bg_focus or beautiful.bg_normal
@@ -145,6 +142,11 @@ local function parse_cell_options(cell, args)
         -- Get default
         props[prop] = args[prop] or beautiful["calendar_" .. cell .. "_" .. prop] or bl_style[prop] or default
     end
+    props['markup'] = cell == "focus" and
+        (args['markup'] or beautiful["calendar_" .. cell .. "_markup"] or bl_style['markup'] or
+        string.format('<span foreground="%s" background="%s"><b>%s</b></span>',
+            props['fg_color'], props['bg_color'], "%s")
+        )
     return props
 end
 
@@ -170,9 +172,11 @@ end
 -- @tparam string position Two characters position of the calendar (default "cc")
 -- @treturn number,number,number,number Geometry of the calendar, list of x, y, width, height
 local function get_geometry(widget, screen, position)
-    local pos, s = position or "cc", screen or ascreen.focused()
+    local pos = position or "cc"
+    local s = screen or ascreen.focused()
+    local margin = widget._calendar_margin or 0
     local wa = s.workarea
-    local width, height = widget:fit({screen=s, dpi=beautiful.xresources.get_dpi(s)}, wa.width, wa.height)
+    local width, height = widget:fit({screen=s, dpi=s.dpi}, wa.width, wa.height)
 
     width  = width  < wa.width  and width  or wa.width
     height = height < wa.height and height or wa.height
@@ -183,16 +187,16 @@ local function get_geometry(widget, screen, position)
     --                        bl, bc, br
     local x,y
     if pos:sub(1,1) == "t" then
-        y = wa.y
+        y = wa.y + margin
     elseif pos:sub(1,1) == "b" then
-        y = wa.y + wa.height - height
+        y = wa.y + wa.height - (height + margin)
     else  --if pos:sub(1,1) == "c" then
         y = wa.y + math.floor((wa.height - height) / 2)
     end
     if pos:sub(2,2) == "l" then
-        x = wa.x
+        x = wa.x + margin
     elseif pos:sub(2,2) == "r" then
-        x = wa.x + wa.width - width
+        x = wa.x + wa.width - (width + margin)
     else  --if pos:sub(2,2) == "c" then
         x = wa.x + math.floor((wa.width - width) / 2)
     end
@@ -206,7 +210,9 @@ end
 -- @tparam screen screen Screen where to display the calendar
 -- @treturn wibox The wibox calendar
 function calendar_popup:call_calendar(offset, position, screen)
-    local inc_offset, pos, s = offset or 0, position or self.position, screen or self.screen or ascreen.focused()
+    local inc_offset = offset or 0
+    local pos = position or self.position
+    local s = screen or self.screen or ascreen.focused()
     self.position = pos  -- remember last position when changing offset
 
     self.offset = inc_offset ~= 0 and self.offset + inc_offset or 0
@@ -215,9 +221,9 @@ function calendar_popup:call_calendar(offset, position, screen)
     local raw_date = os.date("*t")
     local date = {day=raw_date.day, month=raw_date.month, year=raw_date.year}
     if widget._private.type == "month" and self.offset ~= 0 then
-        raw_date.month = raw_date.month + self.offset
-        raw_date = os.date("*t", os.time(raw_date))
-        date = {month=raw_date.month, year=raw_date.year}
+        local month_offset = (raw_date.month + self.offset - 1) % 12 + 1
+        local year_offset = raw_date.year + math.floor((raw_date.month + self.offset - 1) / 12)
+        date = {month=month_offset, year=year_offset }
     elseif widget._private.type == "year" then
         date = {year=raw_date.year + self.offset}
     end
@@ -241,22 +247,42 @@ end
 --- Attach the calendar to a widget to display at a specific position.
 --
 --    local mytextclock = wibox.widget.textclock()
---    local month_calendar = calendar.month()
+--    local month_calendar = awful.widget.calendar_popup.month()
 --    month_calendar:attach(mytextclock, 'tr')
 --
 -- @param widget Widget to attach the calendar
 -- @tparam[opt="tr"] string position Two characters string defining the position on the screen
+-- @tparam[opt={}] table args Additional options
+-- @tparam[opt=true] bool args.on_hover Show popup during mouse hover
 -- @treturn wibox The wibox calendar
-function calendar_popup:attach(widget, position)
+function calendar_popup:attach(widget, position, args)
     position = position or "tr"
+    args = args or {}
+    if args.on_hover == nil then args.on_hover=true end
     widget:buttons(gears.table.join(
         abutton({ }, 1, function ()
-                              self:call_calendar(0, position)
-                              self.visible = not self.visible
+                              if not self.visible or self._calendar_clicked_on then
+                                  self:call_calendar(0, position)
+                                  self.visible = not self.visible
+                              end
+                              self._calendar_clicked_on = self.visible
                         end),
         abutton({ }, 4, function () self:call_calendar(-1) end),
         abutton({ }, 5, function () self:call_calendar( 1) end)
     ))
+    if args.on_hover then
+        widget:connect_signal("mouse::enter", function ()
+            if not self._calendar_clicked_on then
+                self:call_calendar(0, position)
+                self.visible = true
+            end
+        end)
+        widget:connect_signal("mouse::leave", function ()
+            if not self._calendar_clicked_on then
+                self.visible = false
+            end
+        end)
+    end
     return self
 end
 
@@ -272,6 +298,7 @@ end
 -- @tparam string args.bg Wibox background color
 -- @tparam string args.font Calendar font
 -- @tparam number args.spacing Calendar spacing
+-- @tparam number args.margin Margin around calendar widget
 -- @tparam boolean args.week_numbers Show weeknumbers
 -- @tparam boolean args.start_sunday Start week on Sunday
 -- @tparam boolean args.long_weekdays Format the weekdays with three characters instead of two
@@ -289,7 +316,7 @@ local function get_cal_wibox(caltype, args)
 
     local ret = wibox{ ontop   = true,
                        opacity = args.opacity or 1,
-                       bg      = args.bg
+                       bg      = args.bg or gears.color.transparent
     }
     gears.table.crush(ret, calendar_popup, false)
 
@@ -298,19 +325,26 @@ local function get_cal_wibox(caltype, args)
     ret.screen   = args.screen
 
     local widget = wibox.widget {
-        font          = args.font,
+        font          = args.font or beautiful.font,
         spacing       = args.spacing,
         week_numbers  = args.week_numbers,
         start_sunday  = args.start_sunday,
         long_weekdays = args.long_weekdays,
         fn_embed      = embed(parse_all_options(args)),
+        _calendar_margin = args.margin,
         widget = caltype == "year" and wibox.widget.calendar.year or wibox.widget.calendar.month
     }
     ret:set_widget(widget)
 
     ret:buttons(gears.table.join(
-            abutton({ }, 1, function () ret.visible=false end),
-            abutton({ }, 3, function () ret.visible=false end),
+            abutton({ }, 1, function ()
+                ret.visible=false
+                ret._calendar_clicked_on=false
+            end),
+            abutton({ }, 3, function ()
+                ret.visible=false
+                ret._calendar_clicked_on=false
+            end),
             abutton({ }, 4, function () ret:call_calendar(-1) end),
             abutton({ }, 5, function () ret:call_calendar( 1) end)
     ))
@@ -325,6 +359,7 @@ end
 --
 --
 --    local mytextclock = wibox.widget.textclock()
+--    local month_calendar = awful.widget.calendar_popup.month()
 --    month_calendar:attach( mytextclock, "tr" )
 --
 -- @tparam table args Properties of the widget
@@ -334,6 +369,7 @@ end
 -- @tparam string args.bg Wibox background color
 -- @tparam string args.font Calendar font
 -- @tparam number args.spacing Calendar spacing
+-- @tparam number args.margin Margin around calendar widget
 -- @tparam boolean args.week_numbers Show weeknumbers
 -- @tparam boolean args.start_sunday Start week on Sunday
 -- @tparam boolean args.long_weekdays Format the weekdays with three characters instead of two
@@ -344,7 +380,7 @@ end
 -- @tparam table args.style_normal Cell style for the normal day cells (see `cell_properties`)
 -- @tparam table args.style_focus Cell style for the current day cell (see `cell_properties`)
 -- @treturn wibox A wibox containing the calendar
--- @function awful.widget.calendar.month
+-- @function awful.widget.calendar_popup.month
 function calendar_popup.month(args)
     return get_cal_wibox("month", args)
 end
@@ -367,6 +403,7 @@ end
 -- @tparam string args.bg Wibox background color
 -- @tparam string args.font Calendar font
 -- @tparam number args.spacing Calendar spacing
+-- @tparam number args.margin Margin around calendar widget
 -- @tparam boolean args.week_numbers Show weeknumbers
 -- @tparam boolean args.start_sunday Start week on Sunday
 -- @tparam boolean args.long_weekdays Format the weekdays with three characters instead of two
@@ -380,7 +417,7 @@ end
 -- @tparam table args.style_normal Cell style for the normal day cells (see `cell_properties`)
 -- @tparam table args.style_focus Cell style for the current day cell (see `cell_properties`)
 -- @treturn wibox A wibox containing the calendar
--- @function awful.widget.calendar.year
+-- @function awful.widget.calendar_popup.year
 function calendar_popup.year(args)
     return get_cal_wibox("year", args)
 end

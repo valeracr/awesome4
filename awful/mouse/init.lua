@@ -57,6 +57,10 @@ mouse.wibox = {}
 -- @beautiful beautiful.snap_shape
 -- @tparam function shape A `gears.shape` compatible function
 
+--- The gap between snapped contents.
+-- @beautiful beautiful.snapper_gap
+-- @tparam number (default: 0)
+
 --- Get the client object under the pointer.
 -- @deprecated awful.mouse.client_under_pointer
 -- @return The client object under the pointer, if one can be found.
@@ -124,7 +128,7 @@ end
 -- @function awful.mouse.wibox.move
 --@tparam wibox w The wibox to move, or none to use that under the pointer
 function mouse.wibox.move(w)
-    w = w or mouse.wibox_under_pointer()
+    w = w or mouse.current_wibox
     if not w then return end
 
     if not w

@@ -2,7 +2,7 @@
 --- Tooltip module for awesome objects.
 --
 -- A tooltip is a small hint displayed when the mouse cursor
--- hovers a specific item.
+-- hovers over a specific item.
 -- In awesome, a tooltip can be linked with almost any
 -- object having a `:connect_signal()` method and receiving
 -- `mouse::enter` and `mouse::leave` signals.
@@ -10,13 +10,52 @@
 -- How to create a tooltip?
 -- ---
 --
---     myclock = wibox.widget.textclock({}, "%T", 1)
---     myclock_t = awful.tooltip({
---         objects = { myclock },
+-- 
+--
+--![Usage example](../images/AUTOGEN_awful_tooltip_textclock.svg)
+--
+-- 
+--     local mytextclock = wibox.widget.textclock()
+--  
+--     local myclock_t = awful.tooltip {
+--         objects        = { mytextclock },
 --         timer_function = function()
---                 return os.date("Today is %A %B %d %Y\nThe time is %T")
---             end,
---         })
+--             return os.date('Today is %A %B %d %Y\nThe time is %T')
+--         end,
+--     }
+--
+-- Alternatively, you can use `mouse::enter` signal:
+--
+-- 
+--
+--![Usage example](../images/AUTOGEN_awful_tooltip_textclock2.svg)
+--
+-- 
+--     local mytextclock = wibox.widget.textclock()
+--  
+--     local myclock_t = awful.tooltip { }
+--  
+--     myclock_t:add_to_object(mytextclock)
+--  
+--     mytextclock:connect_signal('mouse::enter', function()
+--         myclock_t.text = os.date('Today is %A %B %d %Y\nThe time is %T')
+--     end)
+--
+-- How to create a tooltip without objects?
+-- ---
+--
+-- 
+--
+--![Usage example](../images/AUTOGEN_awful_tooltip_mouse.svg)
+--
+-- 
+--     local tt = awful.tooltip {
+--         text = 'A tooltip!',
+--         visible = true,
+--     }
+--  
+--     tt.bg = beautiful.bg_normal
+--  
 --
 -- How to add the same tooltip to multiple objects?
 -- ---
@@ -39,25 +78,21 @@
 -- @classmod awful.tooltip
 -------------------------------------------------------------------------
 
-local mouse = mouse
 local timer = require("gears.timer")
 local gtable = require("gears.table")
 local object = require("gears.object")
 local color = require("gears.color")
 local wibox = require("wibox")
 local a_placement = require("awful.placement")
-local abutton = require("awful.button")
+local a_button = require("awful.button")
 local shape = require("gears.shape")
 local beautiful = require("beautiful")
-local textbox = require("wibox.widget.textbox")
 local dpi = require("beautiful").xresources.apply_dpi
-local cairo = require("lgi").cairo
 local setmetatable = setmetatable
-local unpack = unpack or table.unpack -- luacheck: globals unpack (compatibility with Lua 5.1)
 local ipairs = ipairs
 local capi = {mouse=mouse, awesome=awesome}
 
-local tooltip = { mt = {}  }
+local tooltip = { mt = {} }
 
 -- The mouse point is 1x1, so anything aligned based on it as parent
 -- geometry will go out of bound. To get the desired placement, it is
@@ -104,77 +139,12 @@ local offset = {
 -- @beautiful beautiful.tooltip_opacity
 
 --- The default tooltip shape.
--- By default, all tooltips are rectangles, however, by setting this variables,
+-- The default shape for all tooltips is a rectangle. However, by setting this variable
 -- they can default to rounded rectangle or stretched octogons.
 -- @beautiful beautiful.tooltip_shape
 -- @tparam[opt=gears.shape.rectangle] function shape A `gears.shape` compatible function
 -- @see shape
 -- @see gears.shape
-
-local function apply_shape(self)
-    local s = self._private.shape
-
-    local wb = self.wibox
-
-    if not s then
-        -- Clear the shape
-        if wb.shape_bounding then
-            wb.shape_bounding = nil
-            wb:set_bgimage(nil)
-        end
-
-        return
-    end
-
-    local w, h = wb.width, wb.height
-
-    -- First, create a A1 mask for the shape bounding itself
-    local img = cairo.ImageSurface(cairo.Format.A1, w, h)
-    local cr = cairo.Context(img)
-
-    cr:set_source_rgba(1,1,1,1)
-
-    s(cr, w, h, unpack(self._private.shape_args or {}))
-    cr:fill()
-    wb.shape_bounding = img._native
-
-    -- The wibox background uses ARGB32 border so tooltip anti-aliasing works
-    -- when an external compositor is used. This will look better than
-    -- the capi.drawin's own border support.
-    img = cairo.ImageSurface(cairo.Format.ARGB32, w, h)
-    cr  = cairo.Context(img)
-
-    -- Draw the border (multiply by 2, then mask the inner part to save a path)
-    local bw = (self._private.border_width
-        or beautiful.tooltip_border_width
-        or beautiful.border_width or 0) * 2
-
-    -- Fix anti-aliasing
-    if bw > 2 and awesome.composite_manager_running then
-        bw = bw - 1
-    end
-
-    local bc = self._private.border_color
-        or beautiful.tooltip_border_color
-        or beautiful.border_normal
-        or "#ffcb60"
-
-    cr:translate(bw, bw)
-    s(cr, w-2*bw, h-2*bw, unpack(self._private.shape_args or {}))
-    cr:set_line_width(bw)
-    cr:set_source(color(bc))
-    cr:stroke_preserve()
-    cr:clip()
-
-    local bg = self._private.bg
-        or beautiful.tooltip_bg
-        or beautiful.bg_focus or "#ffcb60"
-
-    cr:set_source(color(bg))
-    cr:paint()
-
-    wb:set_bgimage(img)
-end
 
 local function apply_mouse_mode(self)
     local w              = self:get_wibox()
@@ -193,13 +163,9 @@ local function apply_outside_mode(self)
     local _, position = a_placement.next_to(w, {
         geometry            = self._private.widget_geometry,
         preferred_positions = self.preferred_positions,
+        preferred_anchors   = self.preferred_alignments,
         honor_workarea      = true,
     })
-
-    if position ~= self.current_position then
-        -- Re-apply the shape.
-        apply_shape(self)
-    end
 
     self.current_position = position
 end
@@ -209,16 +175,12 @@ end
 -- @tparam tooltip self A tooltip object.
 local function set_geometry(self)
     -- calculate width / height
-    local n_w, n_h = self.textbox:get_preferred_size(mouse.screen)
+    local n_w, n_h = self.textbox:get_preferred_size(capi.mouse.screen)
     n_w = n_w + self.marginbox.left + self.marginbox.right
     n_h = n_h + self.marginbox.top + self.marginbox.bottom
 
     local w = self:get_wibox()
     w:geometry({ width = n_w, height = n_h })
-
-    if self._private.shape then
-        apply_shape(self)
-    end
 
     local mode = self.mode
 
@@ -265,7 +227,7 @@ local function hide(self)
     self:emit_signal("property::visible")
 end
 
---- The wibox.
+--- The wibox containing the tooltip widgets.
 -- @property wibox
 -- @param `wibox`
 
@@ -275,11 +237,11 @@ function tooltip:get_wibox()
     end
 
     local wb = wibox(self.wibox_properties)
-    wb:set_widget(self.marginbox)
+    wb:set_widget(self.widget)
 
     -- Close the tooltip when clicking it.  This gets done on release, to not
     -- emit the release event on an underlying object, e.g. the titlebar icon.
-    wb:buttons(abutton({}, 1, nil, self.hide))
+    wb:buttons(a_button({}, 1, nil, self.hide))
 
     self._private.wibox = wb
 
@@ -306,6 +268,19 @@ end
 
 --- The horizontal alignment.
 --
+-- This is valid for the mouse mode only. For the outside mode, use
+-- `preferred_positions`.
+--
+-- 
+--
+--![Usage example](../images/AUTOGEN_awful_tooltip_align.svg)
+--
+--
+-- 
+--
+--![Usage example](../images/AUTOGEN_awful_tooltip_align2.svg)
+--
+--
 -- The following values are valid:
 --
 -- * top_left
@@ -319,6 +294,8 @@ end
 --
 -- @property align
 -- @see beautiful.tooltip_align
+-- @see mode
+-- @see preferred_positions
 
 --- The default tooltip alignment.
 -- @beautiful beautiful.tooltip_align
@@ -342,6 +319,12 @@ end
 
 --- The shape of the tooltip window.
 -- If the shape require some parameters, use `set_shape`.
+--
+-- 
+--
+--![Usage example](../images/AUTOGEN_awful_tooltip_shape.svg)
+--
+--
 -- @property shape
 -- @see gears.shape
 -- @see set_shape
@@ -352,16 +335,28 @@ end
 -- @tparam gears.shape s The shape
 -- @see shape
 -- @see gears.shape
-function tooltip:set_shape(s, ...)
-    self._private.shape = s
-    self._private.shape_args = {...}
-    apply_shape(self)
+function tooltip:set_shape(s)
+    self.backgroundbox:set_shape(s)
 end
 
 --- Set the tooltip positioning mode.
 -- This affects how the tooltip is placed. By default, the tooltip is `align`ed
 -- close to the mouse cursor. It is also possible to place the tooltip relative
 -- to the widget geometry.
+--
+-- **mouse:**
+--
+-- 
+--
+--![Usage example](../images/AUTOGEN_awful_tooltip_mode.svg)
+--
+--
+-- **outside:**
+--
+-- 
+--
+--![Usage example](../images/AUTOGEN_awful_tooltip_mode2.svg)
+--
 --
 -- Valid modes are:
 --
@@ -384,8 +379,20 @@ end
 
 --- The preferred positions when in `outside` mode.
 --
+-- 
+--
+--![Usage example](../images/AUTOGEN_awful_tooltip_preferred_positions.svg)
+--
+--
 -- If the tooltip fits on multiple sides of the drawable, then this defines the
--- priority
+-- priority.
+--
+-- The valid table values are:
+--
+-- * "top"
+-- * "right"
+-- * "left"
+-- * "bottom"
 --
 -- The default is:
 --
@@ -393,6 +400,9 @@ end
 --
 -- @property preferred_positions
 -- @tparam table preferred_positions The position, ordered by priorities
+-- @see align
+-- @see mode
+-- @see preferred_alignments
 
 function tooltip:get_preferred_positions()
     return self._private.preferred_positions or
@@ -405,12 +415,64 @@ function tooltip:set_preferred_positions(value)
     set_geometry(self)
 end
 
+--- The preferred alignment when using the `outside` mode.
+--
+-- The values of the table are ordered by priority, the first one that fits
+-- will be used.
+--
+-- **front:**
+--
+-- 
+--
+--![Usage example](../images/AUTOGEN_awful_tooltip_preferred_alignment.svg)
+--
+--
+-- **middle:**
+--
+-- 
+--
+--![Usage example](../images/AUTOGEN_awful_tooltip_preferred_alignment2.svg)
+--
+--
+-- **back:**
+--
+-- 
+--
+--![Usage example](../images/AUTOGEN_awful_tooltip_preferred_alignment3.svg)
+--
+--
+-- The valid table values are:
+--
+-- * front
+-- * middle
+-- * back
+--
+-- The default is:
+--
+--    {"front", "back", "middle"}
+--
+-- @property preferred_alignments
+-- @param string
+-- @see preferred_positions
+
+function tooltip:get_preferred_alignments()
+    return self._private.preferred_alignments or
+        {"front", "back", "middle"}
+end
+
+function tooltip:set_preferred_alignments(value)
+    self._private.preferred_alignments = value
+
+    set_geometry(self)
+end
+
 --- Change displayed text.
 --
 -- @property text
 -- @tparam tooltip self The tooltip object.
 -- @tparam string  text New tooltip text, passed to
 --   `wibox.widget.textbox.set_text`.
+-- @see wibox.widget.textbox
 
 function tooltip:set_text(text)
     self.textbox:set_text(text)
@@ -425,6 +487,7 @@ end
 -- @tparam tooltip self The tooltip object.
 -- @tparam string  text New tooltip markup, passed to
 --   `wibox.widget.textbox.set_markup`.
+-- @see wibox.widget.textbox
 
 function tooltip:set_markup(text)
     self.textbox:set_markup(text)
@@ -443,6 +506,91 @@ function tooltip:set_timeout(timeout)
     if self.timer then
         self.timer.timeout = timeout
     end
+end
+
+--- Set all margins around the tooltip textbox
+--
+-- 
+--
+--![Usage example](../images/AUTOGEN_awful_tooltip_margins.svg)
+--
+--
+-- @property margins
+-- @tparam tooltip self A tooltip object
+-- @tparam number New margins value
+
+function tooltip:set_margins(val)
+    self.marginbox:set_margins(val)
+end
+
+--- The border width.
+--
+-- 
+--
+--![Usage example](../images/AUTOGEN_awful_tooltip_border_width.svg)
+--
+--
+-- @property border_width
+-- @param number
+
+function tooltip:set_border_width(val)
+    self.widget.shape_border_width = val
+end
+
+--- The border color.
+--
+-- 
+--
+--![Usage example](../images/AUTOGEN_awful_tooltip_border_color.svg)
+--
+--
+-- @property border_color
+-- @param gears.color
+
+function tooltip:set_border_color(val)
+    self.widget.shape_border_color = val
+end
+
+--- Set the margins around the left and right of the tooltip textbox
+--
+-- 
+--
+--![Usage example](../images/AUTOGEN_awful_tooltip_margins_leftright.svg)
+--
+--
+-- @property margins_leftright
+-- @tparam tooltip self A tooltip object
+-- @tparam number New margins value
+
+function tooltip:set_margin_leftright(val)
+    self.marginbox:set_left(val)
+    self.marginbox:set_right(val)
+end
+
+--TODO v5 deprecate this
+function tooltip:set_margins_leftright(val)
+    self:set_margin_leftright(val)
+end
+
+--- Set the margins around the top and bottom of the tooltip textbox
+--
+-- 
+--
+--![Usage example](../images/AUTOGEN_awful_tooltip_margins_topbottom.svg)
+--
+--
+-- @property margins_topbottom
+-- @tparam tooltip self A tooltip object
+-- @tparam number New margins value
+
+function tooltip:set_margin_topbottom(val)
+    self.marginbox:set_top(val)
+    self.marginbox:set_bottom(val)
+end
+
+--TODO v5 deprecate this
+function tooltip:set_margins_topbottom(val)
+    self:set_margin_topbottom(val)
 end
 
 --- Add tooltip to an object.
@@ -471,6 +619,7 @@ end
 
 -- Tooltip can be applied to both widgets, wibox and client, their geometry
 -- works differently.
+
 local function get_parent_geometry(arg1, arg2)
     if type(arg2) == "table" and arg2.width then
         return arg2
@@ -493,13 +642,22 @@ end
 -- @tparam[opt=apply_dpi(5)] integer args.margin_leftright The left/right margin for the text.
 -- @tparam[opt=apply_dpi(3)] integer args.margin_topbottom The top/bottom margin for the text.
 -- @tparam[opt=nil] gears.shape args.shape The shape
+-- @tparam[opt] string args.bg The background color
+-- @tparam[opt] string args.fg The foreground color
+-- @tparam[opt] string args.border_color The tooltip border color
+-- @tparam[opt] number args.border_width The tooltip border width
+-- @tparam[opt] string args.align The horizontal alignment
+-- @tparam[opt] string args.font The tooltip font
+-- @tparam[opt] number args.opacity The tooltip opacity
 -- @treturn awful.tooltip The created tooltip.
 -- @see add_to_object
 -- @see timeout
 -- @see text
 -- @see markup
+-- @see align
 -- @function awful.tooltip
 function tooltip.new(args)
+    -- gears.object, properties are linked to set_/get_ functions
     local self = object {
         enable_properties = true,
     }
@@ -544,7 +702,7 @@ function tooltip.new(args)
         function self.show(other, geo)
             -- Auto detect clients and wiboxes
             if other.drawable or other.pid then
-                geo = other:geometry()
+                geo = other
             end
 
             -- Cache the geometry in case it is needed later
@@ -569,26 +727,57 @@ function tooltip.new(args)
         self.timer:connect_signal("timeout", self.timer_function)
     end
 
-    local fg = beautiful.tooltip_fg or beautiful.fg_focus or "#000000"
-    local font = beautiful.tooltip_font or beautiful.font
+    -- collect tooltip properties
+    -- wibox
+    local fg = args.fg or beautiful.tooltip_fg or beautiful.fg_focus or "#000000"
+    local opacity = args.opacity or beautiful.tooltip_opacity or 1
+    -- textbox
+    local font = args.font or beautiful.tooltip_font or beautiful.font
+    -- marginbox
+    local m_lr = args.margin_leftright or dpi(5)
+    local m_tb = args.margin_topbottom or dpi(3)
+    -- backgroundbox
+    local bg = args.bg or beautiful.tooltip_bg
+        or beautiful.bg_focus or "#ffcb60"
+    local border_width = args.border_width or beautiful.tooltip_border_width or 0
+    local border_color = args.border_color or beautiful.tooltip_border_color
+        or beautiful.border_normal or "#ffcb60"
 
-    -- Set default properties
+    -- Set wibox default properties
     self.wibox_properties = {
         visible = false,
         ontop = true,
         border_width = 0,
         fg = fg,
         bg = color.transparent,
-        opacity = beautiful.tooltip_opacity or 1,
+        opacity = opacity,
+        type = "tooltip",
     }
 
-    self.textbox = textbox()
-    self.textbox:set_font(font)
-
-    -- Add margin.
-    local m_lr = args.margin_leftright or dpi(5)
-    local m_tb = args.margin_topbottom or dpi(3)
-    self.marginbox = wibox.container.margin(self.textbox, m_lr, m_lr, m_tb, m_tb)
+    self.widget = wibox.widget {
+        {
+            {
+                id = 'text_role',
+                font = font,
+                widget = wibox.widget.textbox,
+            },
+            id = 'margin_role',
+            left = m_lr,
+            right = m_lr,
+            top = m_tb,
+            bottom = m_tb,
+            widget = wibox.container.margin,
+        },
+        id = 'background_role',
+        bg = bg,
+        shape = self._private.shape,
+        shape_border_width = border_width,
+        shape_border_color = border_color,
+        widget = wibox.container.background,
+    }
+    self.textbox = self.widget:get_children_by_id('text_role')[1]
+    self.marginbox = self.widget:get_children_by_id('margin_role')[1]
+    self.backgroundbox = self.widget:get_children_by_id('background_role')[1]
 
     -- Add tooltip to objects
     if args.objects then

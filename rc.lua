@@ -142,7 +142,8 @@ standart_menu = {
     { "FiReFox", "firefox", "/home/valera/.icons/Black Diamond-V2/scalable/apps/firefox.png" },
     { "TOR", "env GTK_THEME=Boje-Red /home/valera/tor/Browser/start-tor-browser --detach", "/home/valera/.icons/Black Diamond-V2/scalable/apps/epiphany-bookmarks.png" },
     { "Google-Earth", "google-earth", "/home/valera/.icons/Black Diamond-V2/scalable/apps/googleearth-icon.png" },
-    { "Aisleriot", "env GTK_THEME='Fire Red Theme' sol", "/usr/share/icons/Black Diamond-V2/scalable/apps/gnome-aisleriot.png" },
+    { "Aisleriot", "env GTK_THEME='EFDM-GG' sol", "/usr/share/icons/Black Diamond-V2/scalable/apps/gnome-aisleriot.png" },
+   -- { "Aisleriot", "env GTK_THEME='Fire Red Theme' sol", "/usr/share/icons/Black Diamond-V2/scalable/apps/gnome-aisleriot.png" },
     { "XTERM", "xterm", "/home/valera/.icons/Black Diamond-V2/scalable/apps/xterm.png"  },
     { "KDEnLive", "kdenlive", "/home/valera/.icons/Black Diamond-V2/scalable/apps/kdenlive.png" }             
 }
@@ -204,7 +205,7 @@ mytextclockicon = wibox.widget.imagebox()
 mytextclockicon.image = "/home/valera/.icons/Black Diamond-V2/scalable/actions/editdelete.png"
 
 mytextclock1 = wibox.widget.textclock(" <span color=\"#e65117\"><span font=\"odstemplik Bold 18\"><b>%H:%M</b></span></span>")
-lain.widget.calendar({
+lain.widget.cal({
     attach_to = { mytextclock1 }
 })
 --widgets.calendar:attach(mytextclockicon)
