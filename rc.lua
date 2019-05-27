@@ -134,7 +134,7 @@ myawesomemenu = {
 
 standart_menu = {
     { "AlReader", "wine /home/valera/Документы/books/alreader2.win32.ru__0/AlReader2.win32.ru/AlReader2.exe", "/usr/share/icons/Black Diamond-V2/scalable/apps/contacts.png" },
---    { "Opera", "opera-developer","/usr/share/pixmaps/opera-developer.xpm" },
+    { "Smart", "kdeconnect-indicator","/home/valera/.config/awesome/appicons/smartphone.svg" },
     { "KDE", "systemsettings5", "/home/valera/.icons/Black Diamond-V2/scalable/devices/gnome-dev-harddisk-1394.png" },
     { "Thunar", "thunar", "/home/valera/.icons/Black Diamond-V2/scalable/apps/folder_wine_burgunder.png" },
     { "CHROME", "google-chrome-stable", "/home/valera/.icons/Black Diamond-V2/scalable/apps/22/chromium-browser.png" },
@@ -143,6 +143,7 @@ standart_menu = {
     { "TOR", "env GTK_THEME=Boje-Red /home/valera/tor/Browser/start-tor-browser --detach", "/home/valera/.icons/Black Diamond-V2/scalable/apps/epiphany-bookmarks.png" },
     { "Google-Earth", "google-earth", "/home/valera/.icons/Black Diamond-V2/scalable/apps/googleearth-icon.png" },
     { "Aisleriot", "env GTK_THEME='EFDM-GG' sol", "/usr/share/icons/Black Diamond-V2/scalable/apps/gnome-aisleriot.png" },
+    { "Opera", "opera --disable-seccomp-filter-sandbox", "/home/valera/.icons/opera.svg" },
    -- { "Aisleriot", "env GTK_THEME='Fire Red Theme' sol", "/usr/share/icons/Black Diamond-V2/scalable/apps/gnome-aisleriot.png" },
     { "XTERM", "xterm", "/home/valera/.icons/Black Diamond-V2/scalable/apps/xterm.png"  },
     { "KDEnLive", "kdenlive", "/home/valera/.icons/Black Diamond-V2/scalable/apps/kdenlive.png" }             
@@ -162,7 +163,7 @@ mymainmenu = freedesktop.menu.build({
                                     { "____________"},
                                     --{ "Terminal", terminal, "/home/valera/.icons/Black Diamond-V2/scalable/apps/gnome-system-monitor.png" },
                                     --{ "HOME", "gksu dbus-launch thunar", "/home/valera/.config/awesome/image-missing.png" },
-                                    --{ "OPERA", "opera", "/home/valera/.icons/opera.png" },
+                                    --{ "OPERA", "opera --disable-seccomp-filter-sandbox", "/home/valera/.icons/opera.png" },
                                     { "Reboot", "systemctl reboot", "/home/valera/.icons/Black Diamond-V2/scalable/web-browser.png"},
                                     { "STOP",  "systemctl poweroff", "/home/valera/.icons/Black Diamond-V2/scalable/actions/gnome-session-logout.png"}
                                    }
@@ -319,7 +320,7 @@ memicon = awful.widget.launchers({ name = "prev",
 memwidget = wibox.widget.textbox()
 --vicious.register(memwidget, vicious.widgets.mem, "<span font=\"odstemplik Bold 14\"><b>$2/$3</b></span>", 1)
 vicious.register(memwidget, vicious.widgets.mem, "<span color=\"#e65117\"><span font=\"odstemplik Bold 14\"><b>$2 m</b></span></span>", 5)
---vicious.register(memwidget, vicious.widgets.mem, "<span >$2 m</span>", 5)
+--vicious.register(memwidget, vicious.widgets.mem, "<span >$1 m</span>", 5)
 fixedmemwidget = wibox.layout.constraint(memwidget, "exact", 147)
 memwidget.align = "center"
 fixedwidget3 = wibox.layout.constraint(memwidget, "exact", 50)
@@ -1135,6 +1136,8 @@ awful.rules.rules = {
       properties = { border_width = 0 } },
     { rule = { class = "Run.py" },
      properties = { border_width = 0, geometry = { x = 606, y = 400, width = 247, height = 270 } } },
+    { rule = { class = "Tor Browser" },
+     properties = { border_width = 0, geometry = { x = 0, y = 19, width = 1440, height = 881 } } },
      -- properties = { border_width = 0, geometry = { x = 657, y = 660, width = 150, height = 40 } } },
     -- Set Firefox to always map on tags number 2 of screen 1.
     -- { rule = { class = "Firefox" },

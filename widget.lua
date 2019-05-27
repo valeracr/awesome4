@@ -116,7 +116,7 @@ memicon:buttons(awful.util.table.join(
 memwidget = wibox.widget.textbox()
 --vicious.register(memwidget, vicious.widgets.mem, "<span font=\"odstemplik Bold 14\"><b>$2/$3</b></span>", 1)
 --vicious.register(memwidget, vicious.widgets.mem, "<span font=\"odstemplik Bold 18\"><b>$2 m</b></span>", 5)
-vicious.register(memwidget, vicious.widgets.mem, "<span >$2 m</span>", 5)
+vicious.register(memwidget, vicious.widgets.mem, "<span >$1 m</span>", 5)
 fixedmemwidget = wibox.layout.constraint(memwidget, "exact", 147)
 memwidget:set_align("center")
 memicon3 = wibox.widget.imagebox()
