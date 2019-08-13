@@ -21,7 +21,8 @@ theme.widget_batempty = " ~/.config/awesome/icons/batempty.png"
 
 -- {{{ Font
 --theme.font                          = "Tewi 8"
-theme.taglist_font                  = "Icons 8"
+--theme.taglist_font                  = "Icons 8"
+theme.taglist_font                  = "DejaVu Sans 9"
 --theme.font      = "Terminus Re33 Bold 10"
 theme.font      = "Sony Sketch EF 11"
 --theme.font = "odstemplik 18"
