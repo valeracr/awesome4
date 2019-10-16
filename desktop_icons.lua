@@ -290,7 +290,7 @@ local net1aa = wibox({ type = "desktop", visible = true, bg = "#00000000" })
 net1aa:geometry({ x = 1043, y = 749, width = 36, height = 50 })
 net1aa:set_widget(net1a)
 ----------------
-netwidget = blingbling.net1({ interface = "eth0", show_text = true, timeout = 5, text_background_color = "#2a000080" })
+netwidget = blingbling.net1({ interface = "enp3s0", show_text = true, timeout = 5, text_background_color = "#2a000080" })
 netwidget:set_ippopup()
 netwidget:set_graph_line_color("#e65117ff")
 netwidget:set_background_color("#2a000000")

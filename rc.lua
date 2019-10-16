@@ -441,7 +441,7 @@ pacwidget:set_font("odstemplik Bold 17")
 
 --
 -- Network Widget
-netwidget = blingbling.net({ interface = "eth0", show_text = false, timeout = 5 })
+netwidget = blingbling.net({ interface = "enp3s0", show_text = false, timeout = 5 })
 netwidget:set_ippopup()
 netwidget:set_graph_line_color("#e65117ff")
 ----netwidget:set_background_color("#f7010150")
