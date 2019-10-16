@@ -914,6 +914,13 @@ clientkeys = awful.util.table.join(
             c.minimized = true
         end ,
         {description = "minimize", group = "client"}),
+    awful.key({ modkey, "Control"   }, "m",      
+        function ()
+            for _, c in ipairs(mouse.screen.selected_tag:clients()) do
+                 c.minimized = true
+            end
+        end,
+              {description = "close all windows in current tag", group = "client"}),
     awful.key({ modkey,           }, "m",
         function (c)
             c.maximized = not c.maximized
