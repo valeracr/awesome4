@@ -165,8 +165,8 @@ mymainmenu = freedesktop.menu.build({
                                     --{ "Terminal", terminal, "/home/valera/.icons/Black Diamond-V2/scalable/apps/gnome-system-monitor.png" },
                                     --{ "HOME", "gksu dbus-launch thunar", "/home/valera/.config/awesome/image-missing.png" },
                                     --{ "OPERA", "opera --disable-seccomp-filter-sandbox", "/home/valera/.icons/opera.png" },
-                                    { "Reboot", "/home/valera/.reboot", "/home/valera/.icons/Black Diamond-V2/scalable/web-browser.png"},
-                                    { "STOP",  "/home/valera/.halt", "/home/valera/.icons/Black Diamond-V2/scalable/actions/gnome-session-logout.png"}
+                                    { "Reboot", "systemctl reboot", "/home/valera/.icons/Black Diamond-V2/scalable/web-browser.png"},
+                                    { "STOP",  "systemctl poweroff", "/home/valera/.icons/Black Diamond-V2/scalable/actions/gnome-session-logout.png"}
                                    }
                         })
 
