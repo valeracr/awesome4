@@ -176,8 +176,8 @@ mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
     -- Each screen has its own tag table.
 --awful.tag({ 1, 2, 3, 4, 5 }, s, awful.layout.layouts[1])
 ----local names = { "➀", "➁", "➂", "➃", "➄" }
-local names = { "⛪", "❡", "✉", "♫", "☘" }
---local names = { "Ƅ", "ƀ", "Ɵ", "ƈ", "Ɗ" }
+---local names = { "⛪", "❡", "✉", "♫", "☘" }
+local names = { "Ƅ", "ƀ", "Ɵ", "ƈ", "Ɗ" }
 --local names = { "Ƅ", "Ɵ", "ƈ", "Ɗ" }
 local l = awful.layout.suit  -- Just to save some typing: use an alias.
 local layouts = { l.tile.bottom, l.tile.bottom, l.tile.bottom, l.spiral.dwindle, l.floating }
