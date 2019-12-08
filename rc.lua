@@ -688,7 +688,36 @@ awful.screen.connect_for_each_screen(function(s)
 
     -- Create the wibox
     s.mywibox = awful.wibar({ position = "top", screen = s, height = 18 })
-
+ -------------
+ -- autohide panel
+s.wibox_plug = awful.wibar({ position = "top",
+                             height = 1,
+                             opacity = 0,
+                             visible = false,
+                             screen = s })
+local function make_panel_visible()
+    s.mywibox.visible = true
+    s.wibox_plug.visible = false
+end
+local function make_panel_hidden()
+    s.mywibox.visible = false
+    s.wibox_plug.visible = true
+end
+local function panel_autohide(focused_client)
+    if focused_client.class == 'Google-chrome'
+            and focused_client:isvisible() then
+        make_panel_hidden()
+        s.mywibox:connect_signal("mouse::leave", make_panel_hidden)
+        s.wibox_plug:connect_signal("mouse::enter", make_panel_visible)
+    else
+        make_panel_visible()
+        s.mywibox:disconnect_signal("mouse::leave", make_panel_hidden)
+        s.wibox_plug:disconnect_signal("mouse::enter", make_panel_visible)
+    end
+end
+client.connect_signal("focus", panel_autohide)
+client.connect_signal("unfocus", panel_autohide)
+---------------------
     -- Add widgets to the wibox
     s.mywibox:setup {
         layout = wibox.layout.align.horizontal,
