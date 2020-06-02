@@ -424,7 +424,7 @@ pacwidget_t = awful.tooltip({ objects = { pacwidget},})
 vicious.register(pacwidget, vicious.widgets.pkg,
                 function(widget,args)
                     local io = { popen = io.popen }
-                    local s = io.popen("pacman -Qu -b /tmp/checkup-db-valera")
+                    local s = io.popen("pacman -Qu -b /tmp/checkup-db-1000")
                     --local s = io.popen("/usr/bin/checkupdates")
                     local str = ''
 		    local i = 0
@@ -567,11 +567,11 @@ local taglist_buttons = awful.util.table.join(
 -------------
 ---Client_menu
 
---local t1 = awful.tag.find_by_name(awful.client.movetotag( "Ƅ" ),"Ƅ" )  
---local t2 = awful.tag.find_by_name(awful.client.movetotag( "ƀ" ),"ƀ" )
---local t3 = awful.tag.find_by_name(awful.client.movetotag( "Ɵ" ),"Ɵ" )
---local t4 = awful.tag.find_by_name(awful.client.movetotag( "ƈ" ),"ƈ" )
---local t5 = awful.tag.find_by_name(awful.client.movetotag( "Ɗ" ),"Ɗ" )
+local t1 = awful.tag.find_by_name(awful.client.movetotag( "Ƅ" ),"Ƅ" )  
+local t2 = awful.tag.find_by_name(awful.client.movetotag( "ƀ" ),"ƀ" )
+local t3 = awful.tag.find_by_name(awful.client.movetotag( "Ɵ" ),"Ɵ" )
+local t4 = awful.tag.find_by_name(awful.client.movetotag( "ƈ" ),"ƈ" )
+local t5 = awful.tag.find_by_name(awful.client.movetotag( "Ɗ" ),"Ɗ" )
 -----local names = { "⛪", "❡", "☦", "♫", "☘" }
 --local t1 = awful.tag.find_by_name(awful.client.movetotag( "➀" ),"➀" )  
 --local t2 = awful.tag.find_by_name(awful.client.movetotag( "➁" ),"➁" )
@@ -579,11 +579,11 @@ local taglist_buttons = awful.util.table.join(
 --local t4 = awful.tag.find_by_name(awful.client.movetotag( "➃" ),"➃" )
 --local t5 = awful.tag.find_by_name(awful.client.movetotag( "➄" ),"➄" )
 --
-local t1 = awful.tag.find_by_name(awful.client.movetotag( "⛪" ),"⛪" )  
-local t2 = awful.tag.find_by_name(awful.client.movetotag( "❡" ),"❡" )
-local t3 = awful.tag.find_by_name(awful.client.movetotag( "✉" ),"✉" )
-local t4 = awful.tag.find_by_name(awful.client.movetotag( "♫" ),"♫" )
-local t5 = awful.tag.find_by_name(awful.client.movetotag( "☘" ),"☘" )
+--local t1 = awful.tag.find_by_name(awful.client.movetotag( "⛪" ),"⛪" )  
+--local t2 = awful.tag.find_by_name(awful.client.movetotag( "❡" ),"❡" )
+--local t3 = awful.tag.find_by_name(awful.client.movetotag( "✉" ),"✉" )
+--local t4 = awful.tag.find_by_name(awful.client.movetotag( "♫" ),"♫" )
+--local t5 = awful.tag.find_by_name(awful.client.movetotag( "☘" ),"☘" )
 
 local t_menu ={ 
            {"____FIRST", function() awful.client.movetotag(t1) end },

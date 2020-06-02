@@ -210,6 +210,23 @@ desktop_wibox10b:geometry({ x = 238, y = 630, width = 70, height = 18 })
 desktop_wibox10b:set_widget(my_widget10b)
 
 -----------
+my_widget19aa = awful.widget.launcher({ name = "telegram",
+                                     image = "/home/valera/.config/awesome/appicons/palemoon.png",
+                                     command = "telegram-desktop"
+                                     })
+function my_widget19aa:fit(context, width, height) return width, height end
+local desktop_wibox19aa = wibox({ type = "desktop", visible = true, bg = "#00000000" })
+desktop_wibox19aa:geometry({ x = 350, y = 590, width = 32, height = 32 })
+desktop_wibox19aa:set_widget(my_widget19aa)
+--
+local my_widget10aa = wibox.widget.textbox()
+--my_widget10aa.markup = "<span color=\"#f29466\">CoolReader</span>"
+my_widget10aa.markup = "<span color=\"#e74f12\"><span font=\"odstemplik 14\"><b>Telegram</b></span></span>"
+function my_widget10aa:fit(context, width, height) return width, height end
+local desktop_wibox10aa = wibox({ type = "desktop", visible = true, bg = "#00000000" })
+desktop_wibox10aa:geometry({ x = 335, y = 630, width = 79, height = 18 })
+desktop_wibox10aa:set_widget(my_widget10aa)
+---------------
 cpu1a = wibox.widget.imagebox()
 cpu1a.image = "/home/valera/.config/awesome/appicons/cp1.png"
 function cpu1a:fit(context, width, height) return width, height end
