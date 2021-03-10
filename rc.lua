@@ -176,8 +176,9 @@ mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
     -- Each screen has its own tag table.
 --awful.tag({ 1, 2, 3, 4, 5 }, s, awful.layout.layouts[1])
 ----local names = { "➀", "➁", "➂", "➃", "➄" }
----local names = { "⛪", "❡", "✉", "♫", "☘" }
-local names = { "Ƅ", "ƀ", "Ɵ", "ƈ", "Ɗ" }
+local names = { "⛪", "❡", "✉", "♫", "☘" }
+------------local names = { "Ƅ", "ƀ", "Ɵ", "ƈ", "Ɗ" }
+--------local names = {"  |", "  |", "  |", "  |", ""}
 --local names = { "Ƅ", "Ɵ", "ƈ", "Ɗ" }
 local l = awful.layout.suit  -- Just to save some typing: use an alias.
 local layouts = { l.tile.bottom, l.tile.bottom, l.tile.bottom, l.spiral.dwindle, l.floating }
@@ -567,11 +568,11 @@ local taglist_buttons = awful.util.table.join(
 -------------
 ---Client_menu
 
-local t1 = awful.tag.find_by_name(awful.client.movetotag( "Ƅ" ),"Ƅ" )  
-local t2 = awful.tag.find_by_name(awful.client.movetotag( "ƀ" ),"ƀ" )
-local t3 = awful.tag.find_by_name(awful.client.movetotag( "Ɵ" ),"Ɵ" )
-local t4 = awful.tag.find_by_name(awful.client.movetotag( "ƈ" ),"ƈ" )
-local t5 = awful.tag.find_by_name(awful.client.movetotag( "Ɗ" ),"Ɗ" )
+--local t1 = awful.tag.find_by_name(awful.client.movetotag( "  |" ),"  |" )  
+--local t2 = awful.tag.find_by_name(awful.client.movetotag( "  |" ),"  |" )
+--local t3 = awful.tag.find_by_name(awful.client.movetotag( "  |" ),"  |" )
+--local t4 = awful.tag.find_by_name(awful.client.movetotag( "  |" ),"  |" )
+--local t5 = awful.tag.find_by_name(awful.client.movetotag( "" ),"" )
 -----local names = { "⛪", "❡", "☦", "♫", "☘" }
 --local t1 = awful.tag.find_by_name(awful.client.movetotag( "➀" ),"➀" )  
 --local t2 = awful.tag.find_by_name(awful.client.movetotag( "➁" ),"➁" )
@@ -579,11 +580,11 @@ local t5 = awful.tag.find_by_name(awful.client.movetotag( "Ɗ" ),"Ɗ" )
 --local t4 = awful.tag.find_by_name(awful.client.movetotag( "➃" ),"➃" )
 --local t5 = awful.tag.find_by_name(awful.client.movetotag( "➄" ),"➄" )
 --
---local t1 = awful.tag.find_by_name(awful.client.movetotag( "⛪" ),"⛪" )  
---local t2 = awful.tag.find_by_name(awful.client.movetotag( "❡" ),"❡" )
---local t3 = awful.tag.find_by_name(awful.client.movetotag( "✉" ),"✉" )
---local t4 = awful.tag.find_by_name(awful.client.movetotag( "♫" ),"♫" )
---local t5 = awful.tag.find_by_name(awful.client.movetotag( "☘" ),"☘" )
+local t1 = awful.tag.find_by_name(awful.client.movetotag( "⛪" ),"⛪" )  
+local t2 = awful.tag.find_by_name(awful.client.movetotag( "❡" ),"❡" )
+local t3 = awful.tag.find_by_name(awful.client.movetotag( "✉" ),"✉" )
+local t4 = awful.tag.find_by_name(awful.client.movetotag( "♫" ),"♫" )
+local t5 = awful.tag.find_by_name(awful.client.movetotag( "☘" ),"☘" )
 
 local t_menu ={ 
            {"____FIRST", function() awful.client.movetotag(t1) end },
@@ -826,6 +827,7 @@ globalkeys = awful.util.table.join(
     --awful.key({ }, "F2", function () scratch.drop("opera", c, nil, nil, 1.00, 0.90) end),
     awful.key({ }, "F2", function () awful.spawn("dbus-launch /home/valera/.x") end),
     --awful.key({ }, "F3", function () awful.spawn("thunar") end),
+    awful.key({ }, "XF86Mail", function () awful.spawn("thunderbird") end),
     awful.key({ modkey,           }, "j",
         function ()
             awful.client.focus.byidx( 1)
@@ -897,6 +899,26 @@ globalkeys = awful.util.table.join(
               end,
               {description = "restore minimized", group = "client"}),
 
+    ----MUTE
+     awful.key({}, "XF86AudioRaiseVolume",
+function()
+os.execute("amixer -D pulse sset Master 5%+")
+end
+),
+awful.key({}, "XF86AudioLowerVolume",
+function()
+os.execute("amixer -D pulse sset Master 5%-")
+end
+),
+awful.key({}, "XF86AudioMute",
+function()
+os.execute("amixer -D pulse sset Master toggle")
+end
+),
+awful.key({  },            "XF86AudioPrev",     function () awful.util.spawn_with_shell("mpc prev || ncmpcpp prev") end),
+        awful.key({  },            "XF86AudioStop",     function () stop_icon:set_image("/home/valera/.config/awesome/icons/mpd/mpd_play.png") mpicon:set_image("/home/valera/.config/awesome/icons/14.png") mpicon1:set_image("/home/valera/.config/awesome/icons/15.png") mpicon3:set_image("/home/valera/.config/awesome/icons/16.png") awful.util.spawn_with_shell("killall mpd & killall python3 ~/cavalcade/cavalcade/run.py") mpdwidget.update() end),
+        awful.key({  },            "XF86AudioPlay",     function () stop_icon:set_image("/home/valera/.config/awesome/icons/mpd/mpd_pause.png") mpicon:set_image("/home/valera/.config/awesome/icons/14a.png") mpicon1:set_image("/home/valera/.config/awesome/icons/15a.png") mpicon3:set_image("/home/valera/.config/awesome/icons/16a.png") awful.util.spawn_with_shell("mpd & python3 ~/cavalcade/cavalcade/run.py") mpdwidget.update()  end),
+        awful.key({  },            "XF86AudioNext",     function () awful.util.spawn_with_shell("mpc next || ncmpcpp next") end),
 
     -- Prompt
     awful.key({  },            "Menu",     function () awful.screen.focused().mypromptbox:run() end,
@@ -1193,7 +1215,7 @@ awful.rules.rules = {
     { rule = { class = "Tilda" },
       properties = { border_width = 0 } },
     { rule = { class = "Run.py" },
-     properties = { border_width = 0, geometry = { x = 606, y = 400, width = 247, height = 270 } } },
+     properties = { border_width = 0, geometry = { x = 606, y = 436, width = 247, height = 270 } } },
     { rule = { class = "Tor Browser" },
      properties = { border_width = 0, geometry = { x = 0, y = 19, width = 1440, height = 881 } } },
      -- properties = { border_width = 0, geometry = { x = 657, y = 660, width = 150, height = 40 } } },
