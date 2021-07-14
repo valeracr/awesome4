@@ -47,7 +47,7 @@ my_widget = awful.widget.launcher({ name = "firefox",
 function my_widget:fit(context, width, height) return width, height end
 
 local desktop_wibox = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox:geometry({ x = 1300, y = 100, width = 32, height = 32 })
+desktop_wibox:geometry({ x = 50, y = 200, width = 32, height = 32 })
 
 desktop_wibox:set_widget(my_widget)
 
@@ -58,7 +58,7 @@ local my_widget1 = wibox.widget.textbox()
 my_widget1.markup = "<span color=\"#e74f12\"><span font=\"odstemplik 15\"><b>TorBrowser</b></span></span>"
 function my_widget1:fit(context, width, height) return width, height end
 local desktop_wibox1 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox1:geometry({ x = 1277, y = 140, width = 90, height = 18 })
+desktop_wibox1:geometry({ x = 27, y = 230, width = 90, height = 18 })
 desktop_wibox1:set_widget(my_widget1)
 -------------------
 -------------------------
@@ -68,14 +68,14 @@ my_widget3 = awful.widget.launchers({ name = "desktop",
                                      })
 function my_widget3:fit(context, width, height) return width, height end
 local desktop_wibox3 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox3:geometry({ x = 1300, y = 200, width = 32, height = 32 })
+desktop_wibox3:geometry({ x = 50, y = 290, width = 32, height = 32 })
 desktop_wibox3:set_widget(my_widget3)
 --
 local my_widget4 = wibox.widget.textbox()
 my_widget4.markup = "<span color=\"#e74f12\"><span font=\"odstemplik 15\"><b>File System</b></span></span>"
 function my_widget4:fit(context, width, height) return width, height end
 local desktop_wibox4 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox4:geometry({ x = 1278, y = 240, width = 90, height = 22 })
+desktop_wibox4:geometry({ x = 28, y = 330, width = 90, height = 22 })
 desktop_wibox4:set_widget(my_widget4)
 
 -----------
@@ -86,14 +86,14 @@ my_widget5 = awful.widget.launchers({ name = "desktop",
                                      })
 function my_widget5:fit(context, width, height) return width, height end
 local desktop_wibox5 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox5:geometry({ x = 1300, y = 300, width = 32, height = 32 })
+desktop_wibox5:geometry({ x = 50, y = 390, width = 32, height = 32 })
 desktop_wibox5:set_widget(my_widget5)
 --
 local my_widget6 = wibox.widget.textbox()
 my_widget6.markup = "<span color=\"#e74f12\"><span font=\"odstemplik 15\"><b>Home</b></span></span>"
 function my_widget6:fit(context, width, height) return width, height end
 local desktop_wibox6 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox6:geometry({ x = 1296, y = 340, width = 50, height = 18 })
+desktop_wibox6:geometry({ x = 46, y = 430, width = 50, height = 18 })
 desktop_wibox6:set_widget(my_widget6)
 
 
@@ -105,14 +105,14 @@ my_widget7 = awful.widget.launchers({ name = "trash",
                                      })
 function my_widget7:fit(context, width, height) return width, height end
 local desktop_wibox7 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox7:geometry({ x = 1300, y = 400, width = 32, height = 32 })
+desktop_wibox7:geometry({ x = 50, y = 490, width = 32, height = 32 })
 desktop_wibox7:set_widget(my_widget7)
 --
 local my_widget8 = wibox.widget.textbox()
 my_widget8.markup = "<span color=\"#e74f12\"><span font=\"odstemplik 15\"><b>Trash</b></span></span>"
 function my_widget8:fit(context, width, height) return width, height end
 local desktop_wibox8 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox8:geometry({ x = 1298, y = 440, width = 50, height = 18 })
+desktop_wibox8:geometry({ x = 48, y = 530, width = 50, height = 18 })
 desktop_wibox8:set_widget(my_widget8)
 
 
@@ -125,7 +125,7 @@ my_widget9 = awful.widget.launcher({ name = "acestream",
                                      })
 function my_widget9:fit(context, width, height) return width, height end
 local desktop_wibox9 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox9:geometry({ x = 1310, y = 500, width = 32, height = 32 })
+desktop_wibox9:geometry({ x = 54, y = 100, width = 32, height = 32 })
 desktop_wibox9:set_widget(my_widget9)
 --
 local my_widget10 = wibox.widget.textbox()
@@ -133,7 +133,7 @@ local my_widget10 = wibox.widget.textbox()
 my_widget10.markup = "<span color=\"#e74f12\"><span font=\"odstemplik 14\"><b>Acestream</b></span></span>"
 function my_widget10:fit(context, width, height) return width, height end
 local desktop_wibox10 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox10:geometry({ x = 1286, y = 540, width = 70, height = 18 })
+desktop_wibox10:geometry({ x = 30, y = 140, width = 70, height = 18 })
 desktop_wibox10:set_widget(my_widget10)
 
 ------------
@@ -143,14 +143,14 @@ my_widget01 = awful.widget.launcher({ name = "PkgBrowser",
                                      })
 function my_widget01:fit(context, width, height) return width, height end
 local desktop_wibox02 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox02:geometry({ x = 1306, y = 600, width = 32, height = 32 })
+desktop_wibox02:geometry({ x = 1356, y = 650, width = 32, height = 32 })
 desktop_wibox02:set_widget(my_widget01)
 
 local my_widget03 = wibox.widget.textbox()
 my_widget03.markup = "<span color=\"#e74f12\"><span font=\"odstemplik 15\"><b>PkgBrowser</b></span></span>"
 function my_widget03:fit(context, width, height) return width, height end
 local desktop_wibox04 = wibox({ type = "desktop", visible = true, bg = "#00000000" })
-desktop_wibox04:geometry({ x = 1275, y = 640, width = 90, height = 18 })
+desktop_wibox04:geometry({ x = 1325, y = 690, width = 90, height = 18 })
 desktop_wibox04:set_widget(my_widget03)
 -----------
 
