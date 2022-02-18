@@ -210,9 +210,9 @@ desktop_wibox10b:geometry({ x = 238, y = 630, width = 70, height = 18 })
 desktop_wibox10b:set_widget(my_widget10b)
 
 -----------
-my_widget19aa = awful.widget.launcher({ name = "telegram",
+my_widget19aa = awful.widget.launchers({ name = "telegram",
                                      image = "/home/valera/.config/awesome/appicons/palemoon.png",
-                                     command = "telegram-desktop"
+                                     command = "QT_STYLE_OVERRIDE=Breeze telegram-desktop"
                                      })
 function my_widget19aa:fit(context, width, height) return width, height end
 local desktop_wibox19aa = wibox({ type = "desktop", visible = true, bg = "#00000000" })
